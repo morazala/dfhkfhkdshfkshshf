@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Bé Học Đánh Vần</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@500;600;700;800&family=Be+Vietnam+Pro:ital,wght@0,400;0,500;0,600;0,700;1,500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<div class="stage">
+
+  <header class="board" id="board">
+    <div class="board-inner">
+      <p class="board-eyebrow">Chữ cái đang học</p>
+      <h1 class="board-letter" id="letterDisplay">a</h1>
+      <p class="board-word" id="wholeWordCaption">&nbsp;</p>
+    </div>
+    <div class="chalk-tray" aria-hidden="true">
+      <span class="chalk chalk-white"></span>
+      <span class="chalk chalk-red"></span>
+    </div>
+  </header>
+
+  <main class="page">
+
+    <div class="row middle-row">
+      <div class="cell square-cell onset-cell" id="onsetCell">
+        <span class="cell-tab">Phần đầu</span>
+        <div class="cell-text" id="onsetText"></div>
+      </div>
+      <div class="cell square-cell rime-cell" id="rimeCell">
+        <span class="cell-tab">Phần cuối</span>
+        <div class="cell-text" id="rimeText"></div>
+      </div>
+    </div>
+
+    <div class="row bottom-row">
+      <div class="cell strip-cell merge-cell hidden" id="mergeCell">
+        <span class="cell-tab">Từ hoàn chỉnh</span>
+        <div class="cell-text" id="mergeText"></div>
+        <button class="replay-btn" id="replayBtn" title="Nghe lại" aria-label="Nghe lại">🔊</button>
+      </div>
+    </div>
+
+  </main>
+
+  <footer class="controls">
+    <nav class="key-nav">
+      <button class="key-btn" id="prevKeyBtn" aria-label="Chữ cái trước">
+        <span class="arrow">‹</span><span class="key-label" id="prevKeyLabel">—</span>
+      </button>
+      <div class="key-status">
+        <span class="key-pos"><span id="keyPos">1</span> / <span id="keyTotal">1</span></span>
+        <span class="word-pos" id="wordPos">từ 1/1</span>
+      </div>
+      <button class="key-btn" id="nextKeyBtn" aria-label="Chữ cái sau">
+        <span class="key-label" id="nextKeyLabel">—</span><span class="arrow">›</span>
+      </button>
+    </nav>
+
+    <div class="rate-row">
+      <label class="auto-toggle" for="autoPlayToggle">
+        <input type="checkbox" id="autoPlayToggle" class="auto-toggle-input">
+        <span class="auto-toggle-track"><span class="auto-toggle-thumb"></span></span>
+        <span class="auto-toggle-text">Tự động</span>
+      </label>
+      <span class="rate-sep" aria-hidden="true"></span>
+      <label for="rateSlider">Tốc độ đọc</label>
+      <input type="range" id="rateSlider" min="0.5" max="1.5" step="0.1" value="0.9">
+      <span class="rate-val" id="rateValue">0.9×</span>
+    </div>
+  </footer>
+
+  <p class="hint">Dùng <kbd>←</kbd> <kbd>→</kbd> hoặc <kbd>Page&nbsp;Up</kbd> <kbd>Page&nbsp;Down</kbd> để chuyển từ</p>
+
+</div>
+
+<script src="phonics-parser.js"></script>
+<script src="script.js"></script>
+</body>
+</html>
