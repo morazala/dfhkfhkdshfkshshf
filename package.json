@@ -1,0 +1,14 @@
+{
+  "name": "be-hoc-danh-van",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Bé Học Đánh Vần — giọng đọc dùng Edge TTS (edge-tts-node) qua server Node cục bộ.",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "dependencies": {
+    "edge-tts-node": "latest",
+    "express": "^4.19.2"
+  }
+}

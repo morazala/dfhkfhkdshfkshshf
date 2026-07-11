@@ -62,15 +62,23 @@
       </button>
     </nav>
 
-    <div class="rate-row">
+    <div class="rate-row rate-row--voice">
       <label class="auto-toggle" for="autoPlayToggle">
         <input type="checkbox" id="autoPlayToggle" class="auto-toggle-input">
         <span class="auto-toggle-track"><span class="auto-toggle-thumb"></span></span>
         <span class="auto-toggle-text">Tự động</span>
       </label>
       <span class="rate-sep" aria-hidden="true"></span>
+      <label for="voiceSelect">Giọng đọc</label>
+      <select id="voiceSelect" class="voice-select">
+        <option value="vi-VN-HoaiMyNeural">Hoài My (nữ)</option>
+        <option value="vi-VN-NamMinhNeural">Nam Minh (nam)</option>
+      </select>
+    </div>
+
+    <div class="rate-row rate-row--speed">
       <label for="rateSlider">Tốc độ đọc</label>
-      <input type="range" id="rateSlider" min="0.5" max="1.5" step="0.1" value="0.9">
+      <input type="range" id="rateSlider" min="0.5" max="3" step="0.1" value="0.9">
       <span class="rate-val" id="rateValue">0.9×</span>
     </div>
   </footer>

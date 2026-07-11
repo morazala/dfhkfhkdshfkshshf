@@ -348,6 +348,26 @@ body{
 .rate-row label{ flex:0 0 auto; font-weight:600; }
 .rate-val{ flex:0 0 34px; text-align:right; font-weight:700; color:var(--ink); }
 
+.rate-row--speed{ border-top:none; padding-top:0; }
+
+.voice-select{
+  flex:1 1 auto;
+  min-width:120px;
+  font-family: var(--font-body);
+  font-weight:600;
+  font-size:13px;
+  color: var(--ink);
+  background: var(--paper);
+  border: 1px solid rgba(54,45,34,.28);
+  border-radius:8px;
+  padding:5px 8px;
+  cursor:pointer;
+}
+.voice-select:focus-visible{
+  outline:none;
+  box-shadow: 0 0 0 3px rgba(224,168,62,.55);
+}
+
 /* ---- Công tắc "Tự động" (nằm ngay cạnh thanh Tốc độ đọc) ---- */
 .auto-toggle{
   display:flex;

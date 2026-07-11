@@ -48,6 +48,7 @@
   const state = {
     flatIndex: 0,
     rate: 0.9,
+    voice: 'vi-VN-HoaiMyNeural',
     playToken: 0,
     autoPlay: false,
     autoTimer: null
@@ -75,7 +76,8 @@
     wordPos: document.getElementById('wordPos'),
     rateSlider: document.getElementById('rateSlider'),
     rateValue: document.getElementById('rateValue'),
-    autoPlayToggle: document.getElementById('autoPlayToggle')
+    autoPlayToggle: document.getElementById('autoPlayToggle'),
+    voiceSelect: document.getElementById('voiceSelect')
   };
 
   /* ======================================================================
@@ -153,33 +155,95 @@
   }
 
   /* ======================================================================
-     7. WEB SPEECH API — speak() trả về Promise, không đè âm thanh
+     7. GIỌNG ĐỌC — Edge TTS (edge-tts-node) qua backend, phát bằng <audio>
+     ---------------------------------------------------------------------
+     Trước đây dùng thẳng window.speechSynthesis (giọng đọc có sẵn của hệ điều
+     hành/trình duyệt): chất lượng giọng không đều, và tốc độ đọc
+     (utterance.rate) ở khá nhiều trình duyệt/giọng bị ÂM THẦM bỏ qua hoặc ghim
+     lại — kéo thanh trượt hết cỡ vẫn nghe y như cũ, đúng như hiện tượng bạn
+     gặp phải.
+
+     Giờ thay bằng: gọi server cục bộ (server.js, dùng edge-tts-node) để tổng
+     hợp sẵn 1 file MP3 giọng neural rõ ràng cho từng đoạn cần đọc, tải về và
+     phát bằng thẻ <audio>. Tốc độ đọc được chỉnh bằng `audio.playbackRate` —
+     thuộc tính chuẩn, áp dụng NGAY LẬP TỨC và đáng tin cậy trên mọi trình
+     duyệt hiện đại — nên có thể cho phép kéo tới 3× mà vẫn nghe rõ, mượt.
      ====================================================================== */
-  let cachedVoices = [];
-  function refreshVoices() {
-    if ('speechSynthesis' in window) cachedVoices = window.speechSynthesis.getVoices();
-  }
-  if ('speechSynthesis' in window) {
-    refreshVoices();
-    window.speechSynthesis.onvoiceschanged = refreshVoices;
+  const TTS_ENDPOINT = '/api/tts';
+
+  // Cache trong phiên làm việc: mỗi (giọng + đoạn text) chỉ cần tải 1 lần,
+  // những lần đọc lại sau (đổi từ qua lại, bấm nghe lại...) dùng luôn URL đã
+  // có sẵn, không gọi lại server. (Server cũng tự cache ra đĩa ở lần đầu.)
+  const audioUrlCache = new Map(); // key: `${voice}::${text}` -> object URL
+
+  let currentAudio = null; // <audio> đang phát (nếu có), để có thể dừng ngay khi bị ngắt
+
+  function audioCacheKey(text, voice) { return voice + '::' + text; }
+
+  async function fetchAudioUrl(text, voice) {
+    const key = audioCacheKey(text, voice);
+    if (audioUrlCache.has(key)) return audioUrlCache.get(key);
+
+    const res = await fetch(TTS_ENDPOINT, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ text, voice })
+    });
+    if (!res.ok) {
+      let detail = '';
+      try { detail = (await res.json()).error || ''; } catch { /* ignore */ }
+      throw new Error('TTS lỗi ' + res.status + (detail ? ': ' + detail : ''));
+    }
+    const blob = await res.blob();
+    const url = URL.createObjectURL(blob);
+    audioUrlCache.set(key, url);
+    return url;
   }
 
-  function speak(text, rate) {
-    return new Promise(resolve => {
-      if (!('speechSynthesis' in window) || !text) { resolve(); return; }
-      window.speechSynthesis.cancel();
-      const utter = new SpeechSynthesisUtterance(text);
-      utter.lang = 'vi-VN';
-      utter.rate = rate;
-      const viVoice = cachedVoices.find(v => v.lang && v.lang.toLowerCase().startsWith('vi'));
-      if (viVoice) utter.voice = viVoice;
+  // Dừng ngay giọng đọc đang phát (nếu có) — dùng khi người dùng chuyển từ/
+  // điều hướng/bấm nghe lại giữa chừng, thay cho speechSynthesis.cancel() cũ.
+  function stopSpeaking() {
+    if (currentAudio) {
+      currentAudio.pause();
+      currentAudio.currentTime = 0;
+      currentAudio = null;
+    }
+  }
+
+  function speak(text, rate, voice) {
+    return new Promise(async resolve => {
+      stopSpeaking();
+      if (!text) { resolve(); return; }
+
+      let url;
+      try {
+        url = await fetchAudioUrl(text, voice);
+      } catch (err) {
+        console.error('[TTS] Không lấy được audio cho "' + text + '":', err);
+        resolve(); // không để app treo nếu server TTS lỗi/chưa chạy
+        return;
+      }
+
+      const audio = new Audio(url);
+      // playbackRate hỗ trợ mượt trong khoảng ~0.25×–4× trên mọi trình duyệt
+      // hiện đại (Chrome, Edge, Firefox, Safari) — không bị ghim/bỏ qua như
+      // utterance.rate của Web Speech API trước đây.
+      audio.playbackRate = rate;
+      currentAudio = audio;
+
       let done = false;
-      const finish = () => { if (!done) { done = true; resolve(); } };
-      utter.onend = finish;
-      utter.onerror = finish;
+      const finish = () => {
+        if (done) return;
+        done = true;
+        if (currentAudio === audio) currentAudio = null;
+        resolve();
+      };
+      audio.onended = finish;
+      audio.onerror = finish;
       // an toàn: nếu trình duyệt "nuốt" sự kiện, không để app treo mãi
-      setTimeout(finish, 4000);
-      window.speechSynthesis.speak(utter);
+      setTimeout(finish, 6000);
+
+      audio.play().catch(finish);
     });
   }
 
@@ -257,7 +321,7 @@
         el.mergeCell.classList.add('final-glow');
       }
 
-      await speak(step.text, state.rate);
+      await speak(step.text, state.rate, state.voice);
       if (myToken !== state.playToken) return;
     }
 
@@ -354,35 +418,53 @@
     if (el.autoPlayToggle) el.autoPlayToggle.checked = false;
   }
 
-  el.prevKeyBtn.addEventListener('click', () => {
+  // Gọi khi có bất kỳ thao tác điều hướng thủ công nào: tắt tự động + im lặng
+  // ngay lập tức, kể cả khi thao tác đó không thực sự đổi sang từ khác (vd
+  // bấm mũi tên khi đã ở từ đầu/cuối danh sách).
+  function handleManualInput() {
     stopAutoPlay();
+    stopSpeaking();
+  }
+
+  el.prevKeyBtn.addEventListener('click', () => {
+    handleManualInput();
     const item = FLAT[state.flatIndex];
     const prevKey = KEYS[item.keyIndex - 1];
     if (prevKey) goTo(KEY_FIRST_FLAT_INDEX[prevKey]);
   });
   el.nextKeyBtn.addEventListener('click', () => {
-    stopAutoPlay();
+    handleManualInput();
     const item = FLAT[state.flatIndex];
     const nextKey = KEYS[item.keyIndex + 1];
     if (nextKey) goTo(KEY_FIRST_FLAT_INDEX[nextKey]);
   });
 
   el.replayBtn.addEventListener('click', () => {
-    stopAutoPlay();
+    handleManualInput();
     state.playToken++;
     const myToken = state.playToken;
     playWord(FLAT[state.flatIndex], myToken);
   });
 
   document.addEventListener('keydown', (e) => {
-    if (e.key === 'ArrowRight' || e.key === 'PageDown') { e.preventDefault(); stopAutoPlay(); next(); }
-    else if (e.key === 'ArrowLeft' || e.key === 'PageUp') { e.preventDefault(); stopAutoPlay(); prev(); }
+    if (e.key === 'ArrowRight' || e.key === 'PageDown') { e.preventDefault(); handleManualInput(); next(); }
+    else if (e.key === 'ArrowLeft' || e.key === 'PageUp') { e.preventDefault(); handleManualInput(); prev(); }
   });
 
   el.rateSlider.addEventListener('input', () => {
     state.rate = parseFloat(el.rateSlider.value);
     el.rateValue.textContent = state.rate.toFixed(1) + '×';
+    // Nếu đang có audio phát dở, đổi tốc độ áp dụng NGAY LẬP TỨC (không cần
+    // đợi từ tiếp theo), vì audio.playbackRate có thể chỉnh khi đang chạy.
+    if (currentAudio) currentAudio.playbackRate = state.rate;
   });
+
+  if (el.voiceSelect) {
+    state.voice = el.voiceSelect.value || state.voice;
+    el.voiceSelect.addEventListener('change', () => {
+      state.voice = el.voiceSelect.value;
+    });
+  }
 
   if (el.autoPlayToggle) {
     el.autoPlayToggle.addEventListener('change', () => {
