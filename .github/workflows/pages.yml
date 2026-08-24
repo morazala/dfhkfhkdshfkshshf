@@ -32,6 +32,7 @@ jobs:
           RENDER_API_URL: ${{ secrets.RENDER_API_URL }}
           GOOGLE_CLIENT_ID: ${{ secrets.GOOGLE_CLIENT_ID }}
           FRONTEND_ORIGIN: ${{ secrets.FRONTEND_ORIGIN }}
+          ENABLE_PWA: 'true'
       - uses: actions/configure-pages@v5
       - uses: actions/upload-pages-artifact@v3
         with:

@@ -1,5 +1,5 @@
 /* Offline shell + cache-first audio. Audio is cached on demand, never all at install time. */
-const VERSION = 'phonics-pwa-v1';
+const VERSION = 'phonics-pwa-v2';
 const SHELL_CACHE = `${VERSION}-shell`;
 const AUDIO_CACHE = `${VERSION}-audio`;
 const SHELL = [
@@ -58,6 +58,7 @@ self.addEventListener('fetch', event => {
   const request = event.request;
   if (request.method !== 'GET') return;
   const url = new URL(request.url);
+  if (/^(localhost|127\.0\.0\.1)$/i.test(url.hostname)) return;
   // API Render is cross-origin from GitHub Pages; service workers can still
   // apply network-first to it, while audio/static storage stays same-origin.
   if (url.pathname.includes('/api/')) {
@@ -65,7 +66,7 @@ self.addEventListener('fetch', event => {
     return;
   }
   if (url.origin !== self.location.origin) return;
-  if (url.pathname.includes('/audio-cache/') && url.pathname.endsWith('.wav')) {
+  if ((url.pathname.includes('/audio-cache/') || url.pathname.includes('/audio/')) && url.pathname.endsWith('.wav')) {
     event.respondWith(cacheFirst(request));
     return;
   }

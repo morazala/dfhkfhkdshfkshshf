@@ -2,5 +2,6 @@
 window.APP_CONFIG = Object.freeze({
   apiBaseUrl: '',
   googleClientId: '',
-  frontendOrigin: window.location.origin
+  frontendOrigin: window.location.origin,
+  enablePwa: false
 });
