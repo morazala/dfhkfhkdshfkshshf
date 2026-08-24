@@ -9,6 +9,13 @@
      Định dạng file data.json: [{ "key": "a", "values": ["a","à",...] }, ...]
      ====================================================================== */
   const DATA_URL = 'data.json';
+  const STATIC_DEPLOY = /(^|\.)github\.io$/i.test(window.location.hostname);
+  const PUBLIC_BASE_URL = new URL('.', document.baseURI).href;
+  document.documentElement.classList.toggle('static-deploy', STATIC_DEPLOY);
+
+  function publicUrl(path) {
+    return new URL(path, PUBLIC_BASE_URL).href;
+  }
 
   let DATA = null;
   let keyCarouselInstance = null;
@@ -435,7 +442,9 @@
           ...entry,
           // File upload có thể thay WAV nhưng vẫn giữ nguyên hash/tên file.
           // Query version buộc browser bỏ audio cũ đang immutable-cache.
-          url: '/audio/' + encodeURIComponent(entry.file) + `?v=${audioCacheVersion(entry, manifest)}`
+          url: STATIC_DEPLOY
+            ? publicUrl('audio-cache/' + encodeURIComponent(entry.file)) + `?v=${audioCacheVersion(entry, manifest)}`
+            : '/audio/' + encodeURIComponent(entry.file) + `?v=${audioCacheVersion(entry, manifest)}`
         });
         audioEntriesByText.set(text, entries);
       }
@@ -689,6 +698,7 @@
   }
 
   async function fetchAudioManifest() {
+    if (STATIC_DEPLOY) return fetch(publicUrl('audio-cache/manifest.json'), { cache: 'no-store' });
     const response = await fetch('/api/manifest', { cache: 'no-store' });
     // Cho phép trang vẫn dùng được nếu browser còn kết nối server cũ chưa
     // restart trong lúc cập nhật code. Sau khi restart, luôn đi endpoint an toàn.
@@ -697,6 +707,7 @@
   }
 
   async function refreshCacheManager({ quiet = false, force = false } = {}) {
+    if (STATIC_DEPLOY) return;
     try {
       const [manifestRes, routesRes, statusRes] = await Promise.all([
         fetchAudioManifest(),
@@ -1110,8 +1121,12 @@
     try {
       const [manifestRes, routesRes, statusRes] = await Promise.all([
         fetchAudioManifest(),
-        fetch('/api/cache-routes', { cache: 'no-store' }),
-        fetch('/api/settings', { cache: 'no-store' })
+        STATIC_DEPLOY
+          ? fetch(publicUrl('tts-routes.json'), { cache: 'no-store' })
+          : fetch('/api/cache-routes', { cache: 'no-store' }),
+        STATIC_DEPLOY
+          ? Promise.resolve({ ok: false })
+          : fetch('/api/settings', { cache: 'no-store' })
       ]);
       if (!manifestRes.ok) throw new Error('Chưa có audio-cache/manifest.json. Hãy chạy npm run tts:generate.');
       const manifest = await manifestRes.json();
@@ -1119,8 +1134,10 @@
       cacheStatusData = statusRes.ok ? await statusRes.json() : null;
       if (manifest.schemaVersion !== 1) throw new Error('Manifest TTS không đúng phiên bản.');
       setAudioManifest(manifest, routeConfig);
-      renderCatalogManager();
-      renderCacheManager();
+      if (!STATIC_DEPLOY) {
+        renderCatalogManager();
+        renderCacheManager();
+      }
       audioManifestError = null;
     } catch (error) {
       audioManifestError = error;

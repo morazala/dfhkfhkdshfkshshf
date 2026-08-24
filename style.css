@@ -1363,6 +1363,11 @@ body{
   text-shadow:0 0 2px rgba(255,255,255,.65), 0 0 18px rgba(244,239,226,.42), 0 3px 0 rgba(0,0,0,.25);
 }
 .key-slide-button:hover{ color:var(--chalk); }
+
+/* GitHub Pages chỉ phát cache đã generate sẵn; không hiển thị khu vực quản trị/TTS. */
+.static-deploy #settingsBtn,
+.static-deploy #homeSettingsBtn,
+.static-deploy #settingsPanel{ display:none !important; }
 .stage.home-active .key-carousel{ display:none; }
 
 /* Hai nút đáy main dùng chung một hàng riêng, không chồng lên nhau. */
