@@ -1,5 +1,7 @@
 'use strict';
 
+require('dotenv').config();
+
 /**
  * server.js — Backend cho "Bé Học Đánh Vần"
  * ---------------------------------------------------------------------------
