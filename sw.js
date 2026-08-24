@@ -1,5 +1,5 @@
 /* Offline shell + cache-first audio. Audio is cached on demand, never all at install time. */
-const VERSION = 'phonics-pwa-v2';
+const VERSION = 'phonics-pwa-v3';
 const SHELL_CACHE = `${VERSION}-shell`;
 const AUDIO_CACHE = `${VERSION}-audio`;
 const SHELL = [
@@ -29,14 +29,30 @@ async function trimAudioCache(cache) {
 
 async function cacheFirst(request) {
   const cache = await caches.open(AUDIO_CACHE);
-  const cached = await cache.match(request);
+  const isRangeRequest = request.headers.has('range');
+  // Audio elements commonly request WAV bằng Range. Cache API không nhận
+  // response 206, nên ưu tiên bản đầy đủ đã cache nếu có; nếu chưa có thì
+  // trả nguyên response 206 trực tiếp cho trình phát.
+  const cacheKey = new Request(request.url, { method: 'GET' });
+  const cached = await cache.match(cacheKey);
   if (cached) return cached;
-  const response = await fetch(request);
-  if (response.ok) {
-    await cache.put(request, response.clone());
-    await trimAudioCache(cache);
+  try {
+    const response = await fetch(request);
+    if (!isRangeRequest && response.ok && response.status === 200) {
+      try {
+        await cache.put(cacheKey, response.clone());
+        await trimAudioCache(cache);
+      } catch (cacheError) {
+        // Cache đầy hoặc browser từ chối lưu không được làm hỏng audio live.
+        console.warn('[PWA] Không lưu được audio vào cache:', cacheError);
+      }
+    }
+    return response;
+  } catch (error) {
+    const fallback = await cache.match(cacheKey);
+    if (fallback) return fallback;
+    return new Response(null, { status: 503, statusText: 'Audio offline chưa được cache' });
   }
-  return response;
 }
 
 async function networkFirst(request) {
