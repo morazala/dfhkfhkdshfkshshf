@@ -17,6 +17,9 @@
  */
 
 const express = require('express');
+const cors = require('cors');
+const helmet = require('helmet');
+const rateLimit = require('express-rate-limit');
 const fs = require('fs/promises');
 const path = require('path');
 const crypto = require('crypto');
@@ -35,6 +38,20 @@ const {
   normalizeWav,
   readCatalog
 } = require('./tts-generate.js');
+const {
+  initDatabase,
+  upsertGoogleUser,
+  listUsers,
+  deleteUser
+} = require('./db.js');
+const {
+  verifyGoogleCredential,
+  issueToken,
+  authenticateRequest,
+  requireAdmin,
+  setSessionCookie,
+  clearSessionCookie
+} = require('./auth.js');
 
 const PORT = process.env.PORT || 3000;
 const PUBLIC_DIR = __dirname;
@@ -51,6 +68,30 @@ const app = express();
 const jobs = new Map();
 let activeJobId = null;
 
+const allowedOrigins = new Set(
+  String(process.env.ALLOWED_ORIGINS || process.env.FRONTEND_ORIGIN || '')
+    .split(',').map(origin => origin.trim()).filter(Boolean)
+);
+
+app.disable('x-powered-by');
+app.use(helmet({ contentSecurityPolicy: false, crossOriginResourcePolicy: false }));
+app.use(cors({
+  credentials: true,
+  origin(origin, callback) {
+    if (!origin || allowedOrigins.has(origin) || (process.env.NODE_ENV !== 'production' && allowedOrigins.size === 0)) return callback(null, origin || true);
+    return callback(new Error('Origin không được phép.'));
+  }
+}));
+app.use(rateLimit({ windowMs: 15 * 60 * 1000, limit: 240, standardHeaders: 'draft-7', legacyHeaders: false }));
+const authRateLimit = rateLimit({ windowMs: 15 * 60 * 1000, limit: 20, standardHeaders: 'draft-7', legacyHeaders: false });
+app.use(express.json({ limit: '1mb' }));
+
+// Giữ workflow local hiện tại không cần secret; mọi môi trường production
+// bắt buộc đi qua Admin Secret trước khi sửa route/catalog/cache.
+const adminMutationGuard = (req, res, next) => process.env.NODE_ENV === 'production'
+  ? requireAdmin(req, res, next)
+  : next();
+
 const noCacheSource = {
   setHeaders(res, filePath) {
     if (/\.(html|css|js|json)$/i.test(filePath)) res.setHeader('Cache-Control', 'no-store');
@@ -58,7 +99,53 @@ const noCacheSource = {
 };
 
 app.get('/api/health', (req, res) => {
-  res.json({ ok: true, service: 'be-hoc-danh-van' });
+  res.json({ ok: true, service: 'be-hoc-danh-van', database: Boolean(process.env.DATABASE_URL) });
+});
+
+app.post('/api/auth/google', authRateLimit, async (req, res) => {
+  try {
+    const payload = await verifyGoogleCredential(req.body?.credential);
+    const user = await upsertGoogleUser({
+      googleId: payload.sub,
+      email: payload.email,
+      displayName: payload.name,
+      avatarUrl: payload.picture,
+      deviceInfo: req.body?.deviceInfo,
+      userAgent: req.get('user-agent')
+    });
+    setSessionCookie(res, issueToken(user));
+    res.json({ ok: true, user });
+  } catch (error) {
+    const status = error.code === 'USER_DISABLED' ? 403 : 401;
+    res.status(status).json({ ok: false, error: error.message || 'Đăng nhập Google thất bại.' });
+  }
+});
+
+app.get('/api/auth/me', authenticateRequest, (req, res) => {
+  res.json({ ok: true, user: req.user });
+});
+
+app.post('/api/auth/logout', (req, res) => {
+  clearSessionCookie(res);
+  res.json({ ok: true });
+});
+
+app.get('/api/admin/users', requireAdmin, async (req, res) => {
+  try {
+    res.json({ ok: true, users: await listUsers() });
+  } catch (error) {
+    res.status(503).json({ ok: false, error: error.message || 'Database chưa sẵn sàng.' });
+  }
+});
+
+app.delete('/api/admin/users/:id', requireAdmin, async (req, res) => {
+  try {
+    const user = await deleteUser(String(req.params.id || ''));
+    if (!user) return res.status(404).json({ ok: false, error: 'Không tìm thấy tài khoản.' });
+    return res.json({ ok: true, user });
+  } catch (error) {
+    return res.status(503).json({ ok: false, error: error.message || 'Database chưa sẵn sàng.' });
+  }
 });
 
 function normalizeUploadedText(value) {
@@ -110,7 +197,6 @@ app.get('/api/manifest', async (req, res) => {
 
 // Phục vụ luôn các file tĩnh của trang (index.html, script.js, style.css,
 // phonics-parser.js, data.json) để không cần chạy 2 server song song.
-app.use(express.json({ limit: '1mb' }));
 app.use(express.static(PUBLIC_DIR, noCacheSource));
 app.use('/audio', express.static(AUDIO_DIR, { fallthrough: true, immutable: true, maxAge: '1y' }));
 
@@ -257,7 +343,7 @@ app.get('/api/cache-routes', async (req, res) => {
   res.json({ ...routes, catalog });
 });
 
-app.put('/api/cache-routes', async (req, res) => {
+app.put('/api/cache-routes', adminMutationGuard, async (req, res) => {
   try {
     const catalog = await readCatalog();
     const routes = normalizeRoutesConfig(req.body, catalog);
@@ -275,7 +361,7 @@ app.get('/api/settings', async (req, res) => {
   res.json({ ...status, tokenConfigured: false });
 });
 
-app.put('/api/catalog', async (req, res) => {
+app.put('/api/catalog', adminMutationGuard, async (req, res) => {
   try {
     const catalog = normalizeCatalog(req.body?.catalog || req.body);
     await writeJsonAtomic(CATALOG_PATH, catalog);
@@ -311,7 +397,7 @@ app.get('/api/cache/:hash/download', async (req, res) => {
 
 // Người dùng có thể thay audio đã tải xuống bằng file WAV tự chỉnh. Route này
 // chỉ ghi file/manifest, tuyệt đối không gọi TTS và không cần token.
-app.post('/api/cache/upload', express.raw({
+app.post('/api/cache/upload', adminMutationGuard, express.raw({
   type: ['audio/wav', 'audio/x-wav', 'application/octet-stream'],
   limit: '20mb'
 }), async (req, res) => {
@@ -355,7 +441,7 @@ app.post('/api/cache/upload', express.raw({
   }
 });
 
-app.delete('/api/cache/:hash', async (req, res) => {
+app.delete('/api/cache/:hash', adminMutationGuard, async (req, res) => {
   const hash = String(req.params.hash || '');
   if (!/^[a-f0-9]{64}$/.test(hash)) return res.status(400).json({ ok: false, error: 'Hash cache không hợp lệ.' });
   try {
@@ -374,7 +460,7 @@ app.delete('/api/cache/:hash', async (req, res) => {
   }
 });
 
-app.post('/api/cache/generate', async (req, res) => {
+app.post('/api/cache/generate', adminMutationGuard, async (req, res) => {
   if (activeJobId) return res.status(409).json({ ok: false, error: 'Đang có một job generate khác.', jobId: activeJobId });
   const token = String(req.body?.token || '').trim();
   if (!token) return res.status(400).json({ ok: false, error: 'Cần nhập FPT API token.' });
@@ -416,7 +502,25 @@ app.get('/api/cache/generate/:jobId', (req, res) => {
   res.json({ ...job, output: job.output.slice(-40).join('') });
 });
 
-app.listen(PORT, () => {
-  console.log(`Bé Học Đánh Vần đang chạy tại http://localhost:${PORT}`);
-  console.log('[TTS] Runtime chỉ phát audio-cache; generate chỉ chạy khi người dùng chủ động bấm.');
+app.use((error, req, res, next) => {
+  if (res.headersSent) return next(error);
+  console.error('[API]', error.message || error);
+  return res.status(error.status || 500).json({ ok: false, error: 'Máy chủ gặp lỗi; vui lòng thử lại sau.' });
 });
+
+async function start() {
+  try {
+    const database = await initDatabase();
+    console.log(`[DB] ${database.ready ? 'PostgreSQL sẵn sàng.' : 'Chưa cấu hình DATABASE_URL; auth/admin sẽ tạm tắt.'}`);
+  } catch (error) {
+    console.error('[DB] Không khởi tạo được schema:', error.message);
+  }
+  app.listen(PORT, () => {
+    console.log(`Bé Học Đánh Vần đang chạy tại http://localhost:${PORT}`);
+    console.log('[TTS] Runtime chỉ phát audio-cache; generate chỉ chạy khi người dùng chủ động bấm.');
+  });
+}
+
+if (require.main === module) start();
+
+module.exports = { app, start };

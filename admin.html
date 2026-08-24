@@ -1,0 +1,23 @@
+<!doctype html>
+<html lang="vi">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Admin · Bé Học Đánh Vần</title>
+  <style>
+    :root{font-family:system-ui,sans-serif;color:#173f35;background:#f4efe2}body{max-width:1200px;margin:0 auto;padding:24px}h1{margin-top:0}.toolbar{display:flex;gap:8px;flex-wrap:wrap;margin:16px 0}input,button{font:inherit;padding:10px 12px;border:1px solid #c8b98f;border-radius:8px}input{min-width:320px}button{cursor:pointer;background:#173f35;color:#fff}.danger{background:#bd3e36}.status{min-height:24px}.table-wrap{overflow:auto;background:#fff;border-radius:12px;box-shadow:0 4px 20px #0001}table{border-collapse:collapse;width:100%;min-width:900px}th,td{text-align:left;padding:12px;border-bottom:1px solid #eadfca;vertical-align:top}th{background:#e8dfc9}.muted{color:#716958;font-size:.9em}
+  </style>
+</head>
+<body>
+  <h1>Quản trị người dùng</h1>
+  <p class="muted">Admin Secret chỉ được giữ trong bộ nhớ trang này, không lưu vào localStorage.</p>
+  <div class="toolbar">
+    <input id="secret" type="password" autocomplete="off" placeholder="Admin Secret Key">
+    <button id="load">Tải danh sách</button>
+    <button id="logout" type="button">Xoá secret khỏi trang</button>
+  </div>
+  <p id="status" class="status" role="status"></p>
+  <div class="table-wrap"><table><thead><tr><th>Email</th><th>Đăng ký</th><th>Đăng nhập cuối</th><th>Thiết bị</th><th>Trạng thái</th><th></th></tr></thead><tbody id="users"></tbody></table></div>
+  <script src="admin.js"></script>
+</body>
+</html>

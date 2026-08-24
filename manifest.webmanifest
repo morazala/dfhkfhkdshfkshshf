@@ -1,0 +1,15 @@
+{
+  "name": "Bé Học Đánh Vần",
+  "short_name": "Đánh Vần",
+  "description": "Luyện đánh vần tiếng Việt với audio cache đã được kiểm duyệt.",
+  "lang": "vi-VN",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "any",
+  "theme_color": "#173f35",
+  "background_color": "#d9c99c",
+  "icons": [
+    { "src": "icons/icon.svg", "sizes": "any", "type": "image/svg+xml", "purpose": "any maskable" }
+  ]
+}

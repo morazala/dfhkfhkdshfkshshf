@@ -1368,6 +1368,9 @@ body{
 .static-deploy #settingsBtn,
 .static-deploy #homeSettingsBtn,
 .static-deploy #settingsPanel{ display:none !important; }
+.auth-status{display:block;flex-basis:100%;min-height:1.3em;font-size:.85rem;color:var(--ink-soft,#716958)}
+.auth-status[data-kind="error"]{color:#a7362f}.auth-status[data-kind="success"]{color:#1d6a4d}
+.presentation-mode .hint{opacity:.45}.presentation-mode .board{position:sticky;top:0;z-index:20}
 .stage.home-active .key-carousel{ display:none; }
 
 /* Hai nút đáy main dùng chung một hàng riêng, không chồng lên nhau. */

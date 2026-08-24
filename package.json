@@ -7,11 +7,19 @@
   "scripts": {
     "start": "node server.js",
     "test": "node --test",
+    "build:config": "node scripts/build-config.js",
+    "build": "npm run build:config",
     "tts:plan": "node tts-generate.js --plan-only",
     "tts:generate": "node tts-generate.js"
   },
   "dependencies": {
     "@splidejs/splide": "^4.1.4",
-    "express": "^4.19.2"
+    "cors": "^2.8.6",
+    "express": "^4.19.2",
+    "express-rate-limit": "^8.6.2",
+    "google-auth-library": "^11.0.2",
+    "helmet": "^8.3.0",
+    "jsonwebtoken": "^9.0.3",
+    "pg": "^8.23.0"
   }
 }

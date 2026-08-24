@@ -3,6 +3,8 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#173f35">
+<link rel="manifest" href="manifest.webmanifest">
 <title>Bé Học Đánh Vần</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -78,6 +80,9 @@
       <p>Bắt đầu luyện đọc từng chữ, từng vần và dấu thanh.</p>
       <div class="home-actions">
         <button class="home-start-btn" id="startBtn" type="button">BẮT ĐẦU</button>
+        <button class="home-settings-btn" id="loginBtn" type="button">ĐĂNG NHẬP / ĐĂNG KÝ GOOGLE</button>
+        <button class="home-settings-btn" id="logoutBtn" type="button" hidden>ĐĂNG XUẤT</button>
+        <span class="auth-status" id="authStatus" role="status" aria-live="polite"></span>
         <button class="home-settings-btn" id="homeSettingsBtn" type="button">⚙ CÀI ĐẶT</button>
       </div>
     </section>
@@ -219,6 +224,10 @@
 
 <script src="phonics-parser.js"></script>
 <script src="vendor/splide/splide.min.js"></script>
+<script src="app-config.js"></script>
+<script src="https://accounts.google.com/gsi/client" async defer></script>
+<script src="auth-client.js"></script>
+<script src="pwa.js" defer></script>
 <script src="script.js"></script>
 </body>
 </html>

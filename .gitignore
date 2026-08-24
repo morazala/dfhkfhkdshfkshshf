@@ -4,3 +4,4 @@ dist/
 build/
 audio-cache/*.wav
 audio-cache/manifest.json
+audio-cache/*.tmp

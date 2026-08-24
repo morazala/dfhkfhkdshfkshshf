@@ -20,6 +20,8 @@
   let DATA = null;
   let keyCarouselInstance = null;
   let suppressCarouselMove = false;
+  const audioElementCache = new Map();
+  let presentationWakeLock = null;
 
   /* ======================================================================
      2. LÀM PHẲNG DỮ LIỆU
@@ -450,6 +452,37 @@
       }
     }
     applyRuntimeConfig(routeConfig);
+  }
+
+  function cachedAudioElement(url) {
+    let audio = audioElementCache.get(url);
+    if (audio) return audio;
+    audio = new Audio();
+    audio.preload = 'auto';
+    audio.src = url;
+    audio.load();
+    audioElementCache.set(url, audio);
+    while (audioElementCache.size > 32) {
+      const oldest = audioElementCache.keys().next().value;
+      const candidate = audioElementCache.get(oldest);
+      if (candidate === currentAudio) break;
+      candidate?.pause();
+      audioElementCache.delete(oldest);
+    }
+    return audio;
+  }
+
+  function warmAudioForItem(item) {
+    if (!item || !audioManifest) return;
+    const texts = new Set([item.word]);
+    const steps = state.spellingMode === LETTERS_ONLY_MODE
+      ? buildFaceLetterSteps(item.word)
+      : window.PhonicsParser.buildSpellingSteps(item.word).steps;
+    steps.forEach(step => { if (step?.text) texts.add(step.text); });
+    texts.forEach(text => {
+      const entry = selectAudioEntry(text, item.word);
+      if (entry) cachedAudioElement(entry.url);
+    });
   }
 
   function applyRuntimeConfig(routeConfig) {
@@ -1157,6 +1190,34 @@
     }
   }
 
+  async function enterPresentationMode() {
+    document.documentElement.classList.add('presentation-mode');
+    // Browsers intentionally do not expose whether USB/HDMI/VGA is connected.
+    // Fullscreen is the safe, user-gesture-compatible presentation mode.
+    try {
+      if (!document.fullscreenElement && document.documentElement.requestFullscreen) {
+        await document.documentElement.requestFullscreen({ navigationUI: 'hide' });
+      }
+    } catch (_) {
+      // Fullscreen can be denied by browser policy; the responsive presentation
+      // class remains active and the lesson still starts normally.
+    }
+    try {
+      if ('wakeLock' in navigator && !presentationWakeLock) {
+        presentationWakeLock = await navigator.wakeLock.request('screen');
+      }
+    } catch (_) {}
+  }
+
+  async function leavePresentationMode() {
+    document.documentElement.classList.remove('presentation-mode');
+    try { await presentationWakeLock?.release(); } catch (_) {}
+    presentationWakeLock = null;
+    try {
+      if (document.fullscreenElement && document.exitFullscreen) await document.exitFullscreen();
+    } catch (_) {}
+  }
+
   function speak(text, rate, fallbackText = '', word = '') {
     return new Promise(resolve => {
       stopSpeaking();
@@ -1178,8 +1239,9 @@
 
       let done = false;
       let timeoutId = null;
-      const audio = new Audio(entry.url);
-      audio.preload = 'auto';
+      const audio = cachedAudioElement(entry.url);
+      audio.pause();
+      audio.currentTime = 0;
       audio.playbackRate = Math.max(0.5, Math.min(3, Number(rate) || 1));
       currentAudio = audio;
 
@@ -1378,6 +1440,7 @@
     state.playToken++;
     stopAutoPlay();
     stopSpeaking();
+    leavePresentationMode();
     if (el.stage) el.stage.classList.add('home-active');
     if (el.letter) el.letter.textContent = 'BÉ HỌC ĐÁNH VẦN';
   }
@@ -1504,6 +1567,8 @@
     el.mergeCell.classList.remove('final-glow');
     clearLit(el.onsetText);
     clearLit(el.rimeText);
+    warmAudioForItem(item);
+    warmAudioForItem(FLAT[(state.flatIndex + 1) % FLAT.length]);
 
     const onsetOnly = !!onset && !rime;
     if (onset) {
@@ -1661,6 +1726,7 @@
   if (el.startBtn) {
     el.startBtn.addEventListener('click', () => {
       state.started = true;
+      enterPresentationMode();
       renderCurrent();
     });
   }
