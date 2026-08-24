@@ -1,0 +1,56 @@
+[
+  {
+    "id": "std_leminh",
+    "model": "FPT.AI-VITs",
+    "voice": "std_leminh",
+    "label": "Lê Minh · Nam · Bắc"
+  },
+  {
+    "id": "std_kimngan",
+    "model": "FPT.AI-VITs",
+    "voice": "std_kimngan",
+    "label": "Kim Ngân · Nữ · Nam"
+  },
+  {
+    "id": "std_banmai",
+    "model": "FPT.AI-VITs",
+    "voice": "std_banmai",
+    "label": "Ban Mai · Nữ · Bắc"
+  },
+  {
+    "id": "std_hatieumai",
+    "model": "FPT.AI-VITs",
+    "voice": "std_hatieumai",
+    "label": "Hà Tiểu Mai · Nữ · Nam"
+  },
+  {
+    "id": "std_ngoclam",
+    "model": "FPT.AI-VITs",
+    "voice": "std_ngoclam",
+    "label": "Ngọc Lam · Nữ · Trung"
+  },
+  {
+    "id": "std_thuminh",
+    "model": "FPT.AI-VITs",
+    "voice": "std_thuminh",
+    "label": "Thu Minh · Nữ · Bắc"
+  },
+  {
+    "id": "std_giahuy",
+    "model": "FPT.AI-VITs",
+    "voice": "std_giahuy",
+    "label": "Gia Huy · Nam · Nam"
+  },
+  {
+    "id": "std_huyphong",
+    "model": "FPT.AI-VITs",
+    "voice": "std_huyphong",
+    "label": "Huy Phong · Nam · Bắc"
+  },
+  {
+    "id": "std_minhquan",
+    "model": "FPT.AI-VITs",
+    "voice": "std_minhquan",
+    "label": "Minh Quân · Nam · Bắc"
+  }
+]

@@ -2,13 +2,16 @@
   "name": "be-hoc-danh-van",
   "version": "1.0.0",
   "private": true,
-  "description": "Bé Học Đánh Vần — giọng đọc dùng Edge TTS (edge-tts-node) qua server Node cục bộ.",
+  "description": "Bé Học Đánh Vần — luyện đánh vần với giọng tiếng Việt cục bộ trong trình duyệt.",
   "main": "server.js",
   "scripts": {
-    "start": "node server.js"
+    "start": "node server.js",
+    "test": "node --test",
+    "tts:plan": "node tts-generate.js --plan-only",
+    "tts:generate": "node tts-generate.js"
   },
   "dependencies": {
-    "edge-tts-node": "latest",
+    "@splidejs/splide": "^4.1.4",
     "express": "^4.19.2"
   }
 }

@@ -6,50 +6,90 @@
 <title>Bé Học Đánh Vần</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@500;600;700;800&family=Be+Vietnam+Pro:ital,wght@0,400;0,500;0,600;0,700;1,500&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:ital,wght@0,400;0,500;0,600;0,700;1,500&family=Mali:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/node_modules/@splidejs/splide/dist/css/splide-core.min.css">
 <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
-<div class="stage">
+<div class="stage" id="stage">
 
   <header class="board" id="board">
     <div class="board-inner">
-      <p class="board-eyebrow">Chữ cái đang học</p>
-      <h1 class="board-letter" id="letterDisplay">a</h1>
-      <p class="board-word" id="wholeWordCaption">&nbsp;</p>
-    </div>
-    <div class="chalk-tray" aria-hidden="true">
-      <span class="chalk chalk-white"></span>
-      <span class="chalk chalk-red"></span>
+      <h1 class="board-letter visually-hidden" id="letterDisplay">a</h1>
+      <div class="key-carousel splide" id="keyCarousel" aria-label="Chọn nhóm chữ cái">
+        <div class="splide__track">
+          <ul class="splide__list" id="keyCarouselTrack"></ul>
+        </div>
+      </div>
     </div>
   </header>
 
   <main class="page">
+    <div class="main-top-controls">
+        <label class="auto-toggle auto-toggle--main" for="autoPlayToggle">
+          <input type="checkbox" id="autoPlayToggle" class="auto-toggle-input">
+          <span class="auto-toggle-track"><span class="auto-toggle-thumb"></span></span>
+          <span class="auto-toggle-text">Tự động</span>
+        </label>
+        <div class="speed-presets" aria-label="Chế độ tốc độ đọc">
+          <span class="speed-caption">TỐC ĐỘ ĐỌC</span>
+          <button class="speed-preset" type="button" data-speed-mode="slow">Chậm</button>
+          <button class="speed-preset" type="button" data-speed-mode="medium">Trung bình</button>
+          <button class="speed-preset" type="button" data-speed-mode="normal">Bình thường</button>
+          <button class="speed-preset" type="button" data-speed-mode="fast">Bình nhanh</button>
+          <span class="speed-status" id="speedModeStatus">Trạng thái: Bình thường</span>
+        </div>
+      </div>
+
+    <section class="reading-view" id="readingView">
+
+    <button class="main-nav main-nav--prev" id="mainPrevBtn" type="button" aria-label="Từ trước">
+      <span aria-hidden="true">‹</span>
+    </button>
+    <button class="main-nav main-nav--next" id="mainNextBtn" type="button" aria-label="Từ tiếp theo">
+      <span aria-hidden="true">›</span>
+    </button>
 
     <div class="row middle-row">
       <div class="cell square-cell onset-cell" id="onsetCell">
-        <span class="cell-tab">Phần đầu</span>
         <div class="cell-text" id="onsetText"></div>
       </div>
       <div class="cell square-cell rime-cell" id="rimeCell">
-        <span class="cell-tab">Phần cuối</span>
         <div class="cell-text" id="rimeText"></div>
       </div>
     </div>
 
     <div class="row bottom-row">
       <div class="cell strip-cell merge-cell hidden" id="mergeCell">
-        <span class="cell-tab">Từ hoàn chỉnh</span>
         <div class="cell-text" id="mergeText"></div>
-        <button class="replay-btn" id="replayBtn" title="Nghe lại" aria-label="Nghe lại">🔊</button>
       </div>
     </div>
 
+    </section>
+
+    <div class="main-actions">
+      <button class="exit-btn" id="exitBtn" type="button">BẤM VÀO ĐÂY ĐỂ THOÁT RA</button>
+      <button class="replay-btn" id="replayBtn" type="button" title="Đọc lại từ hiện tại" aria-label="Đọc lại từ hiện tại"><span aria-hidden="true">🔊</span> BẤM VÀO ĐÂY ĐỂ ĐỌC LẠI</button>
+    </div>
+
+    <section class="home-panel" id="homePanel" aria-labelledby="homeTitle">
+      <h2 id="homeTitle">BÉ HỌC ĐÁNH VẦN</h2>
+      <p>Bắt đầu luyện đọc từng chữ, từng vần và dấu thanh.</p>
+      <div class="home-actions">
+        <button class="home-start-btn" id="startBtn" type="button">BẮT ĐẦU</button>
+        <button class="home-settings-btn" id="homeSettingsBtn" type="button">⚙ CÀI ĐẶT</button>
+      </div>
+    </section>
+
   </main>
 
-  <footer class="controls">
-    <nav class="key-nav">
+  <footer class="controls" id="controls">
+    <button id="controlsToggle" type="button" class="controls-toggle" aria-expanded="false" aria-controls="controlsPanel">
+      <span class="controls-toggle-label">BẤM VÀO ĐÂY ĐỂ KÉO LÊN</span>
+    </button>
+    <div class="controls-panel" id="controlsPanel">
+      <nav class="key-nav">
       <button class="key-btn" id="prevKeyBtn" aria-label="Chữ cái trước">
         <span class="arrow">‹</span><span class="key-label" id="prevKeyLabel">—</span>
       </button>
@@ -60,34 +100,125 @@
       <button class="key-btn" id="nextKeyBtn" aria-label="Chữ cái sau">
         <span class="key-label" id="nextKeyLabel">—</span><span class="arrow">›</span>
       </button>
-    </nav>
+      </nav>
 
-    <div class="rate-row rate-row--voice">
-      <label class="auto-toggle" for="autoPlayToggle">
-        <input type="checkbox" id="autoPlayToggle" class="auto-toggle-input">
-        <span class="auto-toggle-track"><span class="auto-toggle-thumb"></span></span>
-        <span class="auto-toggle-text">Tự động</span>
-      </label>
-      <span class="rate-sep" aria-hidden="true"></span>
-      <label for="voiceSelect">Giọng đọc</label>
-      <select id="voiceSelect" class="voice-select">
-        <option value="vi-VN-HoaiMyNeural">Hoài My (nữ)</option>
-        <option value="vi-VN-NamMinhNeural">Nam Minh (nam)</option>
+      <div class="rate-row rate-row--voice">
+      <button id="settingsBtn" type="button" class="settings-btn" aria-expanded="false">⚙ Cài đặt</button>
+      </div>
+
+      <div class="rate-row rate-row--voice">
+      <label for="readingModeSelect">Kiểu đánh vần</label>
+      <select id="readingModeSelect" class="voice-select">
+        <option value="full" selected>Đầy đủ: ghép âm và đọc dấu</option>
+        <option value="letters-only">Chỉ mặt chữ (vẫn đọc giọng LeminH)</option>
       </select>
-    </div>
+      </div>
 
-    <div class="rate-row rate-row--speed">
+      <div class="rate-row rate-row--speed">
       <label for="rateSlider">Tốc độ đọc</label>
-      <input type="range" id="rateSlider" min="0.5" max="3" step="0.1" value="0.9">
-      <span class="rate-val" id="rateValue">0.9×</span>
+      <input type="range" id="rateSlider" min="0.5" max="3" step="0.1" value="1.5">
+      <span class="rate-val" id="rateValue">1.5×</span>
+      </div>
+
+      <div class="rate-row rate-row--speed">
+      <label for="transitionSlider">Khoảng chuyển chữ</label>
+      <input type="range" id="transitionSlider" min="0" max="2" step="0.1" value="0.3">
+      <span class="rate-val" id="transitionValue">0.3s</span>
+      </div>
     </div>
   </footer>
 
   <p class="hint">Dùng <kbd>←</kbd> <kbd>→</kbd> hoặc <kbd>Page&nbsp;Up</kbd> <kbd>Page&nbsp;Down</kbd> để chuyển từ</p>
 
+  <div class="exit-dialog hidden" id="exitDialog" role="dialog" aria-modal="true" aria-labelledby="exitDialogTitle">
+    <div class="exit-dialog-card">
+      <h2 id="exitDialogTitle">Thoát phần luyện đọc?</h2>
+      <p>Tiến trình đọc hiện tại sẽ dừng lại để quay về trang chủ.</p>
+      <div class="exit-dialog-actions">
+        <button id="exitStayBtn" type="button" class="exit-stay-btn">Ở lại</button>
+        <button id="exitConfirmBtn" type="button" class="exit-confirm-btn">Xác nhận thoát</button>
+      </div>
+    </div>
+  </div>
+
+  <section class="settings-panel hidden" id="settingsPanel" aria-labelledby="settingsTitle">
+    <div class="settings-head">
+      <div>
+        <h2 id="settingsTitle">Cài đặt TTS và cache</h2>
+        <p>Thay đổi tại đây được cập nhật ngay. Token giữ trong bộ nhớ phiên web/server để dùng tiếp, không ghi vào JSON hay log.</p>
+      </div>
+      <button id="settingsClose" type="button" class="settings-close" aria-label="Đóng cài đặt">×</button>
+    </div>
+
+    <div class="settings-block">
+      <h3>Token generate</h3>
+      <div class="settings-token-row">
+        <input id="ttsToken" type="password" autocomplete="off" placeholder="Dán FPT API token khi cần generate">
+        <select id="generateRouteSelect" class="voice-select" aria-label="Voice cho cache thiếu"></select>
+        <button id="generateMissingBtn" type="button" class="cache-action cache-action--primary">Thêm hết cache thiếu</button>
+      </div>
+      <p id="generateStatus" class="cache-status" role="status" aria-live="polite">Chưa nhập token.</p>
+    </div>
+
+    <div class="settings-block">
+      <div class="settings-subhead">
+        <h3>Danh sách model / voice</h3>
+        <span id="catalogSummary" class="cache-summary"></span>
+      </div>
+      <div class="catalog-add-row">
+        <input id="catalogModel" type="text" placeholder="Model, ví dụ FPT.AI-VITs">
+        <input id="catalogVoice" type="text" placeholder="Voice ID, ví dụ std_moi">
+        <input id="catalogLabel" type="text" placeholder="Tên hiển thị">
+        <button id="catalogAddBtn" type="button" class="cache-action">Thêm model</button>
+      </div>
+      <div id="catalogList" class="catalog-list"></div>
+    </div>
+
+    <div class="settings-block">
+      <div class="settings-subhead">
+        <div>
+          <h3>Route theo prefix phụ âm</h3>
+          <p>Ví dụ prefix <b>r</b> sẽ áp dụng cho ra, rướp, rượp…; route cache cụ thể vẫn được ưu tiên.</p>
+        </div>
+      </div>
+      <div class="prefix-route-form">
+        <input id="prefixRoutePrefix" type="text" maxlength="3" placeholder="Prefix, ví dụ r" aria-label="Prefix phụ âm">
+        <select id="prefixRouteSelect" class="voice-select" aria-label="Voice cho prefix"></select>
+        <div id="prefixToneExclusions" class="prefix-tone-exclusions" aria-label="Thanh điệu loại trừ">
+          <label><input type="checkbox" value="1"> huyền</label>
+          <label><input type="checkbox" value="2"> sắc</label>
+          <label><input type="checkbox" value="3"> hỏi</label>
+          <label><input type="checkbox" value="4"> ngã</label>
+          <label><input type="checkbox" value="5"> nặng</label>
+        </div>
+        <button id="prefixRouteAdd" type="button" class="cache-action cache-action--primary">Lưu prefix</button>
+      </div>
+      <div id="prefixRouteList" class="prefix-route-list"></div>
+    </div>
+
+    <div class="settings-block">
+      <div class="cache-manager-head">
+        <div>
+          <h3>Quản lý cache</h3>
+          <p>Route từng câu, xoá bản đọc không ưng ý và quét thiếu cache từ dữ liệu hiện tại.</p>
+        </div>
+        <span id="cacheSummary" class="cache-summary">0/0 cache</span>
+      </div>
+      <div class="cache-manager-tools">
+        <label for="cacheSearch">Tìm cache</label>
+        <input id="cacheSearch" type="search" placeholder="Ví dụ: ư, kha, bờ">
+        <button id="cacheRefresh" type="button" class="cache-action">Quét lại</button>
+        <button id="cacheSave" type="button" class="cache-action cache-action--primary">Lưu route</button>
+      </div>
+      <p id="cacheStatus" class="cache-status" role="status" aria-live="polite">Đang tải danh sách cache…</p>
+      <div id="cacheList" class="cache-list" role="list" aria-label="Danh sách cache TTS"></div>
+    </div>
+  </section>
+
 </div>
 
 <script src="phonics-parser.js"></script>
+<script src="/node_modules/@splidejs/splide/dist/js/splide.min.js"></script>
 <script src="script.js"></script>
 </body>
 </html>

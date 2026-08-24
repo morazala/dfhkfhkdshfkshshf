@@ -93,10 +93,41 @@
   // (đọc là "i ngắn") để TTS đọc đúng. Các chuỗi đã ghép nhiều ký tự lại với nhau
   // (vd bước combine "uy", "uýt", "ay", "uay", hay chính từ hoàn chỉnh) KHÔNG đi qua
   // hàm này nên "y" trong các chuỗi đó vẫn được giữ nguyên như cũ.
+  // FPT.AI-VITs đôi lúc hiểu nguyên âm đơn "o", "ô", "ư" như một mảnh âm tiết
+  // khi đầu vào chỉ có đúng một ký tự. Dấu chấm không được hiển thị, nhưng giúp
+  // engine chốt đây là một lượt đọc độc lập. Generator sẽ cache theo audioText.
+  const ISOLATED_VOWEL_AUDIO_TEXT = { o: 'o.', ô: 'ô.', ư: 'ư.' };
+
   function letterStep(ch) {
-    if (ch === 'y') return { type: 'letter', text: 'i' };
-    return { type: 'letter', text: letterName(ch) };
+    const text = ch === 'y' ? 'i' : letterName(ch);
+    const audioText = ISOLATED_VOWEL_AUDIO_TEXT[text];
+    return audioText ? { type: 'letter', text, audioText } : { type: 'letter', text };
   }
+
+  // ---------- 1b. GHI ĐÈ VĂN BẢN ĐỌC (TTS) CHO TỪNG TOKEN ÂM ----------
+  // "s" và "x" trong tiếng Việt CHUẨN/phổ thông (giọng Bắc) phát âm GIỐNG HỆT
+  // NHAU (đều là /s/ xát vô thanh, KHÔNG uốn lưỡi) — chỉ giọng miền Nam/Trung mới
+  // phát âm "s" uốn lưỡi khác "x". Đây LÀ PHÁT ÂM ĐÚNG chuẩn phổ thông, không phải
+  // lỗi — giọng cục bộ vẫn giữ đúng khác biệt phát âm ở mức văn bản học tập,
+  // CẢ HAI đều là giọng chuẩn/Bắc, chưa có giọng miền Nam để tạo ra sự khác biệt
+  // uốn lưỡi mà bạn muốn. Không có cách nào ở tầng code sửa được việc này — cần
+  // Microsoft ra thêm giọng miền Nam mới có.
+  //
+  // Việc CÒN SỬA ĐƯỢC: nếu 2 âm tiết ngắn này bị đọc lí nhí/cụt (không chỉ "giống
+  // nhau" mà còn khó nghe rõ) khi bị đọc tách biệt khỏi câu, có thể cải thiện NGỮ
+  // ĐIỆU đọc (không đổi được ÂM VỊ). Bảng dưới đây cho phép đổi riêng VĂN BẢN GỬI
+  // CHO TTS của một token mà không ảnh hưởng gì tới chữ hiển thị trên UI (bước
+  // {type:'token'} vốn không hiển thị lên ô nào, chỉ dùng để đọc — xem playWord
+  // trong script.js). Đang thử thêm dấu chấm cuối để TTS đọc trọn âm, rõ ràng như
+  // 1 câu hoàn chỉnh thay vì bị cụt như khi đọc lửng giữa chừng. Nếu vẫn chưa đủ
+  // rõ, có thể thử bọc SSML (vd '<prosody rate="-15%">Sờ.</prosody>') — NHƯNG chỉ
+  // có tác dụng nếu engine TTS hỗ trợ SSML; engine trình duyệt hiện tại không
+  // gửi SSML nên các override văn bản ở trên vẫn là cách an toàn nhất.
+  const TOKEN_AUDIO_OVERRIDES = {
+    'sờ': 'Sờ.',
+    'xờ': 'Xờ.'
+  };
+  function tokenAudioText(name) { return TOKEN_AUDIO_OVERRIDES[name] || name; }
 
   // ---------- HÀM TIỆN ÍCH ----------
   function chars(str) { return Array.from(str); }
@@ -117,7 +148,11 @@
   function applyTone(nucleus, toneIndex) {
     if (toneIndex === 0) return nucleus;
     const arr = chars(nucleus);
-    let idx = arr.findIndex(c => PRIORITY_VOWELS.includes(c));
+    // Với cụm "ươ", dấu đặt trên "ơ" (ướp/ước), không đặt trên "ư".
+    // Đây là trường hợp đặc biệt của quy tắc đặt dấu tiếng Việt.
+    let idx = arr.includes('ư') && arr.includes('ơ')
+      ? arr.lastIndexOf('ơ')
+      : arr.findIndex(c => PRIORITY_VOWELS.includes(c));
     if (idx === -1) idx = arr.length - 1;
     const base = arr[idx];
     arr[idx] = (TONE_TABLE[base] || [base])[toneIndex] || base;
@@ -125,6 +160,26 @@
   }
 
   function tonelessWord(word) { return chars(word).map(ch => charBaseTone(ch).base).join(''); }
+
+  // Một số vần đóng không thể đứng thanh ngang trong chính tả tiếng Việt:
+  // op/oc/ôt... khi parser nhận đầu vào không dấu sẽ dùng dạng đọc mặc định
+  // sắc (óp/óc/ốt...). Đây là canonical key của AUDIO CACHE, không phải một
+  // bước mới để hiển thị hay đọc thêm dấu. Vì vậy op và óp dùng chung một cache.
+  function canonicalAudioText(text) {
+    const normalized = String(text || '').normalize('NFC').trim().replace(/\s+/g, ' ');
+    if (!normalized) return '';
+    if ({ o: true, 'ô': true, 'ư': true }[normalized]) return `${normalized}.`;
+    const { onset, rime } = splitOnsetRime(normalized);
+    if (onset) return normalized;
+    const { base, toneIndex } = stripTone(rime);
+    const { nucleus, final } = splitNucleusFinal(base);
+    if (toneIndex === 0 && STOP_FINALS.has(final)) return applyTone(nucleus, 2) + final;
+    return normalized;
+  }
+
+  function isLegacyParserText(text) {
+    return String(text || '').normalize('NFC').includes('ứơ');
+  }
 
   // ---------- 4. TÁCH ÂM ĐẦU / VẦN (dùng cho MỌI phụ âm đầu TRỪ "gi") ----------
   function splitOnsetRime(word) {
@@ -165,9 +220,18 @@
     const steps = [];
     let rimeDisplay;
 
+    // Phụ âm đứng một mình (b, c, m...) chỉ là một âm đầu độc lập. Không tạo
+    // bước vần/từ hoàn chỉnh vì TTS sẽ cố đọc lại chữ như một âm tiết (cê, bê...).
+    if (onset && !rime) {
+      return {
+        word, onset, rime, nucleus, final, toneName,
+        steps: [{ type: 'token', text: tokenAudioText(onsetToken) }]
+      };
+    }
+
     if (needsRimeSpelling) {
       chars(nucleus).forEach(ch => steps.push(letterStep(ch)));
-      if (final) steps.push({ type: 'token', text: FINAL_TOKENS[final] });
+      if (final) steps.push({ type: 'token', text: tokenAudioText(FINAL_TOKENS[final]) });
 
       const defaultRime = (isChecked ? applyTone(nucleus, defaultToneIndex) : nucleus) + final;
       steps.push({ type: 'combine', text: defaultRime });
@@ -180,9 +244,9 @@
     }
 
     if (onset) {
-      steps.push({ type: 'token', text: onsetToken });
-      if (!needsRimeSpelling) steps.push(letterStep(nucleus));
-      else steps.push({ type: 'combine', text: rimeDisplay }); // nhắc lại vần trước khi ghép
+      steps.push({ type: 'token', text: tokenAudioText(onsetToken) });
+      if (!needsRimeSpelling && nucleus) steps.push(letterStep(nucleus));
+      else if (needsRimeSpelling) steps.push({ type: 'combine', text: rimeDisplay }); // nhắc lại vần trước khi ghép
 
       const onsetBase = tonelessWord(onset).toLowerCase();
       steps.push({ type: 'combine', text: onsetBase + rimeDisplay });
@@ -192,6 +256,14 @@
       // dạng này bị "nuốt" mất bước đọc nguyên âm gốc, khiến "ò" chỉ đọc "huyền -> ò"
       // mà bỏ qua "o". Nay luôn phát âm nguyên âm gốc trước khi ghép dấu thanh.
       steps.push(letterStep(nucleus));
+    }
+
+    // Với vần không có âm đầu và âm cuối tắc ở thanh ngang (ac, ăc, âc,
+    // at, ap...), defaultRime (ác/ắc/ấc...) đã là bước cuối của phần vần.
+    // Không thêm lại từ gốc không dấu vì sẽ khiến TTS đọc dư một lượt (ác -> ac).
+    if (!onset && isChecked && toneIndex === 0 && steps.at(-1)?.type === 'combine') {
+      steps.at(-1).type = 'final';
+      return { word, onset, rime, nucleus, final, toneName, steps };
     }
 
     // ---- Bước dấu thanh + từ hoàn chỉnh ----
@@ -228,13 +300,9 @@
 
     // ---- Trường hợp 3: "gi" đơn (chỉ 2 ký tự gi + dấu thanh, không còn vần nào khác) ----
     if (remainingToneless === '') {
-      const steps = [{ type: 'token', text: 'gi' }];
+      const steps = [{ type: 'token', text: tokenAudioText('gi') }];
       if (toneIndex !== 0) {
         steps.push({ type: 'tone', text: toneName });
-        steps.push({ type: 'final', text: word });
-      } else if (steps.length && steps[steps.length - 1].text === word) {
-        steps[steps.length - 1].type = 'final';
-      } else {
         steps.push({ type: 'final', text: word });
       }
       return { word, onset: 'gi', rime: '', nucleus: '', final: '', toneName, steps };
@@ -259,7 +327,7 @@
 
     const steps = [];
     chars(nucleus).forEach(ch => steps.push(letterStep(ch)));
-    if (final) steps.push({ type: 'token', text: FINAL_TOKENS[final] });
+    if (final) steps.push({ type: 'token', text: tokenAudioText(FINAL_TOKENS[final]) });
 
     const defaultRime = (isChecked ? applyTone(nucleus, defaultToneIndex) : nucleus) + final;
     steps.push({ type: 'combine', text: defaultRime });
@@ -267,7 +335,7 @@
     // xuất hiện ở bước cuối cùng.
     const rimeDisplay = defaultRime;
 
-    steps.push({ type: 'token', text: 'gi' });
+    steps.push({ type: 'token', text: tokenAudioText('gi') });
     steps.push({ type: 'combine', text: rimeDisplay }); // nhắc lại vần ẩn trước khi ghép
 
     // Chữ "i" đầu vần ẩn CHÍNH LÀ chữ "i" đã viết ngay sau "g" (bị dùng chung / nuốt),
@@ -313,7 +381,7 @@
     const { toneIndex, toneName } = stripTone(rime);
     const extra = chars(nucleus).slice(1).join(''); // nguyên âm đứng sau "u", vd "a","y","ê"
 
-    const steps = [{ type: 'token', text: 'cùa' }];
+    const steps = [{ type: 'token', text: tokenAudioText('cùa') }];
     if (extra) steps.push(letterStep(extra));
 
     const merged = 'qu' + extra; // vd "qua", "quy", "quê" (chưa có dấu thanh)
@@ -354,7 +422,7 @@
     return runStandard(word, onset, rime, onsetToken);
   }
 
-  const PhonicsParser = { buildSpellingSteps, stripTone, splitOnsetRime, splitNucleusFinal, applyTone };
+  const PhonicsParser = { buildSpellingSteps, canonicalAudioText, isLegacyParserText, stripTone, splitOnsetRime, splitNucleusFinal, applyTone };
   if (typeof module !== 'undefined' && module.exports) module.exports = PhonicsParser;
   else global.PhonicsParser = PhonicsParser;
 

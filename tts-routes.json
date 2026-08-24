@@ -1,0 +1,2956 @@
+{
+  "schemaVersion": 1,
+  "default": {
+    "model": "FPT.AI-VITs",
+    "voice": "std_leminh"
+  },
+  "routes": {
+    "kha": {
+      "model": "FPT.AI-VITs",
+      "voice": "std_huyphong"
+    },
+    "ác": {
+      "model": "FPT.AI-VITs",
+      "voice": "std_leminh"
+    },
+    "ách": {
+      "model": "FPT.AI-VITs",
+      "voice": "std_leminh"
+    },
+    "áo": {
+      "model": "FPT.AI-VITs",
+      "voice": "std_leminh"
+    },
+    "áp": {
+      "model": "FPT.AI-VITs",
+      "voice": "std_leminh"
+    },
+    "át": {
+      "model": "FPT.AI-VITs",
+      "voice": "std_leminh"
+    },
+    "ắc": {
+      "model": "FPT.AI-VITs",
+      "voice": "std_leminh"
+    },
+    "ẵm": {
+      "model": "FPT.AI-VITs",
+      "voice": "std_leminh"
+    },
+    "ắp": {
+      "model": "FPT.AI-VITs",
+      "voice": "std_leminh"
+    },
+    "ắt": {
+      "model": "FPT.AI-VITs",
+      "voice": "std_leminh"
+    },
+    "ấc": {
+      "model": "FPT.AI-VITs",
+      "voice": "std_leminh"
+    },
+    "ấp": {
+      "model": "FPT.AI-VITs",
+      "voice": "std_leminh"
+    },
+    "ất": {
+      "model": "FPT.AI-VITs",
+      "voice": "std_leminh"
+    },
+    "b": {
+      "model": "FPT.AI-VITs",
+      "voice": "std_leminh"
+    },
+    "bãi": {
+      "model": "FPT.AI-VITs",
+      "voice": "std_leminh"
+    },
+    "bận": {
+      "model": "FPT.AI-VITs",
+      "voice": "std_leminh"
+    },
+    "bướu": {
+      "model": "FPT.AI-VITs",
+      "voice": "std_leminh"
+    },
+    "c": {
+      "model": "FPT.AI-VITs",
+      "voice": "std_leminh"
+    },
+    "cai": {
+      "model": "FPT.AI-VITs",
+      "voice": "std_leminh"
+    },
+    "cái": {
+      "model": "FPT.AI-VITs",
+      "voice": "std_leminh"
+    },
+    "cam": {
+      "model": "FPT.AI-VITs",
+      "voice": "std_leminh"
+    },
+    "canh": {
+      "model": "FPT.AI-VITs",
+      "voice": "std_leminh"
+    },
+    "cánh": {
+      "model": "FPT.AI-VITs",
+      "voice": "std_leminh"
+    },
+    "cạnh": {
+      "model": "FPT.AI-VITs",
+      "voice": "std_leminh"
+    },
+    "ch": {
+      "model": "FPT.AI-VITs",
+      "voice": "std_leminh"
+    },
+    "chanh": {
+      "model": "FPT.AI-VITs",
+      "voice": "std_leminh"
+    },
+    "chao": {
+      "model": "FPT.AI-VITs",
+      "voice": "std_leminh"
+    },
+    "chào": {
+      "model": "FPT.AI-VITs",
+      "voice": "std_leminh"
+    },
+    "che": {
+      "model": "FPT.AI-VITs",
+      "voice": "std_leminh"
+    },
+    "chè": {
+      "model": "FPT.AI-VITs",
+      "voice": "std_leminh"
+    },
+    "chênh": {
+      "model": "FPT.AI-VITs",
+      "voice": "std_leminh"
+    },
+    "chi": {
+      "model": "FPT.AI-VITs",
+      "voice": "std_leminh"
+    },
+    "chì": {
+      "model": "FPT.AI-VITs",
+      "voice": "std_leminh"
+    },
+    "chỉ": {
+      "model": "FPT.AI-VITs",
+      "voice": "std_leminh"
+    },
+    "chinh": {
+      "model": "FPT.AI-VITs",
+      "voice": "std_leminh"
+    },
+    "chỉnh": {
+      "model": "FPT.AI-VITs",
+      "voice": "std_leminh"
+    },
+    "chó": {
+      "model": "FPT.AI-VITs",
+      "voice": "std_leminh"
+    },
+    "choe": {
+      "model": "FPT.AI-VITs",
+      "voice": "std_leminh"
+    },
+    "choè": {
+      "model": "FPT.AI-VITs",
+      "voice": "std_leminh"
+    },
+    "choi": {
+      "model": "FPT.AI-VITs",
+      "voice": "std_leminh"
+    },
+    "chòi": {
+      "model": "FPT.AI-VITs",
+      "voice": "std_leminh"
+    },
+    "chong": {
+      "model": "FPT.AI-VITs",
+      "voice": "std_leminh"
+    },
+    "chóng": {
+      "model": "FPT.AI-VITs",
+      "voice": "std_leminh"
+    },
+    "chôn": {
+      "model": "FPT.AI-VITs",
+      "voice": "std_leminh"
+    },
+    "chồn": {
+      "model": "FPT.AI-VITs",
+      "voice": "std_leminh"
+    },
+    "chơ": {
+      "model": "FPT.AI-VITs",
+      "voice": "std_leminh"
+    },
+    "chợ": {
+      "model": "FPT.AI-VITs",
+      "voice": "std_leminh"
+    },
+    "chơi": {
+      "model": "FPT.AI-VITs",
+      "voice": "std_leminh"
+    },
+    "chu": {
+      "model": "FPT.AI-VITs",
+      "voice": "std_leminh"
+    },
+    "chú": {
+      "model": "FPT.AI-VITs",
+      "voice": "std_leminh"
+    },
+    "chua": {
+      "model": "FPT.AI-VITs",
+      "voice": "std_leminh"
+    },
+    "chuân": {
+      "model": "FPT.AI-VITs",
+      "voice": "std_leminh"
+    },
+    "chuẩn": {
+      "model": "FPT.AI-VITs",
+      "voice": "std_leminh"
+    },
+    "chục": {
+      "model": "FPT.AI-VITs",
+      "voice": "std_leminh"
+    },
+    "chụm": {
+      "model": "FPT.AI-VITs",
+      "voice": "std_leminh"
+    },
+    "chuối": {
+      "model": "FPT.AI-VITs",
+      "voice": "std_leminh"
+    },
+    "chuông": {
+      "model": "FPT.AI-VITs",
+      "voice": "std_leminh"
+    },
+    "chuyên": {
+      "model": "FPT.AI-VITs",
+      "voice": "std_leminh"
+    },
+    "chuyến": {
+      "model": "FPT.AI-VITs",
+      "voice": "std_leminh"
+    },
+    "chuyện": {
+      "model": "FPT.AI-VITs",
+      "voice": "std_leminh"
+    },
+    "chư": {
+      "model": "FPT.AI-VITs",
+      "voice": "std_leminh"
+    },
+    "chữ": {
+      "model": "FPT.AI-VITs",
+      "voice": "std_leminh"
+    },
+    "chưng": {
+      "model": "FPT.AI-VITs",
+      "voice": "std_leminh"
+    },
+    "chươm": {
+      "model": "FPT.AI-VITs",
+      "voice": "std_leminh"
+    },
+    "chườm": {
+      "model": "FPT.AI-VITs",
+      "voice": "std_leminh"
+    },
+    "cỏ": {
+      "model": "FPT.AI-VITs",
+      "voice": "std_leminh"
+    },
+    "cổ": {
+      "model": "FPT.AI-VITs",
+      "voice": "std_leminh"
+    },
+    "cộ": {
+      "model": "FPT.AI-VITs",
+      "voice": "std_leminh"
+    },
+    "công": {
+      "model": "FPT.AI-VITs",
+      "voice": "std_leminh"
+    },
+    "cộng": {
+      "model": "FPT.AI-VITs",
+      "voice": "std_leminh"
+    },
+    "cỡ": {
+      "model": "FPT.AI-VITs",
+      "voice": "std_leminh"
+    },
+    "cụ": {
+      "model": "FPT.AI-VITs",
+      "voice": "std_leminh"
+    },
+    "cun": {
+      "model": "FPT.AI-VITs",
+      "voice": "std_leminh"
+    },
+    "cún": {
+      "model": "FPT.AI-VITs",
+      "voice": "std_leminh"
+    },
+    "cư": {
+      "model": "FPT.AI-VITs",
+      "voice": "std_leminh"
+    },
+    "cử": {
+      "model": "FPT.AI-VITs",
+      "voice": "std_leminh"
+    },
+    "cửa": {
+      "model": "FPT.AI-VITs",
+      "voice": "std_leminh"
+    },
+    "cưi": {
+      "model": "FPT.AI-VITs",
+      "voice": "std_leminh"
+    },
+    "cửi": {
+      "model": "FPT.AI-VITs",
+      "voice": "std_leminh"
+    },
+    "cươi": {
+      "model": "FPT.AI-VITs",
+      "voice": "std_leminh"
+    },
+    "cười": {
+      "model": "FPT.AI-VITs",
+      "voice": "std_leminh"
+    },
+    "cưu": {
+      "model": "FPT.AI-VITs",
+      "voice": "std_giahuy"
+    },
+    "cừu": {
+      "model": "FPT.AI-VITs",
+      "voice": "std_leminh"
+    },
+    "d": {
+      "model": "FPT.AI-VITs",
+      "voice": "std_leminh"
+    },
+    "dã": {
+      "model": "FPT.AI-VITs",
+      "voice": "std_leminh"
+    },
+    "dao": {
+      "model": "FPT.AI-VITs",
+      "voice": "std_leminh"
+    },
+    "dạo": {
+      "model": "FPT.AI-VITs",
+      "voice": "std_leminh"
+    },
+    "day": {
+      "model": "FPT.AI-VITs",
+      "voice": "std_leminh"
+    },
+    "dãy": {
+      "model": "FPT.AI-VITs",
+      "voice": "std_leminh"
+    },
+    "de": {
+      "model": "FPT.AI-VITs",
+      "voice": "std_leminh"
+    },
+    "dẻ": {
+      "model": "FPT.AI-VITs",
+      "voice": "std_leminh"
+    },
+    "deo": {
+      "model": "FPT.AI-VITs",
+      "voice": "std_leminh"
+    },
+    "dẻo": {
+      "model": "FPT.AI-VITs",
+      "voice": "std_leminh"
+    },
+    "dép": {
+      "model": "FPT.AI-VITs",
+      "voice": "std_leminh"
+    },
+    "dế": {
+      "model": "FPT.AI-VITs",
+      "voice": "std_leminh"
+    },
+    "dết": {
+      "model": "FPT.AI-VITs",
+      "voice": "std_leminh"
+    },
+    "dệt": {
+      "model": "FPT.AI-VITs",
+      "voice": "std_leminh"
+    },
+    "dia": {
+      "model": "FPT.AI-VITs",
+      "voice": "std_leminh"
+    },
+    "dĩa": {
+      "model": "FPT.AI-VITs",
+      "voice": "std_leminh"
+    },
+    "diễm": {
+      "model": "FPT.AI-VITs",
+      "voice": "std_leminh"
+    },
+    "diêu": {
+      "model": "FPT.AI-VITs",
+      "voice": "std_leminh"
+    },
+    "diều": {
+      "model": "FPT.AI-VITs",
+      "voice": "std_leminh"
+    },
+    "diễu": {
+      "model": "FPT.AI-VITs",
+      "voice": "std_leminh"
+    },
+    "diu": {
+      "model": "FPT.AI-VITs",
+      "voice": "std_leminh"
+    },
+    "dịu": {
+      "model": "FPT.AI-VITs",
+      "voice": "std_leminh"
+    },
+    "dong": {
+      "model": "FPT.AI-VITs",
+      "voice": "std_leminh"
+    },
+    "dòng": {
+      "model": "FPT.AI-VITs",
+      "voice": "std_leminh"
+    },
+    "dơ": {
+      "model": "FPT.AI-VITs",
+      "voice": "std_leminh"
+    },
+    "dỡ": {
+      "model": "FPT.AI-VITs",
+      "voice": "std_leminh"
+    },
+    "du": {
+      "model": "FPT.AI-VITs",
+      "voice": "std_leminh"
+    },
+    "dù": {
+      "model": "FPT.AI-VITs",
+      "voice": "std_leminh"
+    },
+    "dữ": {
+      "model": "FPT.AI-VITs",
+      "voice": "std_leminh"
+    },
+    "dự": {
+      "model": "FPT.AI-VITs",
+      "voice": "std_leminh"
+    },
+    "dưa": {
+      "model": "FPT.AI-VITs",
+      "voice": "std_leminh"
+    },
+    "dừa": {
+      "model": "FPT.AI-VITs",
+      "voice": "std_leminh"
+    },
+    "dứa": {
+      "model": "FPT.AI-VITs",
+      "voice": "std_leminh"
+    },
+    "dược": {
+      "model": "FPT.AI-VITs",
+      "voice": "std_leminh"
+    },
+    "dứơc": {
+      "model": "FPT.AI-VITs",
+      "voice": "std_leminh"
+    },
+    "đ": {
+      "model": "FPT.AI-VITs",
+      "voice": "std_leminh"
+    },
+    "đam": {
+      "model": "FPT.AI-VITs",
+      "voice": "std_leminh"
+    },
+    "đám": {
+      "model": "FPT.AI-VITs",
+      "voice": "std_leminh"
+    },
+    "đâm": {
+      "model": "FPT.AI-VITs",
+      "voice": "std_leminh"
+    },
+    "đậm": {
+      "model": "FPT.AI-VITs",
+      "voice": "std_leminh"
+    },
+    "đấp": {
+      "model": "FPT.AI-VITs",
+      "voice": "std_leminh"
+    },
+    "đập": {
+      "model": "FPT.AI-VITs",
+      "voice": "std_leminh"
+    },
+    "đất": {
+      "model": "FPT.AI-VITs",
+      "voice": "std_leminh"
+    },
+    "đâu": {
+      "model": "FPT.AI-VITs",
+      "voice": "std_leminh"
+    },
+    "đầu": {
+      "model": "FPT.AI-VITs",
+      "voice": "std_leminh"
+    },
+    "đây": {
+      "model": "FPT.AI-VITs",
+      "voice": "std_leminh"
+    },
+    "đậy": {
+      "model": "FPT.AI-VITs",
+      "voice": "std_leminh"
+    },
+    "đèn": {
+      "model": "FPT.AI-VITs",
+      "voice": "std_leminh"
+    },
+    "đeo": {
+      "model": "FPT.AI-VITs",
+      "voice": "std_leminh"
+    },
+    "đẽo": {
+      "model": "FPT.AI-VITs",
+      "voice": "std_leminh"
+    },
+    "đê": {
+      "model": "FPT.AI-VITs",
+      "voice": "std_leminh"
+    },
+    "đia": {
+      "model": "FPT.AI-VITs",
+      "voice": "std_leminh"
+    },
+    "đĩa": {
+      "model": "FPT.AI-VITs",
+      "voice": "std_leminh"
+    },
+    "điên": {
+      "model": "FPT.AI-VITs",
+      "voice": "std_leminh"
+    },
+    "điện": {
+      "model": "FPT.AI-VITs",
+      "voice": "std_leminh"
+    },
+    "điu": {
+      "model": "FPT.AI-VITs",
+      "voice": "std_leminh"
+    },
+    "địu": {
+      "model": "FPT.AI-VITs",
+      "voice": "std_leminh"
+    },
+    "đỏ": {
+      "model": "FPT.AI-VITs",
+      "voice": "std_leminh"
+    },
+    "đoa": {
+      "model": "FPT.AI-VITs",
+      "voice": "std_leminh"
+    },
+    "đoá": {
+      "model": "FPT.AI-VITs",
+      "voice": "std_leminh"
+    },
+    "đom": {
+      "model": "FPT.AI-VITs",
+      "voice": "std_leminh"
+    },
+    "đóm": {
+      "model": "FPT.AI-VITs",
+      "voice": "std_leminh"
+    },
+    "đô": {
+      "model": "FPT.AI-VITs",
+      "voice": "std_leminh"
+    },
+    "đồ": {
+      "model": "FPT.AI-VITs",
+      "voice": "std_leminh"
+    },
+    "đổ": {
+      "model": "FPT.AI-VITs",
+      "voice": "std_leminh"
+    },
+    "đỗ": {
+      "model": "FPT.AI-VITs",
+      "voice": "std_leminh"
+    },
+    "đôi": {
+      "model": "FPT.AI-VITs",
+      "voice": "std_leminh"
+    },
+    "đơ": {
+      "model": "FPT.AI-VITs",
+      "voice": "std_leminh"
+    },
+    "đỡ": {
+      "model": "FPT.AI-VITs",
+      "voice": "std_leminh"
+    },
+    "đơi": {
+      "model": "FPT.AI-VITs",
+      "voice": "std_leminh"
+    },
+    "đợi": {
+      "model": "FPT.AI-VITs",
+      "voice": "std_leminh"
+    },
+    "đu": {
+      "model": "FPT.AI-VITs",
+      "voice": "std_leminh"
+    },
+    "đủ": {
+      "model": "FPT.AI-VITs",
+      "voice": "std_leminh"
+    },
+    "đúc": {
+      "model": "FPT.AI-VITs",
+      "voice": "std_leminh"
+    },
+    "đưa": {
+      "model": "FPT.AI-VITs",
+      "voice": "std_leminh"
+    },
+    "đưng": {
+      "model": "FPT.AI-VITs",
+      "voice": "std_leminh"
+    },
+    "đựng": {
+      "model": "FPT.AI-VITs",
+      "voice": "std_leminh"
+    },
+    "đương": {
+      "model": "FPT.AI-VITs",
+      "voice": "std_leminh"
+    },
+    "đường": {
+      "model": "FPT.AI-VITs",
+      "voice": "std_leminh"
+    },
+    "ép": {
+      "model": "FPT.AI-VITs",
+      "voice": "std_leminh"
+    },
+    "ét": {
+      "model": "FPT.AI-VITs",
+      "voice": "std_leminh"
+    },
+    "ếch": {
+      "model": "FPT.AI-VITs",
+      "voice": "std_leminh"
+    },
+    "ếp": {
+      "model": "FPT.AI-VITs",
+      "voice": "std_leminh"
+    },
+    "ết": {
+      "model": "FPT.AI-VITs",
+      "voice": "std_leminh"
+    },
+    "g": {
+      "model": "FPT.AI-VITs",
+      "voice": "std_leminh"
+    },
+    "găn": {
+      "model": "FPT.AI-VITs",
+      "voice": "std_leminh"
+    },
+    "gắn": {
+      "model": "FPT.AI-VITs",
+      "voice": "std_leminh"
+    },
+    "gắp": {
+      "model": "FPT.AI-VITs",
+      "voice": "std_leminh"
+    },
+    "gặp": {
+      "model": "FPT.AI-VITs",
+      "voice": "std_leminh"
+    },
+    "gắt": {
+      "model": "FPT.AI-VITs",
+      "voice": "std_leminh"
+    },
+    "gặt": {
+      "model": "FPT.AI-VITs",
+      "voice": "std_leminh"
+    },
+    "gấc": {
+      "model": "FPT.AI-VITs",
+      "voice": "std_leminh"
+    },
+    "gân": {
+      "model": "FPT.AI-VITs",
+      "voice": "std_leminh"
+    },
+    "gần": {
+      "model": "FPT.AI-VITs",
+      "voice": "std_leminh"
+    },
+    "gất": {
+      "model": "FPT.AI-VITs",
+      "voice": "std_leminh"
+    },
+    "gật": {
+      "model": "FPT.AI-VITs",
+      "voice": "std_leminh"
+    },
+    "gâu": {
+      "model": "FPT.AI-VITs",
+      "voice": "std_leminh"
+    },
+    "gấu": {
+      "model": "FPT.AI-VITs",
+      "voice": "std_leminh"
+    },
+    "gh": {
+      "model": "FPT.AI-VITs",
+      "voice": "std_leminh"
+    },
+    "ghế": {
+      "model": "FPT.AI-VITs",
+      "voice": "std_leminh"
+    },
+    "ghênh": {
+      "model": "FPT.AI-VITs",
+      "voice": "std_leminh"
+    },
+    "ghềnh": {
+      "model": "FPT.AI-VITs",
+      "voice": "std_leminh"
+    },
+    "ghi": {
+      "model": "FPT.AI-VITs",
+      "voice": "std_leminh"
+    },
+    "gian": {
+      "model": "FPT.AI-VITs",
+      "voice": "std_leminh"
+    },
+    "giàn": {
+      "model": "FPT.AI-VITs",
+      "voice": "std_leminh"
+    },
+    "giò": {
+      "model": "FPT.AI-VITs",
+      "voice": "std_leminh"
+    },
+    "giỏ": {
+      "model": "FPT.AI-VITs",
+      "voice": "std_leminh"
+    },
+    "gion": {
+      "model": "FPT.AI-VITs",
+      "voice": "std_leminh"
+    },
+    "giòn": {
+      "model": "FPT.AI-VITs",
+      "voice": "std_leminh"
+    },
+    "giô": {
+      "model": "FPT.AI-VITs",
+      "voice": "std_leminh"
+    },
+    "giỗ": {
+      "model": "FPT.AI-VITs",
+      "voice": "std_leminh"
+    },
+    "giúp": {
+      "model": "FPT.AI-VITs",
+      "voice": "std_leminh"
+    },
+    "góp": {
+      "model": "FPT.AI-VITs",
+      "voice": "std_leminh"
+    },
+    "gô": {
+      "model": "FPT.AI-VITs",
+      "voice": "std_leminh"
+    },
+    "gỗ": {
+      "model": "FPT.AI-VITs",
+      "voice": "std_leminh"
+    },
+    "gốc": {
+      "model": "FPT.AI-VITs",
+      "voice": "std_leminh"
+    },
+    "gu": {
+      "model": "FPT.AI-VITs",
+      "voice": "std_leminh"
+    },
+    "gụ": {
+      "model": "FPT.AI-VITs",
+      "voice": "std_leminh"
+    },
+    "gươm": {
+      "model": "FPT.AI-VITs",
+      "voice": "std_leminh"
+    },
+    "h": {
+      "model": "FPT.AI-VITs",
+      "voice": "std_leminh"
+    },
+    "hai": {
+      "model": "FPT.AI-VITs",
+      "voice": "std_leminh"
+    },
+    "hát": {
+      "model": "FPT.AI-VITs",
+      "voice": "std_leminh"
+    },
+    "hạt": {
+      "model": "FPT.AI-VITs",
+      "voice": "std_leminh"
+    },
+    "hâng": {
+      "model": "FPT.AI-VITs",
+      "voice": "std_leminh"
+    },
+    "hẫng": {
+      "model": "FPT.AI-VITs",
+      "voice": "std_leminh"
+    },
+    "he": {
+      "model": "FPT.AI-VITs",
+      "voice": "std_leminh"
+    },
+    "hè": {
+      "model": "FPT.AI-VITs",
+      "voice": "std_leminh"
+    },
+    "hé": {
+      "model": "FPT.AI-VITs",
+      "voice": "std_leminh"
+    },
+    "hinh": {
+      "model": "FPT.AI-VITs",
+      "voice": "std_leminh"
+    },
+    "hình": {
+      "model": "FPT.AI-VITs",
+      "voice": "std_leminh"
+    },
+    "hoa": {
+      "model": "FPT.AI-VITs",
+      "voice": "std_leminh"
+    },
+    "hoà": {
+      "model": "FPT.AI-VITs",
+      "voice": "std_leminh"
+    },
+    "hoát": {
+      "model": "FPT.AI-VITs",
+      "voice": "std_leminh"
+    },
+    "hoạt": {
+      "model": "FPT.AI-VITs",
+      "voice": "std_leminh"
+    },
+    "hóc": {
+      "model": "FPT.AI-VITs",
+      "voice": "std_leminh"
+    },
+    "học": {
+      "model": "FPT.AI-VITs",
+      "voice": "std_leminh"
+    },
+    "hoi": {
+      "model": "FPT.AI-VITs",
+      "voice": "std_leminh"
+    },
+    "hóp": {
+      "model": "FPT.AI-VITs",
+      "voice": "std_leminh"
+    },
+    "họp": {
+      "model": "FPT.AI-VITs",
+      "voice": "std_leminh"
+    },
+    "hô": {
+      "model": "FPT.AI-VITs",
+      "voice": "std_leminh"
+    },
+    "hồ": {
+      "model": "FPT.AI-VITs",
+      "voice": "std_leminh"
+    },
+    "hổ": {
+      "model": "FPT.AI-VITs",
+      "voice": "std_leminh"
+    },
+    "hố": {
+      "model": "FPT.AI-VITs",
+      "voice": "std_leminh"
+    },
+    "hốp": {
+      "model": "FPT.AI-VITs",
+      "voice": "std_leminh"
+    },
+    "hộp": {
+      "model": "FPT.AI-VITs",
+      "voice": "std_leminh"
+    },
+    "hu": {
+      "model": "FPT.AI-VITs",
+      "voice": "std_leminh"
+    },
+    "hũ": {
+      "model": "FPT.AI-VITs",
+      "voice": "std_leminh"
+    },
+    "huệ": {
+      "model": "FPT.AI-VITs",
+      "voice": "std_leminh"
+    },
+    "hụt": {
+      "model": "FPT.AI-VITs",
+      "voice": "std_leminh"
+    },
+    "hưng": {
+      "model": "FPT.AI-VITs",
+      "voice": "std_leminh"
+    },
+    "hửng": {
+      "model": "FPT.AI-VITs",
+      "voice": "std_leminh"
+    },
+    "hương": {
+      "model": "FPT.AI-VITs",
+      "voice": "std_leminh"
+    },
+    "hướng": {
+      "model": "FPT.AI-VITs",
+      "voice": "std_leminh"
+    },
+    "ích": {
+      "model": "FPT.AI-VITs",
+      "voice": "std_leminh"
+    },
+    "iếc": {
+      "model": "FPT.AI-VITs",
+      "voice": "std_leminh"
+    },
+    "iếp": {
+      "model": "FPT.AI-VITs",
+      "voice": "std_leminh"
+    },
+    "iết": {
+      "model": "FPT.AI-VITs",
+      "voice": "std_leminh"
+    },
+    "íp": {
+      "model": "FPT.AI-VITs",
+      "voice": "std_leminh"
+    },
+    "ít": {
+      "model": "FPT.AI-VITs",
+      "voice": "std_leminh"
+    },
+    "k": {
+      "model": "FPT.AI-VITs",
+      "voice": "std_leminh"
+    },
+    "ke": {
+      "model": "FPT.AI-VITs",
+      "voice": "std_leminh"
+    },
+    "kè": {
+      "model": "FPT.AI-VITs",
+      "voice": "std_leminh"
+    },
+    "kẻ": {
+      "model": "FPT.AI-VITs",
+      "voice": "std_leminh"
+    },
+    "keo": {
+      "model": "FPT.AI-VITs",
+      "voice": "std_leminh"
+    },
+    "kẹo": {
+      "model": "FPT.AI-VITs",
+      "voice": "std_leminh"
+    },
+    "kệ": {
+      "model": "FPT.AI-VITs",
+      "voice": "std_leminh"
+    },
+    "kênh": {
+      "model": "FPT.AI-VITs",
+      "voice": "std_leminh"
+    },
+    "kh": {
+      "model": "FPT.AI-VITs",
+      "voice": "std_leminh"
+    },
+    "kham": {
+      "model": "FPT.AI-VITs",
+      "voice": "std_leminh"
+    },
+    "khám": {
+      "model": "FPT.AI-VITs",
+      "voice": "std_leminh"
+    },
+    "khăn": {
+      "model": "FPT.AI-VITs",
+      "voice": "std_leminh"
+    },
+    "khen": {
+      "model": "FPT.AI-VITs",
+      "voice": "std_leminh"
+    },
+    "khèn": {
+      "model": "FPT.AI-VITs",
+      "voice": "std_leminh"
+    },
+    "khê": {
+      "model": "FPT.AI-VITs",
+      "voice": "std_huyphong"
+    },
+    "khế": {
+      "model": "FPT.AI-VITs",
+      "voice": "std_leminh"
+    },
+    "khêu": {
+      "model": "FPT.AI-VITs",
+      "voice": "std_leminh"
+    },
+    "khều": {
+      "model": "FPT.AI-VITs",
+      "voice": "std_leminh"
+    },
+    "khi": {
+      "model": "FPT.AI-VITs",
+      "voice": "std_leminh"
+    },
+    "khỉ": {
+      "model": "FPT.AI-VITs",
+      "voice": "std_leminh"
+    },
+    "khoai": {
+      "model": "FPT.AI-VITs",
+      "voice": "std_leminh"
+    },
+    "khoe": {
+      "model": "FPT.AI-VITs",
+      "voice": "std_leminh"
+    },
+    "khoẻ": {
+      "model": "FPT.AI-VITs",
+      "voice": "std_leminh"
+    },
+    "khom": {
+      "model": "FPT.AI-VITs",
+      "voice": "std_leminh"
+    },
+    "khóm": {
+      "model": "FPT.AI-VITs",
+      "voice": "std_leminh"
+    },
+    "khô": {
+      "model": "FPT.AI-VITs",
+      "voice": "std_leminh"
+    },
+    "khu": {
+      "model": "FPT.AI-VITs",
+      "voice": "std_leminh"
+    },
+    "khuân": {
+      "model": "FPT.AI-VITs",
+      "voice": "std_leminh"
+    },
+    "khuôn": {
+      "model": "FPT.AI-VITs",
+      "voice": "std_leminh"
+    },
+    "kĩ": {
+      "model": "FPT.AI-VITs",
+      "voice": "std_leminh"
+    },
+    "kích": {
+      "model": "FPT.AI-VITs",
+      "voice": "std_leminh"
+    },
+    "kịch": {
+      "model": "FPT.AI-VITs",
+      "voice": "std_leminh"
+    },
+    "kiêm": {
+      "model": "FPT.AI-VITs",
+      "voice": "std_leminh"
+    },
+    "kiểm": {
+      "model": "FPT.AI-VITs",
+      "voice": "std_leminh"
+    },
+    "kiếm": {
+      "model": "FPT.AI-VITs",
+      "voice": "std_leminh"
+    },
+    "kiên": {
+      "model": "FPT.AI-VITs",
+      "voice": "std_leminh"
+    },
+    "kiến": {
+      "model": "FPT.AI-VITs",
+      "voice": "std_leminh"
+    },
+    "kiễng": {
+      "model": "FPT.AI-VITs",
+      "voice": "std_leminh"
+    },
+    "kiêu": {
+      "model": "FPT.AI-VITs",
+      "voice": "std_leminh"
+    },
+    "kiều": {
+      "model": "FPT.AI-VITs",
+      "voice": "std_leminh"
+    },
+    "kinh": {
+      "model": "FPT.AI-VITs",
+      "voice": "std_leminh"
+    },
+    "kính": {
+      "model": "FPT.AI-VITs",
+      "voice": "std_leminh"
+    },
+    "kíp": {
+      "model": "FPT.AI-VITs",
+      "voice": "std_leminh"
+    },
+    "kịp": {
+      "model": "FPT.AI-VITs",
+      "voice": "std_leminh"
+    },
+    "l": {
+      "model": "FPT.AI-VITs",
+      "voice": "std_leminh"
+    },
+    "lác": {
+      "model": "FPT.AI-VITs",
+      "voice": "std_leminh"
+    },
+    "lạc": {
+      "model": "FPT.AI-VITs",
+      "voice": "std_leminh"
+    },
+    "lai": {
+      "model": "FPT.AI-VITs",
+      "voice": "std_leminh"
+    },
+    "lái": {
+      "model": "FPT.AI-VITs",
+      "voice": "std_leminh"
+    },
+    "lang": {
+      "model": "FPT.AI-VITs",
+      "voice": "std_leminh"
+    },
+    "làng": {
+      "model": "FPT.AI-VITs",
+      "voice": "std_leminh"
+    },
+    "lát": {
+      "model": "FPT.AI-VITs",
+      "voice": "std_leminh"
+    },
+    "lạt": {
+      "model": "FPT.AI-VITs",
+      "voice": "std_leminh"
+    },
+    "lăm": {
+      "model": "FPT.AI-VITs",
+      "voice": "std_leminh"
+    },
+    "lằm": {
+      "model": "FPT.AI-VITs",
+      "voice": "std_leminh"
+    },
+    "lăn": {
+      "model": "FPT.AI-VITs",
+      "voice": "std_leminh"
+    },
+    "lặn": {
+      "model": "FPT.AI-VITs",
+      "voice": "std_leminh"
+    },
+    "lây": {
+      "model": "FPT.AI-VITs",
+      "voice": "std_leminh"
+    },
+    "lẫy": {
+      "model": "FPT.AI-VITs",
+      "voice": "std_leminh"
+    },
+    "le": {
+      "model": "FPT.AI-VITs",
+      "voice": "std_leminh"
+    },
+    "leo": {
+      "model": "FPT.AI-VITs",
+      "voice": "std_leminh"
+    },
+    "lẽo": {
+      "model": "FPT.AI-VITs",
+      "voice": "std_leminh"
+    },
+    "lê": {
+      "model": "FPT.AI-VITs",
+      "voice": "std_leminh"
+    },
+    "lếch": {
+      "model": "FPT.AI-VITs",
+      "voice": "std_leminh"
+    },
+    "lệch": {
+      "model": "FPT.AI-VITs",
+      "voice": "std_leminh"
+    },
+    "lênh": {
+      "model": "FPT.AI-VITs",
+      "voice": "std_leminh"
+    },
+    "lệnh": {
+      "model": "FPT.AI-VITs",
+      "voice": "std_leminh"
+    },
+    "li": {
+      "model": "FPT.AI-VITs",
+      "voice": "std_leminh"
+    },
+    "lích": {
+      "model": "FPT.AI-VITs",
+      "voice": "std_leminh"
+    },
+    "lịch": {
+      "model": "FPT.AI-VITs",
+      "voice": "std_leminh"
+    },
+    "liêng": {
+      "model": "FPT.AI-VITs",
+      "voice": "std_leminh"
+    },
+    "liệng": {
+      "model": "FPT.AI-VITs",
+      "voice": "std_leminh"
+    },
+    "lít": {
+      "model": "FPT.AI-VITs",
+      "voice": "std_leminh"
+    },
+    "lọ": {
+      "model": "FPT.AI-VITs",
+      "voice": "std_leminh"
+    },
+    "loé": {
+      "model": "FPT.AI-VITs",
+      "voice": "std_leminh"
+    },
+    "lốc": {
+      "model": "FPT.AI-VITs",
+      "voice": "std_leminh"
+    },
+    "lộc": {
+      "model": "FPT.AI-VITs",
+      "voice": "std_leminh"
+    },
+    "lốp": {
+      "model": "FPT.AI-VITs",
+      "voice": "std_leminh"
+    },
+    "lốt": {
+      "model": "FPT.AI-VITs",
+      "voice": "std_leminh"
+    },
+    "lơ": {
+      "model": "FPT.AI-VITs",
+      "voice": "std_leminh"
+    },
+    "lỡ": {
+      "model": "FPT.AI-VITs",
+      "voice": "std_leminh"
+    },
+    "lớn": {
+      "model": "FPT.AI-VITs",
+      "voice": "std_leminh"
+    },
+    "lớp": {
+      "model": "FPT.AI-VITs",
+      "voice": "std_leminh"
+    },
+    "lợp": {
+      "model": "FPT.AI-VITs",
+      "voice": "std_leminh"
+    },
+    "lu": {
+      "model": "FPT.AI-VITs",
+      "voice": "std_leminh"
+    },
+    "luốc": {
+      "model": "FPT.AI-VITs",
+      "voice": "std_leminh"
+    },
+    "luộc": {
+      "model": "FPT.AI-VITs",
+      "voice": "std_leminh"
+    },
+    "luông": {
+      "model": "FPT.AI-VITs",
+      "voice": "std_leminh"
+    },
+    "luống": {
+      "model": "FPT.AI-VITs",
+      "voice": "std_leminh"
+    },
+    "lút": {
+      "model": "FPT.AI-VITs",
+      "voice": "std_leminh"
+    },
+    "lụt": {
+      "model": "FPT.AI-VITs",
+      "voice": "std_leminh"
+    },
+    "luỹ": {
+      "model": "FPT.AI-VITs",
+      "voice": "std_leminh"
+    },
+    "lữ": {
+      "model": "FPT.AI-VITs",
+      "voice": "std_leminh"
+    },
+    "lưa": {
+      "model": "FPT.AI-VITs",
+      "voice": "std_leminh"
+    },
+    "lửa": {
+      "model": "FPT.AI-VITs",
+      "voice": "std_leminh"
+    },
+    "lươi": {
+      "model": "FPT.AI-VITs",
+      "voice": "std_leminh"
+    },
+    "lưới": {
+      "model": "FPT.AI-VITs",
+      "voice": "std_leminh"
+    },
+    "lượt": {
+      "model": "FPT.AI-VITs",
+      "voice": "std_leminh"
+    },
+    "m": {
+      "model": "FPT.AI-VITs",
+      "voice": "std_leminh"
+    },
+    "manh": {
+      "model": "FPT.AI-VITs",
+      "voice": "std_leminh"
+    },
+    "mảnh": {
+      "model": "FPT.AI-VITs",
+      "voice": "std_leminh"
+    },
+    "may": {
+      "model": "FPT.AI-VITs",
+      "voice": "std_leminh"
+    },
+    "máy": {
+      "model": "FPT.AI-VITs",
+      "voice": "std_leminh"
+    },
+    "mắc": {
+      "model": "FPT.AI-VITs",
+      "voice": "std_leminh"
+    },
+    "mặc": {
+      "model": "FPT.AI-VITs",
+      "voice": "std_leminh"
+    },
+    "măng": {
+      "model": "FPT.AI-VITs",
+      "voice": "std_leminh"
+    },
+    "mắt": {
+      "model": "FPT.AI-VITs",
+      "voice": "std_leminh"
+    },
+    "mặt": {
+      "model": "FPT.AI-VITs",
+      "voice": "std_leminh"
+    },
+    "mâm": {
+      "model": "FPT.AI-VITs",
+      "voice": "std_leminh"
+    },
+    "mân": {
+      "model": "FPT.AI-VITs",
+      "voice": "std_leminh"
+    },
+    "mận": {
+      "model": "FPT.AI-VITs",
+      "voice": "std_leminh"
+    },
+    "mấp": {
+      "model": "FPT.AI-VITs",
+      "voice": "std_leminh"
+    },
+    "mập": {
+      "model": "FPT.AI-VITs",
+      "voice": "std_leminh"
+    },
+    "mây": {
+      "model": "FPT.AI-VITs",
+      "voice": "std_leminh"
+    },
+    "me": {
+      "model": "FPT.AI-VITs",
+      "voice": "std_leminh"
+    },
+    "mè": {
+      "model": "FPT.AI-VITs",
+      "voice": "std_leminh"
+    },
+    "mẹ": {
+      "model": "FPT.AI-VITs",
+      "voice": "std_leminh"
+    },
+    "men": {
+      "model": "FPT.AI-VITs",
+      "voice": "std_leminh"
+    },
+    "mèn": {
+      "model": "FPT.AI-VITs",
+      "voice": "std_leminh"
+    },
+    "mếch": {
+      "model": "FPT.AI-VITs",
+      "voice": "std_leminh"
+    },
+    "mia": {
+      "model": "FPT.AI-VITs",
+      "voice": "std_leminh"
+    },
+    "mía": {
+      "model": "FPT.AI-VITs",
+      "voice": "std_leminh"
+    },
+    "mim": {
+      "model": "FPT.AI-VITs",
+      "voice": "std_leminh"
+    },
+    "mỉm": {
+      "model": "FPT.AI-VITs",
+      "voice": "std_leminh"
+    },
+    "mít": {
+      "model": "FPT.AI-VITs",
+      "voice": "std_leminh"
+    },
+    "môi": {
+      "model": "FPT.AI-VITs",
+      "voice": "std_leminh"
+    },
+    "mỗi": {
+      "model": "FPT.AI-VITs",
+      "voice": "std_leminh"
+    },
+    "mơ": {
+      "model": "FPT.AI-VITs",
+      "voice": "std_leminh"
+    },
+    "mỡ": {
+      "model": "FPT.AI-VITs",
+      "voice": "std_leminh"
+    },
+    "mơi": {
+      "model": "FPT.AI-VITs",
+      "voice": "std_leminh"
+    },
+    "mới": {
+      "model": "FPT.AI-VITs",
+      "voice": "std_leminh"
+    },
+    "mui": {
+      "model": "FPT.AI-VITs",
+      "voice": "std_leminh"
+    },
+    "mũi": {
+      "model": "FPT.AI-VITs",
+      "voice": "std_leminh"
+    },
+    "mum": {
+      "model": "FPT.AI-VITs",
+      "voice": "std_leminh"
+    },
+    "mũm": {
+      "model": "FPT.AI-VITs",
+      "voice": "std_leminh"
+    },
+    "muôi": {
+      "model": "FPT.AI-VITs",
+      "voice": "std_leminh"
+    },
+    "muỗi": {
+      "model": "FPT.AI-VITs",
+      "voice": "std_leminh"
+    },
+    "muối": {
+      "model": "FPT.AI-VITs",
+      "voice": "std_leminh"
+    },
+    "muôn": {
+      "model": "FPT.AI-VITs",
+      "voice": "std_leminh"
+    },
+    "muốn": {
+      "model": "FPT.AI-VITs",
+      "voice": "std_leminh"
+    },
+    "muộn": {
+      "model": "FPT.AI-VITs",
+      "voice": "std_leminh"
+    },
+    "muốt": {
+      "model": "FPT.AI-VITs",
+      "voice": "std_leminh"
+    },
+    "mức": {
+      "model": "FPT.AI-VITs",
+      "voice": "std_leminh"
+    },
+    "mực": {
+      "model": "FPT.AI-VITs",
+      "voice": "std_leminh"
+    },
+    "mươi": {
+      "model": "FPT.AI-VITs",
+      "voice": "std_leminh"
+    },
+    "mười": {
+      "model": "FPT.AI-VITs",
+      "voice": "std_leminh"
+    },
+    "mướt": {
+      "model": "FPT.AI-VITs",
+      "voice": "std_leminh"
+    },
+    "n": {
+      "model": "FPT.AI-VITs",
+      "voice": "std_leminh"
+    },
+    "nay": {
+      "model": "FPT.AI-VITs",
+      "voice": "std_leminh"
+    },
+    "nảy": {
+      "model": "FPT.AI-VITs",
+      "voice": "std_leminh"
+    },
+    "nấp": {
+      "model": "FPT.AI-VITs",
+      "voice": "std_leminh"
+    },
+    "ne": {
+      "model": "FPT.AI-VITs",
+      "voice": "std_leminh"
+    },
+    "nẻ": {
+      "model": "FPT.AI-VITs",
+      "voice": "std_leminh"
+    },
+    "nép": {
+      "model": "FPT.AI-VITs",
+      "voice": "std_leminh"
+    },
+    "nẹp": {
+      "model": "FPT.AI-VITs",
+      "voice": "std_leminh"
+    },
+    "nê": {
+      "model": "FPT.AI-VITs",
+      "voice": "std_leminh"
+    },
+    "nề": {
+      "model": "FPT.AI-VITs",
+      "voice": "std_leminh"
+    },
+    "nên": {
+      "model": "FPT.AI-VITs",
+      "voice": "std_leminh"
+    },
+    "nến": {
+      "model": "FPT.AI-VITs",
+      "voice": "std_leminh"
+    },
+    "nếp": {
+      "model": "FPT.AI-VITs",
+      "voice": "std_leminh"
+    },
+    "nết": {
+      "model": "FPT.AI-VITs",
+      "voice": "std_leminh"
+    },
+    "ng": {
+      "model": "FPT.AI-VITs",
+      "voice": "std_leminh"
+    },
+    "ngh": {
+      "model": "FPT.AI-VITs",
+      "voice": "std_leminh"
+    },
+    "nghê": {
+      "model": "FPT.AI-VITs",
+      "voice": "std_leminh"
+    },
+    "nghệ": {
+      "model": "FPT.AI-VITs",
+      "voice": "std_leminh"
+    },
+    "nghên": {
+      "model": "FPT.AI-VITs",
+      "voice": "std_leminh"
+    },
+    "nghển": {
+      "model": "FPT.AI-VITs",
+      "voice": "std_leminh"
+    },
+    "nghi": {
+      "model": "FPT.AI-VITs",
+      "voice": "std_leminh"
+    },
+    "nghỉ": {
+      "model": "FPT.AI-VITs",
+      "voice": "std_leminh"
+    },
+    "nghĩ": {
+      "model": "FPT.AI-VITs",
+      "voice": "std_leminh"
+    },
+    "ngõ": {
+      "model": "FPT.AI-VITs",
+      "voice": "std_leminh"
+    },
+    "ngoai": {
+      "model": "FPT.AI-VITs",
+      "voice": "std_leminh"
+    },
+    "ngoái": {
+      "model": "FPT.AI-VITs",
+      "voice": "std_leminh"
+    },
+    "ngoại": {
+      "model": "FPT.AI-VITs",
+      "voice": "std_leminh"
+    },
+    "ngoăn": {
+      "model": "FPT.AI-VITs",
+      "voice": "std_leminh"
+    },
+    "ngoằn": {
+      "model": "FPT.AI-VITs",
+      "voice": "std_leminh"
+    },
+    "ngon": {
+      "model": "FPT.AI-VITs",
+      "voice": "std_leminh"
+    },
+    "ngọn": {
+      "model": "FPT.AI-VITs",
+      "voice": "std_leminh"
+    },
+    "ngót": {
+      "model": "FPT.AI-VITs",
+      "voice": "std_leminh"
+    },
+    "ngọt": {
+      "model": "FPT.AI-VITs",
+      "voice": "std_leminh"
+    },
+    "ngôi": {
+      "model": "FPT.AI-VITs",
+      "voice": "std_leminh"
+    },
+    "ngu": {
+      "model": "FPT.AI-VITs",
+      "voice": "std_leminh"
+    },
+    "ngủ": {
+      "model": "FPT.AI-VITs",
+      "voice": "std_leminh"
+    },
+    "nguôi": {
+      "model": "FPT.AI-VITs",
+      "voice": "std_leminh"
+    },
+    "nguội": {
+      "model": "FPT.AI-VITs",
+      "voice": "std_leminh"
+    },
+    "nguôn": {
+      "model": "FPT.AI-VITs",
+      "voice": "std_leminh"
+    },
+    "nguồn": {
+      "model": "FPT.AI-VITs",
+      "voice": "std_leminh"
+    },
+    "ngư": {
+      "model": "FPT.AI-VITs",
+      "voice": "std_leminh"
+    },
+    "ngự": {
+      "model": "FPT.AI-VITs",
+      "voice": "std_giahuy"
+    },
+    "ngược": {
+      "model": "FPT.AI-VITs",
+      "voice": "std_leminh"
+    },
+    "ngứơc": {
+      "model": "FPT.AI-VITs",
+      "voice": "std_leminh"
+    },
+    "ngươi": {
+      "model": "FPT.AI-VITs",
+      "voice": "std_leminh"
+    },
+    "người": {
+      "model": "FPT.AI-VITs",
+      "voice": "std_leminh"
+    },
+    "nh": {
+      "model": "FPT.AI-VITs",
+      "voice": "std_leminh"
+    },
+    "nhác": {
+      "model": "FPT.AI-VITs",
+      "voice": "std_leminh"
+    },
+    "nhạc": {
+      "model": "FPT.AI-VITs",
+      "voice": "std_leminh"
+    },
+    "nhan": {
+      "model": "FPT.AI-VITs",
+      "voice": "std_leminh"
+    },
+    "nhãn": {
+      "model": "FPT.AI-VITs",
+      "voice": "std_leminh"
+    },
+    "nhắc": {
+      "model": "FPT.AI-VITs",
+      "voice": "std_leminh"
+    },
+    "nhâm": {
+      "model": "FPT.AI-VITs",
+      "voice": "std_leminh"
+    },
+    "nhẩm": {
+      "model": "FPT.AI-VITs",
+      "voice": "std_leminh"
+    },
+    "nhe": {
+      "model": "FPT.AI-VITs",
+      "voice": "std_leminh"
+    },
+    "nhẹ": {
+      "model": "FPT.AI-VITs",
+      "voice": "std_leminh"
+    },
+    "nhiết": {
+      "model": "FPT.AI-VITs",
+      "voice": "std_leminh"
+    },
+    "nhiệt": {
+      "model": "FPT.AI-VITs",
+      "voice": "std_leminh"
+    },
+    "nhíp": {
+      "model": "FPT.AI-VITs",
+      "voice": "std_leminh"
+    },
+    "nhịp": {
+      "model": "FPT.AI-VITs",
+      "voice": "std_leminh"
+    },
+    "nhỏ": {
+      "model": "FPT.AI-VITs",
+      "voice": "std_leminh"
+    },
+    "nhon": {
+      "model": "FPT.AI-VITs",
+      "voice": "std_leminh"
+    },
+    "nhọn": {
+      "model": "FPT.AI-VITs",
+      "voice": "std_leminh"
+    },
+    "nhót": {
+      "model": "FPT.AI-VITs",
+      "voice": "std_leminh"
+    },
+    "nhôn": {
+      "model": "FPT.AI-VITs",
+      "voice": "std_leminh"
+    },
+    "nhộn": {
+      "model": "FPT.AI-VITs",
+      "voice": "std_leminh"
+    },
+    "nhuốm": {
+      "model": "FPT.AI-VITs",
+      "voice": "std_leminh"
+    },
+    "nhưa": {
+      "model": "FPT.AI-VITs",
+      "voice": "std_leminh"
+    },
+    "nhựa": {
+      "model": "FPT.AI-VITs",
+      "voice": "std_leminh"
+    },
+    "non": {
+      "model": "FPT.AI-VITs",
+      "voice": "std_leminh"
+    },
+    "nón": {
+      "model": "FPT.AI-VITs",
+      "voice": "std_leminh"
+    },
+    "nô": {
+      "model": "FPT.AI-VITs",
+      "voice": "std_leminh"
+    },
+    "nôm": {
+      "model": "FPT.AI-VITs",
+      "voice": "std_leminh"
+    },
+    "nộm": {
+      "model": "FPT.AI-VITs",
+      "voice": "std_leminh"
+    },
+    "nơ": {
+      "model": "FPT.AI-VITs",
+      "voice": "std_leminh"
+    },
+    "nở": {
+      "model": "FPT.AI-VITs",
+      "voice": "std_leminh"
+    },
+    "nui": {
+      "model": "FPT.AI-VITs",
+      "voice": "std_leminh"
+    },
+    "núi": {
+      "model": "FPT.AI-VITs",
+      "voice": "std_leminh"
+    },
+    "nước": {
+      "model": "FPT.AI-VITs",
+      "voice": "std_leminh"
+    },
+    "nứơc": {
+      "model": "FPT.AI-VITs",
+      "voice": "std_leminh"
+    },
+    "nươm": {
+      "model": "FPT.AI-VITs",
+      "voice": "std_leminh"
+    },
+    "nườm": {
+      "model": "FPT.AI-VITs",
+      "voice": "std_leminh"
+    },
+    "nượp": {
+      "model": "FPT.AI-VITs",
+      "voice": "std_leminh"
+    },
+    "nứơp": {
+      "model": "FPT.AI-VITs",
+      "voice": "std_leminh"
+    },
+    "oát": {
+      "model": "FPT.AI-VITs",
+      "voice": "std_leminh"
+    },
+    "oắt": {
+      "model": "FPT.AI-VITs",
+      "voice": "std_leminh"
+    },
+    "óp": {
+      "model": "FPT.AI-VITs",
+      "voice": "std_leminh"
+    },
+    "ốc": {
+      "model": "FPT.AI-VITs",
+      "voice": "std_leminh"
+    },
+    "ốp": {
+      "model": "FPT.AI-VITs",
+      "voice": "std_leminh"
+    },
+    "ốt": {
+      "model": "FPT.AI-VITs",
+      "voice": "std_leminh"
+    },
+    "ớp": {
+      "model": "FPT.AI-VITs",
+      "voice": "std_leminh"
+    },
+    "ớt": {
+      "model": "FPT.AI-VITs",
+      "voice": "std_leminh"
+    },
+    "ph": {
+      "model": "FPT.AI-VITs",
+      "voice": "std_leminh"
+    },
+    "phi": {
+      "model": "FPT.AI-VITs",
+      "voice": "std_leminh"
+    },
+    "phí": {
+      "model": "FPT.AI-VITs",
+      "voice": "std_leminh"
+    },
+    "phô": {
+      "model": "FPT.AI-VITs",
+      "voice": "std_leminh"
+    },
+    "phố": {
+      "model": "FPT.AI-VITs",
+      "voice": "std_leminh"
+    },
+    "phơ": {
+      "model": "FPT.AI-VITs",
+      "voice": "std_leminh"
+    },
+    "phở": {
+      "model": "FPT.AI-VITs",
+      "voice": "std_leminh"
+    },
+    "phương": {
+      "model": "FPT.AI-VITs",
+      "voice": "std_leminh"
+    },
+    "phượng": {
+      "model": "FPT.AI-VITs",
+      "voice": "std_leminh"
+    },
+    "pin": {
+      "model": "FPT.AI-VITs",
+      "voice": "std_leminh"
+    },
+    "qu": {
+      "model": "FPT.AI-VITs",
+      "voice": "std_leminh"
+    },
+    "quê": {
+      "model": "FPT.AI-VITs",
+      "voice": "std_leminh"
+    },
+    "quế": {
+      "model": "FPT.AI-VITs",
+      "voice": "std_leminh"
+    },
+    "quy": {
+      "model": "FPT.AI-VITs",
+      "voice": "std_leminh"
+    },
+    "quỳ": {
+      "model": "FPT.AI-VITs",
+      "voice": "std_leminh"
+    },
+    "quỹ": {
+      "model": "FPT.AI-VITs",
+      "voice": "std_leminh"
+    },
+    "quý": {
+      "model": "FPT.AI-VITs",
+      "voice": "std_leminh"
+    },
+    "quỵ": {
+      "model": "FPT.AI-VITs",
+      "voice": "std_leminh"
+    },
+    "s": {
+      "model": "FPT.AI-VITs",
+      "voice": "std_leminh"
+    },
+    "sách": {
+      "model": "FPT.AI-VITs",
+      "voice": "std_leminh"
+    },
+    "sạch": {
+      "model": "FPT.AI-VITs",
+      "voice": "std_leminh"
+    },
+    "sang": {
+      "model": "FPT.AI-VITs",
+      "voice": "std_leminh"
+    },
+    "sáng": {
+      "model": "FPT.AI-VITs",
+      "voice": "std_leminh"
+    },
+    "sao": {
+      "model": "FPT.AI-VITs",
+      "voice": "std_leminh"
+    },
+    "sáo": {
+      "model": "FPT.AI-VITs",
+      "voice": "std_leminh"
+    },
+    "sáp": {
+      "model": "FPT.AI-VITs",
+      "voice": "std_leminh"
+    },
+    "sạp": {
+      "model": "FPT.AI-VITs",
+      "voice": "std_leminh"
+    },
+    "sau": {
+      "model": "FPT.AI-VITs",
+      "voice": "std_leminh"
+    },
+    "sắt": {
+      "model": "FPT.AI-VITs",
+      "voice": "std_leminh"
+    },
+    "sâm": {
+      "model": "FPT.AI-VITs",
+      "voice": "std_leminh"
+    },
+    "sâu": {
+      "model": "FPT.AI-VITs",
+      "voice": "std_leminh"
+    },
+    "sầu": {
+      "model": "FPT.AI-VITs",
+      "voice": "std_leminh"
+    },
+    "se": {
+      "model": "FPT.AI-VITs",
+      "voice": "std_leminh"
+    },
+    "sẻ": {
+      "model": "FPT.AI-VITs",
+      "voice": "std_leminh"
+    },
+    "sẽ": {
+      "model": "FPT.AI-VITs",
+      "voice": "std_leminh"
+    },
+    "sen": {
+      "model": "FPT.AI-VITs",
+      "voice": "std_leminh"
+    },
+    "sét": {
+      "model": "FPT.AI-VITs",
+      "voice": "std_leminh"
+    },
+    "si": {
+      "model": "FPT.AI-VITs",
+      "voice": "std_leminh"
+    },
+    "sĩ": {
+      "model": "FPT.AI-VITs",
+      "voice": "std_leminh"
+    },
+    "sọ": {
+      "model": "FPT.AI-VITs",
+      "voice": "std_leminh"
+    },
+    "sóc": {
+      "model": "FPT.AI-VITs",
+      "voice": "std_leminh"
+    },
+    "sô": {
+      "model": "FPT.AI-VITs",
+      "voice": "std_leminh"
+    },
+    "sổ": {
+      "model": "FPT.AI-VITs",
+      "voice": "std_leminh"
+    },
+    "số": {
+      "model": "FPT.AI-VITs",
+      "voice": "std_leminh"
+    },
+    "sơn": {
+      "model": "FPT.AI-VITs",
+      "voice": "std_leminh"
+    },
+    "sui": {
+      "model": "FPT.AI-VITs",
+      "voice": "std_leminh"
+    },
+    "sủi": {
+      "model": "FPT.AI-VITs",
+      "voice": "std_leminh"
+    },
+    "sung": {
+      "model": "FPT.AI-VITs",
+      "voice": "std_leminh"
+    },
+    "súng": {
+      "model": "FPT.AI-VITs",
+      "voice": "std_leminh"
+    },
+    "suôi": {
+      "model": "FPT.AI-VITs",
+      "voice": "std_leminh"
+    },
+    "suối": {
+      "model": "FPT.AI-VITs",
+      "voice": "std_leminh"
+    },
+    "sút": {
+      "model": "FPT.AI-VITs",
+      "voice": "std_leminh"
+    },
+    "sụt": {
+      "model": "FPT.AI-VITs",
+      "voice": "std_leminh"
+    },
+    "sư": {
+      "model": "FPT.AI-VITs",
+      "voice": "std_leminh"
+    },
+    "sươn": {
+      "model": "FPT.AI-VITs",
+      "voice": "std_leminh"
+    },
+    "sườn": {
+      "model": "FPT.AI-VITs",
+      "voice": "std_leminh"
+    },
+    "sương": {
+      "model": "FPT.AI-VITs",
+      "voice": "std_leminh"
+    },
+    "t": {
+      "model": "FPT.AI-VITs",
+      "voice": "std_leminh"
+    },
+    "tách": {
+      "model": "FPT.AI-VITs",
+      "voice": "std_leminh"
+    },
+    "tao": {
+      "model": "FPT.AI-VITs",
+      "voice": "std_leminh"
+    },
+    "táo": {
+      "model": "FPT.AI-VITs",
+      "voice": "std_leminh"
+    },
+    "tau": {
+      "model": "FPT.AI-VITs",
+      "voice": "std_leminh"
+    },
+    "tàu": {
+      "model": "FPT.AI-VITs",
+      "voice": "std_leminh"
+    },
+    "tay": {
+      "model": "FPT.AI-VITs",
+      "voice": "std_leminh"
+    },
+    "tăm": {
+      "model": "FPT.AI-VITs",
+      "voice": "std_leminh"
+    },
+    "te": {
+      "model": "FPT.AI-VITs",
+      "voice": "std_leminh"
+    },
+    "tẻ": {
+      "model": "FPT.AI-VITs",
+      "voice": "std_leminh"
+    },
+    "tem": {
+      "model": "FPT.AI-VITs",
+      "voice": "std_leminh"
+    },
+    "tết": {
+      "model": "FPT.AI-VITs",
+      "voice": "std_leminh"
+    },
+    "têu": {
+      "model": "FPT.AI-VITs",
+      "voice": "std_leminh"
+    },
+    "tễu": {
+      "model": "FPT.AI-VITs",
+      "voice": "std_leminh"
+    },
+    "th": {
+      "model": "FPT.AI-VITs",
+      "voice": "std_leminh"
+    },
+    "thác": {
+      "model": "FPT.AI-VITs",
+      "voice": "std_leminh"
+    },
+    "thân": {
+      "model": "FPT.AI-VITs",
+      "voice": "std_leminh"
+    },
+    "the": {
+      "model": "FPT.AI-VITs",
+      "voice": "std_leminh"
+    },
+    "thẻ": {
+      "model": "FPT.AI-VITs",
+      "voice": "std_leminh"
+    },
+    "thêm": {
+      "model": "FPT.AI-VITs",
+      "voice": "std_leminh"
+    },
+    "thềm": {
+      "model": "FPT.AI-VITs",
+      "voice": "std_leminh"
+    },
+    "thi": {
+      "model": "FPT.AI-VITs",
+      "voice": "std_leminh"
+    },
+    "thị": {
+      "model": "FPT.AI-VITs",
+      "voice": "std_leminh"
+    },
+    "thia": {
+      "model": "FPT.AI-VITs",
+      "voice": "std_leminh"
+    },
+    "thìa": {
+      "model": "FPT.AI-VITs",
+      "voice": "std_leminh"
+    },
+    "thiếc": {
+      "model": "FPT.AI-VITs",
+      "voice": "std_leminh"
+    },
+    "thiên": {
+      "model": "FPT.AI-VITs",
+      "voice": "std_leminh"
+    },
+    "thiện": {
+      "model": "FPT.AI-VITs",
+      "voice": "std_leminh"
+    },
+    "thiếp": {
+      "model": "FPT.AI-VITs",
+      "voice": "std_leminh"
+    },
+    "thinh": {
+      "model": "FPT.AI-VITs",
+      "voice": "std_leminh"
+    },
+    "thịnh": {
+      "model": "FPT.AI-VITs",
+      "voice": "std_leminh"
+    },
+    "thọ": {
+      "model": "FPT.AI-VITs",
+      "voice": "std_leminh"
+    },
+    "thoăn": {
+      "model": "FPT.AI-VITs",
+      "voice": "std_leminh"
+    },
+    "thôi": {
+      "model": "FPT.AI-VITs",
+      "voice": "std_leminh"
+    },
+    "thổi": {
+      "model": "FPT.AI-VITs",
+      "voice": "std_leminh"
+    },
+    "thơ": {
+      "model": "FPT.AI-VITs",
+      "voice": "std_leminh"
+    },
+    "thớt": {
+      "model": "FPT.AI-VITs",
+      "voice": "std_leminh"
+    },
+    "thu": {
+      "model": "FPT.AI-VITs",
+      "voice": "std_leminh"
+    },
+    "thủ": {
+      "model": "FPT.AI-VITs",
+      "voice": "std_leminh"
+    },
+    "thung": {
+      "model": "FPT.AI-VITs",
+      "voice": "std_leminh"
+    },
+    "thúng": {
+      "model": "FPT.AI-VITs",
+      "voice": "std_leminh"
+    },
+    "thuông": {
+      "model": "FPT.AI-VITs",
+      "voice": "std_leminh"
+    },
+    "thuổng": {
+      "model": "FPT.AI-VITs",
+      "voice": "std_leminh"
+    },
+    "thuy": {
+      "model": "FPT.AI-VITs",
+      "voice": "std_leminh"
+    },
+    "thuỷ": {
+      "model": "FPT.AI-VITs",
+      "voice": "std_leminh"
+    },
+    "thuyên": {
+      "model": "FPT.AI-VITs",
+      "voice": "std_leminh"
+    },
+    "thuyền": {
+      "model": "FPT.AI-VITs",
+      "voice": "std_leminh"
+    },
+    "thuyết": {
+      "model": "FPT.AI-VITs",
+      "voice": "std_leminh"
+    },
+    "thư": {
+      "model": "FPT.AI-VITs",
+      "voice": "std_leminh"
+    },
+    "thước": {
+      "model": "FPT.AI-VITs",
+      "voice": "std_leminh"
+    },
+    "thứơc": {
+      "model": "FPT.AI-VITs",
+      "voice": "std_leminh"
+    },
+    "tia": {
+      "model": "FPT.AI-VITs",
+      "voice": "std_leminh"
+    },
+    "tía": {
+      "model": "FPT.AI-VITs",
+      "voice": "std_leminh"
+    },
+    "tiếp": {
+      "model": "FPT.AI-VITs",
+      "voice": "std_leminh"
+    },
+    "tiệp": {
+      "model": "FPT.AI-VITs",
+      "voice": "std_leminh"
+    },
+    "tim": {
+      "model": "FPT.AI-VITs",
+      "voice": "std_leminh"
+    },
+    "tỉm": {
+      "model": "FPT.AI-VITs",
+      "voice": "std_leminh"
+    },
+    "tím": {
+      "model": "FPT.AI-VITs",
+      "voice": "std_leminh"
+    },
+    "toa": {
+      "model": "FPT.AI-VITs",
+      "voice": "std_leminh"
+    },
+    "toả": {
+      "model": "FPT.AI-VITs",
+      "voice": "std_leminh"
+    },
+    "toan": {
+      "model": "FPT.AI-VITs",
+      "voice": "std_leminh"
+    },
+    "toán": {
+      "model": "FPT.AI-VITs",
+      "voice": "std_leminh"
+    },
+    "tóc": {
+      "model": "FPT.AI-VITs",
+      "voice": "std_leminh"
+    },
+    "tô": {
+      "model": "FPT.AI-VITs",
+      "voice": "std_leminh"
+    },
+    "tổ": {
+      "model": "FPT.AI-VITs",
+      "voice": "std_leminh"
+    },
+    "tôm": {
+      "model": "FPT.AI-VITs",
+      "voice": "std_leminh"
+    },
+    "tốp": {
+      "model": "FPT.AI-VITs",
+      "voice": "std_leminh"
+    },
+    "tốt": {
+      "model": "FPT.AI-VITs",
+      "voice": "std_leminh"
+    },
+    "tơ": {
+      "model": "FPT.AI-VITs",
+      "voice": "std_leminh"
+    },
+    "tr": {
+      "model": "FPT.AI-VITs",
+      "voice": "std_leminh"
+    },
+    "trăng": {
+      "model": "FPT.AI-VITs",
+      "voice": "std_leminh"
+    },
+    "trâu": {
+      "model": "FPT.AI-VITs",
+      "voice": "std_leminh"
+    },
+    "tre": {
+      "model": "FPT.AI-VITs",
+      "voice": "std_leminh"
+    },
+    "trê": {
+      "model": "FPT.AI-VITs",
+      "voice": "std_leminh"
+    },
+    "trong": {
+      "model": "FPT.AI-VITs",
+      "voice": "std_leminh"
+    },
+    "trô": {
+      "model": "FPT.AI-VITs",
+      "voice": "std_leminh"
+    },
+    "trổ": {
+      "model": "FPT.AI-VITs",
+      "voice": "std_leminh"
+    },
+    "trơi": {
+      "model": "FPT.AI-VITs",
+      "voice": "std_leminh"
+    },
+    "trời": {
+      "model": "FPT.AI-VITs",
+      "voice": "std_leminh"
+    },
+    "truyên": {
+      "model": "FPT.AI-VITs",
+      "voice": "std_leminh"
+    },
+    "truyền": {
+      "model": "FPT.AI-VITs",
+      "voice": "std_leminh"
+    },
+    "truyện": {
+      "model": "FPT.AI-VITs",
+      "voice": "std_leminh"
+    },
+    "tuê": {
+      "model": "FPT.AI-VITs",
+      "voice": "std_leminh"
+    },
+    "tuế": {
+      "model": "FPT.AI-VITs",
+      "voice": "std_leminh"
+    },
+    "tui": {
+      "model": "FPT.AI-VITs",
+      "voice": "std_leminh"
+    },
+    "túi": {
+      "model": "FPT.AI-VITs",
+      "voice": "std_leminh"
+    },
+    "tum": {
+      "model": "FPT.AI-VITs",
+      "voice": "std_leminh"
+    },
+    "tủm": {
+      "model": "FPT.AI-VITs",
+      "voice": "std_leminh"
+    },
+    "tuôi": {
+      "model": "FPT.AI-VITs",
+      "voice": "std_leminh"
+    },
+    "tuổi": {
+      "model": "FPT.AI-VITs",
+      "voice": "std_leminh"
+    },
+    "tuyết": {
+      "model": "FPT.AI-VITs",
+      "voice": "std_leminh"
+    },
+    "tuyệt": {
+      "model": "FPT.AI-VITs",
+      "voice": "std_leminh"
+    },
+    "tư": {
+      "model": "FPT.AI-VITs",
+      "voice": "std_leminh"
+    },
+    "tử": {
+      "model": "FPT.AI-VITs",
+      "voice": "std_leminh"
+    },
+    "tương": {
+      "model": "FPT.AI-VITs",
+      "voice": "std_leminh"
+    },
+    "tưởng": {
+      "model": "FPT.AI-VITs",
+      "voice": "std_leminh"
+    },
+    "uất": {
+      "model": "FPT.AI-VITs",
+      "voice": "std_leminh"
+    },
+    "úc": {
+      "model": "FPT.AI-VITs",
+      "voice": "std_leminh"
+    },
+    "uốc": {
+      "model": "FPT.AI-VITs",
+      "voice": "std_leminh"
+    },
+    "uốt": {
+      "model": "FPT.AI-VITs",
+      "voice": "std_leminh"
+    },
+    "úp": {
+      "model": "FPT.AI-VITs",
+      "voice": "std_leminh"
+    },
+    "út": {
+      "model": "FPT.AI-VITs",
+      "voice": "std_leminh"
+    },
+    "uyết": {
+      "model": "FPT.AI-VITs",
+      "voice": "std_leminh"
+    },
+    "ức": {
+      "model": "FPT.AI-VITs",
+      "voice": "std_giahuy"
+    },
+    "ước": {
+      "model": "FPT.AI-VITs",
+      "voice": "std_leminh"
+    },
+    "ướm": {
+      "model": "FPT.AI-VITs",
+      "voice": "std_leminh"
+    },
+    "ướp": {
+      "model": "FPT.AI-VITs",
+      "voice": "std_leminh"
+    },
+    "ướt": {
+      "model": "FPT.AI-VITs",
+      "voice": "std_leminh"
+    },
+    "ứt": {
+      "model": "FPT.AI-VITs",
+      "voice": "std_leminh"
+    },
+    "v": {
+      "model": "FPT.AI-VITs",
+      "voice": "std_leminh"
+    },
+    "vách": {
+      "model": "FPT.AI-VITs",
+      "voice": "std_leminh"
+    },
+    "vai": {
+      "model": "FPT.AI-VITs",
+      "voice": "std_leminh"
+    },
+    "vải": {
+      "model": "FPT.AI-VITs",
+      "voice": "std_leminh"
+    },
+    "van": {
+      "model": "FPT.AI-VITs",
+      "voice": "std_leminh"
+    },
+    "ván": {
+      "model": "FPT.AI-VITs",
+      "voice": "std_leminh"
+    },
+    "vạn": {
+      "model": "FPT.AI-VITs",
+      "voice": "std_leminh"
+    },
+    "vang": {
+      "model": "FPT.AI-VITs",
+      "voice": "std_leminh"
+    },
+    "vàng": {
+      "model": "FPT.AI-VITs",
+      "voice": "std_leminh"
+    },
+    "vay": {
+      "model": "FPT.AI-VITs",
+      "voice": "std_leminh"
+    },
+    "váy": {
+      "model": "FPT.AI-VITs",
+      "voice": "std_leminh"
+    },
+    "văng": {
+      "model": "FPT.AI-VITs",
+      "voice": "std_leminh"
+    },
+    "vẳng": {
+      "model": "FPT.AI-VITs",
+      "voice": "std_leminh"
+    },
+    "ve": {
+      "model": "FPT.AI-VITs",
+      "voice": "std_leminh"
+    },
+    "vẽ": {
+      "model": "FPT.AI-VITs",
+      "voice": "std_leminh"
+    },
+    "vét": {
+      "model": "FPT.AI-VITs",
+      "voice": "std_leminh"
+    },
+    "vẹt": {
+      "model": "FPT.AI-VITs",
+      "voice": "std_leminh"
+    },
+    "via": {
+      "model": "FPT.AI-VITs",
+      "voice": "std_leminh"
+    },
+    "vỉa": {
+      "model": "FPT.AI-VITs",
+      "voice": "std_leminh"
+    },
+    "viên": {
+      "model": "FPT.AI-VITs",
+      "voice": "std_leminh"
+    },
+    "viết": {
+      "model": "FPT.AI-VITs",
+      "voice": "std_leminh"
+    },
+    "việt": {
+      "model": "FPT.AI-VITs",
+      "voice": "std_leminh"
+    },
+    "vít": {
+      "model": "FPT.AI-VITs",
+      "voice": "std_leminh"
+    },
+    "vịt": {
+      "model": "FPT.AI-VITs",
+      "voice": "std_leminh"
+    },
+    "võ": {
+      "model": "FPT.AI-VITs",
+      "voice": "std_leminh"
+    },
+    "voi": {
+      "model": "FPT.AI-VITs",
+      "voice": "std_leminh"
+    },
+    "vom": {
+      "model": "FPT.AI-VITs",
+      "voice": "std_leminh"
+    },
+    "vòm": {
+      "model": "FPT.AI-VITs",
+      "voice": "std_leminh"
+    },
+    "vong": {
+      "model": "FPT.AI-VITs",
+      "voice": "std_leminh"
+    },
+    "võng": {
+      "model": "FPT.AI-VITs",
+      "voice": "std_leminh"
+    },
+    "vót": {
+      "model": "FPT.AI-VITs",
+      "voice": "std_leminh"
+    },
+    "vọt": {
+      "model": "FPT.AI-VITs",
+      "voice": "std_leminh"
+    },
+    "vơ": {
+      "model": "FPT.AI-VITs",
+      "voice": "std_leminh"
+    },
+    "vở": {
+      "model": "FPT.AI-VITs",
+      "voice": "std_leminh"
+    },
+    "vớt": {
+      "model": "FPT.AI-VITs",
+      "voice": "std_leminh"
+    },
+    "vợt": {
+      "model": "FPT.AI-VITs",
+      "voice": "std_leminh"
+    },
+    "vua": {
+      "model": "FPT.AI-VITs",
+      "voice": "std_leminh"
+    },
+    "vun": {
+      "model": "FPT.AI-VITs",
+      "voice": "std_leminh"
+    },
+    "vung": {
+      "model": "FPT.AI-VITs",
+      "voice": "std_leminh"
+    },
+    "vũng": {
+      "model": "FPT.AI-VITs",
+      "voice": "std_leminh"
+    },
+    "vuông": {
+      "model": "FPT.AI-VITs",
+      "voice": "std_leminh"
+    },
+    "vươn": {
+      "model": "FPT.AI-VITs",
+      "voice": "std_leminh"
+    },
+    "vườn": {
+      "model": "FPT.AI-VITs",
+      "voice": "std_leminh"
+    },
+    "vượn": {
+      "model": "FPT.AI-VITs",
+      "voice": "std_leminh"
+    },
+    "x": {
+      "model": "FPT.AI-VITs",
+      "voice": "std_leminh"
+    },
+    "xã": {
+      "model": "FPT.AI-VITs",
+      "voice": "std_leminh"
+    },
+    "xanh": {
+      "model": "FPT.AI-VITs",
+      "voice": "std_leminh"
+    },
+    "xe": {
+      "model": "FPT.AI-VITs",
+      "voice": "std_leminh"
+    },
+    "xếp": {
+      "model": "FPT.AI-VITs",
+      "voice": "std_leminh"
+    },
+    "xia": {
+      "model": "FPT.AI-VITs",
+      "voice": "std_leminh"
+    },
+    "xịa": {
+      "model": "FPT.AI-VITs",
+      "voice": "std_leminh"
+    },
+    "xích": {
+      "model": "FPT.AI-VITs",
+      "voice": "std_leminh"
+    },
+    "xiếc": {
+      "model": "FPT.AI-VITs",
+      "voice": "std_leminh"
+    },
+    "xiêm": {
+      "model": "FPT.AI-VITs",
+      "voice": "std_leminh"
+    },
+    "xoa": {
+      "model": "FPT.AI-VITs",
+      "voice": "std_leminh"
+    },
+    "xoá": {
+      "model": "FPT.AI-VITs",
+      "voice": "std_leminh"
+    },
+    "xoan": {
+      "model": "FPT.AI-VITs",
+      "voice": "std_leminh"
+    },
+    "xoe": {
+      "model": "FPT.AI-VITs",
+      "voice": "std_leminh"
+    },
+    "xoè": {
+      "model": "FPT.AI-VITs",
+      "voice": "std_leminh"
+    },
+    "xom": {
+      "model": "FPT.AI-VITs",
+      "voice": "std_leminh"
+    },
+    "xóm": {
+      "model": "FPT.AI-VITs",
+      "voice": "std_leminh"
+    },
+    "xôi": {
+      "model": "FPT.AI-VITs",
+      "voice": "std_leminh"
+    },
+    "xốp": {
+      "model": "FPT.AI-VITs",
+      "voice": "std_leminh"
+    },
+    "xuân": {
+      "model": "FPT.AI-VITs",
+      "voice": "std_leminh"
+    },
+    "xuất": {
+      "model": "FPT.AI-VITs",
+      "voice": "std_leminh"
+    },
+    "xúc": {
+      "model": "FPT.AI-VITs",
+      "voice": "std_leminh"
+    },
+    "xuôi": {
+      "model": "FPT.AI-VITs",
+      "voice": "std_leminh"
+    },
+    "xư": {
+      "model": "FPT.AI-VITs",
+      "voice": "std_leminh"
+    },
+    "xứ": {
+      "model": "FPT.AI-VITs",
+      "voice": "std_leminh"
+    },
+    "xưa": {
+      "model": "FPT.AI-VITs",
+      "voice": "std_leminh"
+    },
+    "ưu": {
+      "model": "FPT.AI-VITs",
+      "voice": "std_giahuy"
+    },
+    "hưu": {
+      "model": "FPT.AI-VITs",
+      "voice": "std_giahuy"
+    },
+    "lưu": {
+      "model": "FPT.AI-VITs",
+      "voice": "std_giahuy"
+    },
+    "bưu": {
+      "model": "FPT.AI-VITs",
+      "voice": "std_giahuy"
+    },
+    "mưu": {
+      "model": "FPT.AI-VITs",
+      "voice": "std_giahuy"
+    },
+    "ôi": {
+      "model": "FPT.AI-VITs",
+      "voice": "std_giahuy"
+    },
+    "a": {
+      "model": "FPT.AI-VITs",
+      "voice": "std_leminh"
+    },
+    "ê": {
+      "model": "FPT.AI-VITs",
+      "voice": "std_leminh"
+    },
+    "êu": {
+      "model": "FPT.AI-VITs",
+      "voice": "std_leminh"
+    },
+    "hờ": {
+      "model": "FPT.AI-VITs",
+      "voice": "std_leminh"
+    },
+    "i": {
+      "model": "FPT.AI-VITs",
+      "voice": "std_leminh"
+    },
+    "mờ": {
+      "model": "FPT.AI-VITs",
+      "voice": "std_leminh"
+    },
+    "nặng": {
+      "model": "FPT.AI-VITs",
+      "voice": "std_leminh"
+    },
+    "ngờ": {
+      "model": "FPT.AI-VITs",
+      "voice": "std_leminh"
+    },
+    "sắc": {
+      "model": "FPT.AI-VITs",
+      "voice": "std_leminh"
+    },
+    "u": {
+      "model": "FPT.AI-VITs",
+      "voice": "std_leminh"
+    },
+    "rươu": {
+      "model": "FPT.AI-VITs",
+      "voice": "std_leminh"
+    },
+    "rượu": {
+      "model": "FPT.AI-VITs",
+      "voice": "std_leminh"
+    }
+  },
+  "prefixRoutes": {
+    "r": {
+      "model": "FPT.AI-VITs",
+      "voice": "std_leminh",
+      "excludeTones": []
+    }
+  }
+}
