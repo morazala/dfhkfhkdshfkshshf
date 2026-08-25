@@ -114,6 +114,7 @@
     accountPanel?.classList.add('hidden');
     accountCard?.setAttribute('aria-expanded', 'false');
     setGateStatus(message);
+    document.dispatchEvent(new CustomEvent('phonics-auth-logged-out'));
   }
 
   function showBanned(reason = '') {
@@ -134,6 +135,7 @@
       retryButton.textContent = 'Đăng nhập tài khoản khác';
     }
     setGateStatus('Tài khoản này không được phép truy cập.', 'error');
+    document.dispatchEvent(new CustomEvent('phonics-auth-banned', { detail: { reason } }));
   }
 
   function waitForGoogle() {

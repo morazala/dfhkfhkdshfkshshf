@@ -1190,6 +1190,21 @@
     }
   }
 
+  // Auth có thể bị thu hồi từ thiết bị khác. Hủy cả audio hiện tại lẫn chuỗi
+  // playWord đang chờ để tài khoản bị khóa không tiếp tục phát bài.
+  document.addEventListener('phonics-auth-banned', () => {
+    state.playToken++;
+    state.isReading = false;
+    stopAutoPlay();
+    stopSpeaking();
+  });
+  document.addEventListener('phonics-auth-logged-out', () => {
+    state.playToken++;
+    state.isReading = false;
+    stopAutoPlay();
+    stopSpeaking();
+  });
+
   async function enterPresentationMode() {
     document.documentElement.classList.add('presentation-mode');
     // Browsers intentionally do not expose whether USB/HDMI/VGA is connected.
