@@ -1473,6 +1473,13 @@
         button.type = 'button';
         button.className = 'key-slide-button';
         button.textContent = key;
+        // Chữ dài cần cỡ chữ nhỏ hơn để vừa slide, không bị cắt mất chữ.
+        const keyLength = Array.from(String(key)).length;
+        button.classList.add(
+          keyLength >= 7 ? 'key-len-xlong' :
+          keyLength >= 5 ? 'key-len-long' :
+          keyLength >= 3 ? 'key-len-medium' : 'key-len-short'
+        );
         button.title = `Bắt đầu đọc nhóm ${key}`;
         button.setAttribute('aria-label', `Mở nhóm ${key}`);
         button.addEventListener('click', () => {
@@ -1512,7 +1519,24 @@
         if (!Number.isInteger(targetIndex) || targetIndex === FLAT[state.flatIndex]?.keyIndex) return;
         navigateFromCarousel(targetIndex);
       });
+      // Chữ dài co cỡ vừa khít slide: đo tràn thật rồi giảm font đúng mức,
+      // chạy lại khi slide active đổi hoặc carousel resize. Không dùng animation.
+      const fitActiveKeyButton = (slideEl) => {
+        const root = (slideEl && slideEl.querySelector) ? slideEl
+          : el.keyCarousel.querySelector('.key-slide.is-active');
+        const button = root?.querySelector('.key-slide-button');
+        if (!button) return;
+        button.style.fontSize = '';
+        if (button.scrollWidth <= button.clientWidth) return;
+        const cssSize = parseFloat(window.getComputedStyle(button).fontSize) || 0;
+        if (!cssSize) return;
+        const fitRatio = button.clientWidth / button.scrollWidth;
+        button.style.fontSize = `${Math.max(13, Math.floor(cssSize * fitRatio * 0.96))}px`;
+      };
+      keyCarouselInstance.on('active', Slide => fitActiveKeyButton(Slide?.slide));
+      keyCarouselInstance.on('resized', () => fitActiveKeyButton());
       keyCarouselInstance.mount();
+      fitActiveKeyButton();
     }
     if (keyCarouselInstance.index !== currentKeyIndex) {
       suppressCarouselMove = true;

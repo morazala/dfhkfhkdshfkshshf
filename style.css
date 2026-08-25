@@ -98,9 +98,8 @@ body{
   line-height:1;
   color: var(--chalk);
   text-shadow:
-    0 0 2px rgba(255,255,255,.55),
-    0 0 18px rgba(244,239,226,.35),
-    0 3px 0 rgba(0,0,0,.25);
+    0 1px 0 rgba(0,0,0,.25),
+    0 0 10px rgba(244,239,226,.16);
   letter-spacing:.01em;
   transition: transform .18s ease, opacity .18s ease;
 }
@@ -228,17 +227,16 @@ body{
 .ch{
   display:inline-block;
   transform-origin:50% 72%;
-  transition: color .22s ease, text-shadow .22s ease, transform .22s ease;
+  transition: color .22s ease, transform .22s ease;
 }
 .ch.lit{
   color: var(--margin-red);
+  /* Glow mỏng, sát nét: đủ để nổi bật trên giấy, không xoá nét chữ. */
   text-shadow:
-    0 0 4px rgba(255,244,218,.95),
-    0 0 12px rgba(255,112,83,.85),
-    0 0 26px rgba(217,79,61,.72),
-    0 0 44px rgba(217,79,61,.35);
+    0 0 1px rgba(255,244,218,.5),
+    0 0 9px rgba(255,112,83,.35);
   transform: translateY(-3px) scale(1.06);
-  animation: redLetterReveal .86s cubic-bezier(.2,.85,.25,1) both;
+  animation: redLetterReveal .6s cubic-bezier(.2,.85,.25,1) both;
 }
 .cell-text .ch.lit:nth-child(2){ animation-delay:.06s; }
 .cell-text .ch.lit:nth-child(3){ animation-delay:.12s; }
@@ -246,75 +244,34 @@ body{
 .cell-text .ch.lit:nth-child(5){ animation-delay:.24s; }
 .cell-text .ch.lit:nth-child(6){ animation-delay:.30s; }
 .ch.lit-out{
-  animation: redLetterFadeOut .34s ease-out both !important;
+  animation: redLetterFadeOut .3s ease-out both !important;
 }
+/* Chỉ animate transform/opacity (compositor GPU), màu đổi tại chỗ — không
+   chạy text-shadow/filter từng frame nên nhẹ với thiết bị yếu. */
 @keyframes redLetterFadeOut{
   0%{
     color:var(--margin-red);
     opacity:1;
     transform:translateY(-3px) scale(1.06);
-    text-shadow:
-      0 0 4px rgba(255,244,218,.95),
-      0 0 12px rgba(255,112,83,.85),
-      0 0 26px rgba(217,79,61,.72),
-      0 0 44px rgba(217,79,61,.35);
-  }
-  55%{
-    color:#8f6b5c;
-    opacity:.72;
-    transform:translateY(0) scale(1.01);
-    text-shadow:0 0 10px rgba(217,79,61,.25);
   }
   100%{
     color:var(--ink);
     opacity:1;
     transform:translateY(0) scale(1);
-    text-shadow:none;
   }
 }
 @keyframes redLetterReveal{
   0%{
-    color:var(--ink);
-    opacity:.35;
-    transform:translateY(8px) scale(.78) rotate(-5deg);
-    text-shadow:0 0 0 rgba(217,79,61,0);
-    filter:brightness(1);
+    opacity:.25;
+    transform:translateY(10px) scale(.8) rotate(-4deg);
   }
-  24%{
-    color:#ff8068;
+  55%{
     opacity:1;
-    transform:translateY(-7px) scale(1.18) rotate(3deg);
-    text-shadow:
-      -10px 0 12px rgba(255,215,126,.65),
-      0 -10px 16px rgba(255,244,218,.9),
-      10px 0 18px rgba(255,112,83,.82),
-      0 12px 25px rgba(181,58,43,.78);
-    filter:brightness(1.2);
-  }
-  52%{
-    transform:translateY(-4px) scale(1.09) rotate(-1deg);
-    text-shadow:
-      0 -4px 8px rgba(255,244,218,.9),
-      0 0 22px rgba(255,112,83,.9),
-      0 0 42px rgba(217,79,61,.7);
-  }
-  78%{
-    transform:translateY(-3px) scale(1.04) rotate(1deg);
-    text-shadow:
-      8px 0 12px rgba(255,215,126,.5),
-      0 0 18px rgba(255,112,83,.82),
-      0 0 34px rgba(217,79,61,.55);
+    transform:translateY(-7px) scale(1.16) rotate(2deg);
   }
   100%{
     opacity:1;
-    color:var(--margin-red);
     transform:translateY(-3px) scale(1.06) rotate(0);
-    text-shadow:
-      0 0 4px rgba(255,244,218,.95),
-      0 0 12px rgba(255,112,83,.85),
-      0 0 26px rgba(217,79,61,.72),
-      0 0 44px rgba(217,79,61,.35);
-    filter:brightness(1);
   }
 }
 .ch.tone-pulse{
@@ -322,7 +279,7 @@ body{
 }
 @keyframes tonePulse{
   0%{ transform: translateY(-3px) scale(1.06); }
-  28%{ transform: translateY(-8px) scale(1.3) rotate(-2deg); text-shadow:0 0 8px #fff4da,0 0 30px #ff7053,0 0 58px rgba(217,79,61,.8); }
+  28%{ transform: translateY(-8px) scale(1.28) rotate(-2deg); }
   60%{ transform: translateY(-4px) scale(1.12) rotate(2deg); }
   100%{ transform: translateY(-3px) scale(1.06) rotate(0); }
 }
@@ -338,14 +295,13 @@ body{
 .merge-cell .cell-text{ font-size: clamp(88px, 22vw, 160px); gap:.04em; }
 
 .merge-cell.final-glow .cell-text .ch{
-  animation: finalGlow 1.35s cubic-bezier(.2,.8,.2,1);
+  animation: finalGlow .9s cubic-bezier(.2,.8,.2,1);
 }
 @keyframes finalGlow{
-  0%{ opacity:.4; text-shadow:0 0 0 rgba(217,79,61,0); transform:translateY(8px) scale(.88); }
-  24%{ opacity:1; text-shadow:0 -8px 18px rgba(255,244,218,.95),0 0 34px rgba(255,112,83,.95),0 0 68px rgba(217,79,61,.8); transform:translateY(-9px) scale(1.18) rotate(2deg); }
-  52%{ text-shadow:10px 0 18px rgba(255,215,126,.62),0 0 42px rgba(255,112,83,.9),0 0 70px rgba(217,79,61,.62); transform:translateY(-4px) scale(1.08) rotate(-1deg); }
-  78%{ text-shadow:-8px 0 16px rgba(255,215,126,.52),0 0 28px rgba(255,112,83,.82),0 0 50px rgba(217,79,61,.55); transform:translateY(-3px) scale(1.04); }
-  100%{ text-shadow:0 0 4px rgba(255,244,218,.95),0 0 12px rgba(255,112,83,.85),0 0 26px rgba(217,79,61,.72); transform:translateY(-3px) scale(1.06); }
+  0%{ opacity:.35; transform:translateY(8px) scale(.9); }
+  30%{ opacity:1; transform:translateY(-8px) scale(1.14); }
+  62%{ transform:translateY(-4px) scale(1.07); }
+  100%{ transform:translateY(-3px) scale(1.06); }
 }
 
 .replay-btn{
@@ -1380,7 +1336,7 @@ body{
   align-items:center;
   justify-content:center;
   min-width:0;
-  height:clamp(58px, 9svh, 82px);
+  height:clamp(60px, 10svh, 92px);
   opacity:.42;
   transition:opacity .3s ease, transform .3s ease;
 }
@@ -1393,19 +1349,25 @@ body{
   border:0;
   background:transparent;
   color:var(--chalk);
-  font:600 clamp(22px, 4vw, 42px)/1 var(--font-display);
+  font:600 clamp(20px, 3.6vw, 38px)/1 var(--font-display);
   white-space:nowrap;
-  text-overflow:ellipsis;
   cursor:pointer;
-  text-shadow:0 0 8px rgba(244,239,226,.22);
-  transition:font-size .3s ease, color .3s ease, text-shadow .3s ease;
+  text-shadow:0 1px 0 rgba(0,0,0,.22);
+  transition:color .25s ease;
 }
 .key-carousel .key-slide.is-active{ opacity:1; transform:scale(1.04); }
+/* Chữ active phóng theo chiều rộng màn hình; chữ dài tự giảm cỡ qua class
+   key-len-* (gắn trong script.js) để không bao giờ tràn hay bị cắt. */
 .key-carousel .key-slide.is-active .key-slide-button{
-  font-size:clamp(42px, 8vw, 76px);
+  font-size:clamp(46px, 9.5vw, 84px);
   color:var(--chalk);
-  text-shadow:0 0 2px rgba(255,255,255,.65), 0 0 18px rgba(244,239,226,.42), 0 3px 0 rgba(0,0,0,.25);
+  text-shadow:
+    0 3px 0 rgba(0,0,0,.25),
+    0 0 12px rgba(244,239,226,.26);
 }
+.key-carousel .key-slide.is-active .key-slide-button.key-len-medium{ font-size:clamp(38px, 7.6vw, 68px); }
+.key-carousel .key-slide.is-active .key-slide-button.key-len-long{ font-size:clamp(30px, 6vw, 54px); }
+.key-carousel .key-slide.is-active .key-slide-button.key-len-xlong{ font-size:clamp(24px, 4.6vw, 42px); }
 .key-slide-button:hover{ color:var(--chalk); }
 
 /* GitHub Pages chỉ phát cache đã generate sẵn; không hiển thị khu vực quản trị/TTS. */
