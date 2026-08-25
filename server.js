@@ -78,7 +78,12 @@ const allowedOrigins = new Set(
 );
 
 app.disable('x-powered-by');
-app.use(helmet({ contentSecurityPolicy: false, crossOriginResourcePolicy: false }));
+app.use(helmet({
+  contentSecurityPolicy: false,
+  crossOriginResourcePolicy: false,
+  // Google Identity Services cần được phép kiểm tra trạng thái popup.
+  crossOriginOpenerPolicy: { policy: 'same-origin-allow-popups' }
+}));
 app.use(cors({
   credentials: true,
   origin(origin, callback) {
