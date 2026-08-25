@@ -14,9 +14,10 @@
     }).catch(() => {});
     return;
   }
-  window.addEventListener('load', () => {
-    navigator.serviceWorker.register('./sw.js', { scope: './' }).catch(error => {
-      console.warn('[PWA] Không đăng ký được service worker:', error);
-    });
-  }, { once: true });
+  // Đăng ký ngay khi app shell chạy để các công cụ đóng gói như PWABuilder
+  // kịp phát hiện worker; đường dẫn tương đối vẫn đúng khi chạy dưới GitHub
+  // Pages subpath /<repository>/.
+  navigator.serviceWorker.register('./sw.js', { scope: './' }).catch(error => {
+    console.warn('[PWA] Không đăng ký được service worker:', error);
+  });
 })();
