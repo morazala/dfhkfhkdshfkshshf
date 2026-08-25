@@ -78,21 +78,26 @@
     </div>
 
     <section class="home-panel" id="homePanel" aria-labelledby="homeTitle">
+      <span class="home-eyebrow">Luyện phát âm tiếng Việt</span>
       <h2 id="homeTitle">BÉ HỌC ĐÁNH VẦN</h2>
-      <p>Bắt đầu luyện đọc từng chữ, từng vần và dấu thanh.</p>
+      <p class="home-subtitle">Bắt đầu luyện đọc từng chữ, từng vần và dấu thanh.</p>
+      <div class="home-demo" aria-hidden="true">
+        <span class="home-demo-cell">b</span>
+        <span class="home-demo-op">+</span>
+        <span class="home-demo-cell">a</span>
+        <span class="home-demo-op">=</span>
+        <span class="home-demo-cell home-demo-cell--word">bà</span>
+      </div>
       <div class="home-actions">
         <button class="home-start-btn" id="startBtn" type="button" hidden>BẮT ĐẦU</button>
-        <button class="account-card" id="accountCard" type="button" hidden aria-expanded="false" aria-controls="accountPanel">
+        <button class="profile-btn" id="accountCard" type="button" hidden aria-expanded="false" aria-controls="accountPanel" aria-haspopup="dialog">
           <img id="accountAvatar" alt="Ảnh đại diện tài khoản Google">
-          <span class="account-card-copy"><strong id="accountName">Tài khoản Google</strong><small id="accountEmail"></small></span>
-          <span class="account-card-chevron" aria-hidden="true">⌄</span>
+          <span class="profile-btn-copy"><strong>Hồ sơ người dùng</strong><small id="accountEmail"></small></span>
+          <span class="profile-btn-chevron" aria-hidden="true">›</span>
         </button>
-        <div class="account-panel hidden" id="accountPanel">
-          <p id="accountProfileText"></p>
-          <button class="account-logout-btn" id="accountLogoutBtn" type="button">Đăng xuất</button>
-        </div>
         <button class="home-settings-btn" id="homeSettingsBtn" type="button">⚙ CÀI ĐẶT</button>
       </div>
+      <p class="home-tip">Mẹo: khi luyện tập, dùng ← → để chuyển từ nhanh hơn.</p>
     </section>
 
   </main>
@@ -150,6 +155,40 @@
       <div class="exit-dialog-actions">
         <button id="exitStayBtn" type="button" class="exit-stay-btn">Ở lại</button>
         <button id="exitConfirmBtn" type="button" class="exit-confirm-btn">Xác nhận thoát</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="account-panel hidden" id="accountPanel" role="dialog" aria-modal="true" aria-labelledby="profileCardName">
+    <div class="profile-backdrop" data-profile-close></div>
+    <div class="profile-card">
+      <button class="profile-close" id="profileCloseBtn" type="button" aria-label="Đóng hồ sơ">×</button>
+      <header class="profile-cover">
+        <span class="profile-cover-chalk" aria-hidden="true">a · à · á · ả · ã · ạ</span>
+        <div class="profile-avatar-ring">
+          <img id="profileAvatar" alt="Ảnh đại diện">
+        </div>
+      </header>
+      <div class="profile-identity">
+        <strong id="profileCardName"></strong>
+        <small id="profileCardEmail"></small>
+        <span class="profile-role-badge" id="profileRoleBadge" hidden></span>
+      </div>
+      <p class="profile-provider">
+        <span class="profile-provider-mark" aria-hidden="true">G</span>
+        <span id="accountProfileText"></span>
+      </p>
+      <dl class="profile-details">
+        <div class="profile-detail"><dt>Email</dt><dd id="profileEmailDetail"></dd></div>
+        <div class="profile-detail"><dt>Vai trò</dt><dd id="profileRoleDetail"></dd></div>
+        <div class="profile-detail"><dt>Thành viên từ</dt><dd id="profileMemberSince"></dd></div>
+        <div class="profile-detail"><dt>Đăng nhập gần nhất</dt><dd id="profileLastLogin"></dd></div>
+        <div class="profile-detail profile-detail--wide"><dt>Thiết bị hiện tại</dt><dd id="profileDeviceDetail"></dd></div>
+        <div class="profile-detail profile-detail--wide"><dt>Phiên đăng nhập</dt><dd>Cookie HttpOnly bảo mật, tự gia hạn khi bạn còn sử dụng.</dd></div>
+      </dl>
+      <div class="profile-actions">
+        <button class="profile-switch-btn" id="profileSwitchBtn" type="button">Dùng tài khoản Google khác</button>
+        <button class="account-logout-btn" id="accountLogoutBtn" type="button">Đăng xuất</button>
       </div>
     </div>
   </div>
@@ -249,6 +288,7 @@
 <script src="app-config.js"></script>
 <script src="https://accounts.google.com/gsi/client" async defer></script>
 <script src="auth-client.js"></script>
+<script src="profile.js"></script>
 <script src="pwa.js" defer></script>
 <script src="script.js"></script>
 </body>

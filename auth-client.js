@@ -25,7 +25,18 @@
   let loginInProgress = false;
   let bannedMode = false;
   let sessionCheckInFlight = false;
+  let sessionCheckQueued = false;
   const ACTIVE_SESSION_CHECK_MS = 15_000;
+
+  // Bản chạy local chỉ để xem giao diện: không đăng nhập, không gọi Render.
+  const LOCAL_PREVIEW = /^(localhost|127\.0\.0\.1|\[::1\])$/i.test(window.location.hostname);
+
+  // Gói miễn phí của Render ngủ sau ~15 phút không có request và mất 50 giây
+  // trở lên để dậy. Thay vì báo lỗi giả sau 12 giây, app chủ động "đánh thức"
+  // server bằng /api/health và giữ ấm bằng ping định kỳ.
+  const WAKE_DEADLINE_MS = 90_000;
+  const WAKE_ATTEMPT_TIMEOUT_MS = 8_000;
+  const KEEP_ALIVE_INTERVAL_MS = 4 * 60_000;
 
   function setGateStatus(message, kind = '') {
     if (!gateStatus) return;
@@ -34,6 +45,49 @@
   }
 
   function apiUrl(path) { return apiBaseUrl ? `${apiBaseUrl}${path}` : path; }
+
+  async function pingHealth(timeoutMs) {
+    const controller = new AbortController();
+    const timer = window.setTimeout(() => controller.abort(), timeoutMs);
+    try {
+      const response = await fetch(apiUrl('/api/health'), {
+        credentials: 'include',
+        cache: 'no-store',
+        signal: controller.signal
+      });
+      return response.ok;
+    } catch (_) {
+      return false;
+    } finally {
+      window.clearTimeout(timer);
+    }
+  }
+
+  // Đánh thức Render: lặp ping nhẹ cho tới khi server trả lời hoặc hết hạn.
+  // Server đã dậy thì ping đầu tiên trả lời dưới một giây, không chờ đợi gì.
+  async function wakeServer({ quiet = false } = {}) {
+    if (!apiBaseUrl || LOCAL_PREVIEW) return false;
+    const deadline = Date.now() + WAKE_DEADLINE_MS;
+    let attempt = 0;
+    while (Date.now() < deadline) {
+      if (!navigator.onLine) return false;
+      attempt += 1;
+      if (!quiet) {
+        if (gateTitle) gateTitle.textContent = 'Đang đánh thức server…';
+        if (gateDescription) gateDescription.textContent = 'Server miễn phí của Render đi ngủ khi vắng người dùng và cần khoảng một phút để dậy. App đang tự kết nối lại, bạn không cần làm gì cả.';
+        setGateStatus(`Đang kết nối với server Render (lần thử ${attempt})…`, 'waking');
+      }
+      if (await pingHealth(WAKE_ATTEMPT_TIMEOUT_MS)) return true;
+    }
+    return false;
+  }
+
+  // Giữ ấm server: ping định kỳ khi tab đang mở để Render không ngủ giữa chừng.
+  function keepRenderAwake() {
+    if (!apiBaseUrl || LOCAL_PREVIEW) return;
+    if (document.hidden || !navigator.onLine) return;
+    pingHealth(10_000);
+  }
 
   function deviceInfo() {
     const platform = navigator.userAgentData?.platform || navigator.platform || 'unknown';
@@ -117,6 +171,19 @@
     document.dispatchEvent(new CustomEvent('phonics-auth-logged-out'));
   }
 
+  // Localhost: mở khóa giao diện để xem thử, không có tài khoản và không gọi API.
+  function unlockLocalPreview() {
+    sessionUser = null;
+    bannedMode = false;
+    document.documentElement.classList.remove('auth-pending', 'auth-checking');
+    gate?.classList.add('hidden');
+    if (startButton) startButton.hidden = false;
+    if (accountCard) accountCard.hidden = true;
+    if (loginButton) loginButton.hidden = true;
+    if (retryButton) retryButton.hidden = true;
+    setGateStatus('');
+  }
+
   function showBanned(reason = '') {
     sessionUser = null;
     bannedMode = true;
@@ -167,7 +234,7 @@
   }
 
   async function login() {
-    if (loginInProgress) return;
+    if (loginInProgress || LOCAL_PREVIEW) return;
     if (!apiBaseUrl || !googleClientId) {
       setGateStatus('Bản PWA chưa có cấu hình API Render hoặc Google OAuth public.', 'error');
       if (retryButton) retryButton.hidden = false;
@@ -175,6 +242,14 @@
     }
     loginInProgress = true;
     if (loginButton) loginButton.disabled = true;
+    // Nếu server đang ngủ, đánh thức xong mới mở popup để code đổi token không
+    // bị hủy giữa chừng vì timeout.
+    if (!await wakeServer()) {
+      loginInProgress = false;
+      if (loginButton) loginButton.disabled = false;
+      setGateStatus('Chưa kết nối được server Render. Hãy kiểm tra mạng rồi bấm đăng nhập lại.', 'error');
+      return;
+    }
     setGateStatus('Đang mở cửa sổ chọn tài khoản Google…');
     try {
       const google = await waitForGoogle();
@@ -211,26 +286,44 @@
   }
 
   async function checkSession() {
+    if (LOCAL_PREVIEW) return unlockLocalPreview();
     if (!apiBaseUrl) {
       setLoggedOut('PWA chưa có địa chỉ API Render. Hãy build lại app-config.js với RENDER_API_URL.');
       if (retryButton) retryButton.hidden = false;
       return;
     }
-    if (gateTitle) gateTitle.textContent = 'Đang khôi phục phiên…';
-    if (loginButton) loginButton.hidden = true;
-    setGateStatus('Đang kiểm tra phiên đăng nhập…');
+    if (sessionCheckQueued) return;
+    sessionCheckQueued = true;
     try {
+      if (loginButton) loginButton.hidden = true;
+      setGateStatus('Đang kiểm tra phiên đăng nhập…');
+      // Chờ Render dậy trước (nếu đang ngủ) rồi mới xác minh cookie phiên,
+      // tránh báo "lỗi mạng" giả trong lúc cold start.
+      const awake = await wakeServer();
+      if (!awake) {
+        if (!navigator.onLine) {
+          setGateStatus('Máy bạn đang offline. Kết nối mạng rồi bấm thử lại.', 'error');
+        } else {
+          setGateStatus('Server Render không phản hồi sau hơn một phút. Thường chỉ cần bấm thử lại là được.', 'error');
+        }
+        if (retryButton) retryButton.hidden = false;
+        return;
+      }
+      if (gateTitle) gateTitle.textContent = 'Đang khôi phục phiên…';
+      setGateStatus('Đang kiểm tra phiên đăng nhập…');
       const result = await api('/api/auth/me');
       setAuthenticated(result.user);
     } catch (error) {
       if (error.banned) {
         showBanned(error.reason);
       } else if (error.status !== 401) {
-        setGateStatus('Chưa kết nối được Render. Hãy kiểm tra mạng rồi thử lại.', 'error');
+        setGateStatus('Server Render không phản hồi. Thường chỉ cần bấm thử lại là được.', 'error');
         if (retryButton) retryButton.hidden = false;
       } else {
         setLoggedOut();
       }
+    } finally {
+      sessionCheckQueued = false;
     }
   }
 
@@ -273,17 +366,29 @@
   });
 
   window.setInterval(checkActiveSession, ACTIVE_SESSION_CHECK_MS);
-  window.addEventListener('focus', checkActiveSession);
+  window.setInterval(keepRenderAwake, KEEP_ALIVE_INTERVAL_MS);
+  window.addEventListener('focus', () => {
+    keepRenderAwake();
+    checkActiveSession();
+  });
   document.addEventListener('visibilitychange', () => {
-    if (!document.hidden) checkActiveSession();
+    if (!document.hidden) {
+      keepRenderAwake();
+      checkActiveSession();
+    }
   });
 
   checkSession();
   window.PhonicsAuth = Object.freeze({
     api,
     login,
-    openLogin: () => { gate?.classList.remove('hidden'); loginButton?.focus(); },
-    isAuthenticated: () => Boolean(sessionUser),
-    getUser: () => sessionUser
+    openLogin: () => {
+      if (LOCAL_PREVIEW) return;
+      gate?.classList.remove('hidden');
+      loginButton?.focus();
+    },
+    isAuthenticated: () => LOCAL_PREVIEW || Boolean(sessionUser),
+    getUser: () => sessionUser,
+    localPreview: LOCAL_PREVIEW
   });
 })();
