@@ -24,6 +24,8 @@
   let sessionUser = null;
   let loginInProgress = false;
   let bannedMode = false;
+  let sessionCheckInFlight = false;
+  const ACTIVE_SESSION_CHECK_MS = 15_000;
 
   function setGateStatus(message, kind = '') {
     if (!gateStatus) return;
@@ -230,6 +232,22 @@
     }
   }
 
+  async function checkActiveSession() {
+    if (!sessionUser || sessionCheckInFlight || document.hidden || loginInProgress) return;
+    sessionCheckInFlight = true;
+    try {
+      const result = await api('/api/auth/me');
+      sessionUser = result.user || sessionUser;
+      updateAccount(sessionUser);
+    } catch (error) {
+      if (error.banned) showBanned(error.reason);
+      else if (error.status === 401 || error.status === 403) setLoggedOut('Phiên đăng nhập đã kết thúc. Hãy đăng nhập lại để tiếp tục.');
+      // Lỗi mạng tạm thời không tự đăng xuất; lần kiểm tra kế tiếp sẽ thử lại.
+    } finally {
+      sessionCheckInFlight = false;
+    }
+  }
+
   loginButton?.addEventListener('click', login);
   retryButton?.addEventListener('click', () => {
     if (!bannedMode) return checkSession();
@@ -250,6 +268,12 @@
     try { await api('/api/auth/logout', { method: 'POST' }); } catch (_) {}
     accountLogoutButton.disabled = false;
     setLoggedOut('Đã đăng xuất. Hãy đăng nhập lại để bắt đầu.');
+  });
+
+  window.setInterval(checkActiveSession, ACTIVE_SESSION_CHECK_MS);
+  window.addEventListener('focus', checkActiveSession);
+  document.addEventListener('visibilitychange', () => {
+    if (!document.hidden) checkActiveSession();
   });
 
   checkSession();
