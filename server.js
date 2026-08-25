@@ -71,6 +71,10 @@ const app = express();
 const jobs = new Map();
 let activeJobId = null;
 
+// Render đứng sau reverse proxy và gửi X-Forwarded-For. Tin đúng một lớp
+// proxy để express-rate-limit nhận diện IP ổn định.
+app.set('trust proxy', 1);
+
 const PUBLIC_FRONTEND_ORIGIN = 'https://morazala.github.io';
 const allowedOrigins = new Set(
   String(process.env.ALLOWED_ORIGINS || process.env.FRONTEND_ORIGIN || PUBLIC_FRONTEND_ORIGIN)
@@ -108,7 +112,13 @@ const noCacheSource = {
 };
 
 app.get('/api/health', (req, res) => {
-  res.json({ ok: true, service: 'be-hoc-danh-van', database: Boolean(process.env.DATABASE_URL) });
+  res.json({
+    ok: true,
+    service: 'be-hoc-danh-van',
+    database: Boolean(String(process.env.DATABASE_URL || '').trim()),
+    googleClientConfigured: Boolean(String(process.env.GOOGLE_CLIENT_ID || '').trim()),
+    googleSecretConfigured: Boolean(String(process.env.GOOGLE_CLIENT_SECRET || '').trim())
+  });
 });
 
 app.post('/api/auth/google', authRateLimit, async (req, res) => {
@@ -129,7 +139,8 @@ app.post('/api/auth/google', authRateLimit, async (req, res) => {
     setSessionCookie(res, issueToken(user));
     res.json({ ok: true, user });
   } catch (error) {
-    const status = error.code === 'USER_DISABLED' ? 403 : 401;
+    const configurationError = /chưa được cấu hình|DATABASE_URL/.test(String(error.message || ''));
+    const status = error.code === 'USER_DISABLED' ? 403 : (configurationError ? 503 : 401);
     res.status(status).json({ ok: false, error: error.message || 'Đăng nhập Google thất bại.' });
   }
 });
