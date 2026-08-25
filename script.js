@@ -431,26 +431,34 @@
   }
 
   function audioCacheVersion(entry, manifest = audioManifest) {
-    return encodeURIComponent(entry?.uploadedAt || entry?.generatedAt || manifest?.generatedAt || entry?.bytes || 'current');
+    // Version theo NỘI DUNG từng file (timestamp/bytes của entry), KHÔNG theo
+    // manifest.generatedAt: một phiên generate/upload chỉ làm tải lại đúng
+    // các file đổi, thay vì làm trôi toàn bộ ~1900 URL audio đang cache.
+    return encodeURIComponent(entry?.uploadedAt || entry?.generatedAt || entry?.bytes || 'current');
   }
 
   function setAudioManifest(manifest, routeConfig = audioRoutes) {
+    const nextEntries = Object.values(manifest?.entries || {})
+      .filter(entry => entry.status === 'ready' && entry.text && entry.file);
+    // Polling có thể đọc phải manifest rỗng trong khoảnh khắc generate/upload
+    // đang thay file trên đĩa. Không được xoá sạch map audio đang có vì một
+    // lần đọc hụt — nếu vậy mọi câu đột nhiên báo "thiếu cache" cho tới poll
+    // kế tiếp.
+    if (!nextEntries.length && audioEntriesByText.size) return;
     audioManifest = manifest;
     audioEntriesByText = new Map();
-    for (const entry of Object.values(manifest?.entries || {})) {
-      if (entry.status === 'ready' && entry.text && entry.file) {
-        const text = canonicalAudioText(entry.text);
-        const entries = audioEntriesByText.get(text) || [];
-        entries.push({
-          ...entry,
-          // File upload có thể thay WAV nhưng vẫn giữ nguyên hash/tên file.
-          // Query version buộc browser bỏ audio cũ đang immutable-cache.
-          url: STATIC_DEPLOY
-            ? publicUrl('audio-cache/' + encodeURIComponent(entry.file)) + `?v=${audioCacheVersion(entry, manifest)}`
-            : '/audio/' + encodeURIComponent(entry.file) + `?v=${audioCacheVersion(entry, manifest)}`
-        });
-        audioEntriesByText.set(text, entries);
-      }
+    for (const entry of nextEntries) {
+      const text = canonicalAudioText(entry.text);
+      const entries = audioEntriesByText.get(text) || [];
+      entries.push({
+        ...entry,
+        // File upload có thể thay WAV nhưng vẫn giữ nguyên hash/tên file.
+        // Query version buộc browser bỏ audio cũ đang immutable-cache.
+        url: STATIC_DEPLOY
+          ? publicUrl('audio-cache/' + encodeURIComponent(entry.file)) + `?v=${audioCacheVersion(entry, manifest)}`
+          : '/audio/' + encodeURIComponent(entry.file) + `?v=${audioCacheVersion(entry, manifest)}`
+      });
+      audioEntriesByText.set(text, entries);
     }
     applyRuntimeConfig(routeConfig);
   }
