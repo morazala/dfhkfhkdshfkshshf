@@ -44,7 +44,8 @@ const {
   initDatabase,
   upsertGoogleUser,
   listUsers,
-  deleteUser
+  deleteUser,
+  setUserBan
 } = require('./db.js');
 const {
   verifyGoogleCredential,
@@ -141,8 +142,13 @@ app.post('/api/auth/google', authRateLimit, async (req, res) => {
     res.json({ ok: true, user });
   } catch (error) {
     const configurationError = /chưa được cấu hình|DATABASE_URL/.test(String(error.message || ''));
-    const status = error.code === 'USER_DISABLED' ? 403 : (configurationError ? 503 : 401);
-    res.status(status).json({ ok: false, error: error.message || 'Đăng nhập Google thất bại.' });
+    const status = error.code === 'USER_DISABLED' || error.code === 'USER_BANNED' ? 403 : (configurationError ? 503 : 401);
+    res.status(status).json({
+      ok: false,
+      banned: error.code === 'USER_BANNED',
+      reason: error.reason || '',
+      error: error.message || 'Đăng nhập Google thất bại.'
+    });
   }
 });
 
@@ -170,6 +176,17 @@ app.get('/api/admin/users', requireAdmin, async (req, res) => {
 app.delete('/api/admin/users/:id', requireAdmin, async (req, res) => {
   try {
     const user = await deleteUser(String(req.params.id || ''));
+    if (!user) return res.status(404).json({ ok: false, error: 'Không tìm thấy tài khoản.' });
+    return res.json({ ok: true, user });
+  } catch (error) {
+    return res.status(503).json({ ok: false, error: error.message || 'Database chưa sẵn sàng.' });
+  }
+});
+
+app.patch('/api/admin/users/:id/ban', requireAdmin, async (req, res) => {
+  try {
+    const banned = Boolean(req.body?.banned);
+    const user = await setUserBan(String(req.params.id || ''), banned, req.body?.reason);
     if (!user) return res.status(404).json({ ok: false, error: 'Không tìm thấy tài khoản.' });
     return res.json({ ok: true, user });
   } catch (error) {

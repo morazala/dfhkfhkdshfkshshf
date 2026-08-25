@@ -10,6 +10,7 @@
   const gate = document.querySelector('#authGate');
   const gateStatus = document.querySelector('#authGateStatus');
   const gateTitle = document.querySelector('#authGateTitle');
+  const gateDescription = document.querySelector('#authGateDescription');
   const retryButton = document.querySelector('#authRetryBtn');
   const loginButton = document.querySelector('#googleLoginBtn');
   const startButton = document.querySelector('#startBtn');
@@ -22,6 +23,7 @@
   const accountProfileText = document.querySelector('#accountProfileText');
   let sessionUser = null;
   let loginInProgress = false;
+  let bannedMode = false;
 
   function setGateStatus(message, kind = '') {
     if (!gateStatus) return;
@@ -56,6 +58,8 @@
     if (!response.ok) {
       const error = new Error(result.error || `API lỗi ${response.status}.`);
       error.status = response.status;
+      error.banned = Boolean(result.banned);
+      error.reason = String(result.reason || '');
       throw error;
     }
     return result;
@@ -75,6 +79,7 @@
 
   function setAuthenticated(user) {
     sessionUser = user || null;
+    bannedMode = false;
     updateAccount(sessionUser);
     document.documentElement.classList.remove('auth-pending');
     document.documentElement.classList.remove('auth-checking');
@@ -88,6 +93,30 @@
 
   function setLoggedOut(message = 'Hãy đăng nhập bằng Google để bắt đầu.') {
     sessionUser = null;
+    bannedMode = false;
+    document.documentElement.classList.add('auth-pending');
+    document.documentElement.classList.remove('auth-checking');
+    gate?.classList.remove('hidden');
+    if (startButton) startButton.hidden = true;
+    if (accountCard) accountCard.hidden = true;
+    if (gateTitle) gateTitle.textContent = 'Đăng nhập để bắt đầu';
+    if (gateDescription) gateDescription.textContent = 'Đăng nhập bằng Google để lưu phiên học và sử dụng ứng dụng ổn định trên các thiết bị của bạn.';
+    if (loginButton) {
+      loginButton.hidden = false;
+      loginButton.disabled = false;
+    }
+    if (retryButton) {
+      retryButton.hidden = true;
+      retryButton.textContent = 'Thử kiểm tra lại';
+    }
+    accountPanel?.classList.add('hidden');
+    accountCard?.setAttribute('aria-expanded', 'false');
+    setGateStatus(message);
+  }
+
+  function showBanned(reason = '') {
+    sessionUser = null;
+    bannedMode = true;
     document.documentElement.classList.add('auth-pending');
     document.documentElement.classList.remove('auth-checking');
     gate?.classList.remove('hidden');
@@ -95,7 +124,14 @@
     if (accountCard) accountCard.hidden = true;
     accountPanel?.classList.add('hidden');
     accountCard?.setAttribute('aria-expanded', 'false');
-    setGateStatus(message);
+    if (gateTitle) gateTitle.textContent = 'Tài khoản đã bị BAN';
+    if (gateDescription) gateDescription.textContent = `Lý do: ${reason || 'Vi phạm quy định sử dụng.'} Nếu cần hỗ trợ, hãy liên hệ Zalo 0353200675.`;
+    if (loginButton) loginButton.hidden = true;
+    if (retryButton) {
+      retryButton.hidden = false;
+      retryButton.textContent = 'Đăng nhập tài khoản khác';
+    }
+    setGateStatus('Tài khoản này không được phép truy cập.', 'error');
   }
 
   function waitForGoogle() {
@@ -118,7 +154,8 @@
       });
       setAuthenticated(result.user);
     } catch (error) {
-      setGateStatus(error.message || 'Đăng nhập Google thất bại. Hãy thử lại.', 'error');
+      if (error.banned) showBanned(error.reason);
+      else setGateStatus(error.message || 'Đăng nhập Google thất bại. Hãy thử lại.', 'error');
     } finally {
       loginInProgress = false;
       if (loginButton) loginButton.disabled = false;
@@ -182,19 +219,28 @@
       const result = await api('/api/auth/me');
       setAuthenticated(result.user);
     } catch (error) {
-      if (error.status !== 401) {
+      if (error.banned) {
+        showBanned(error.reason);
+      } else if (error.status !== 401) {
         setGateStatus('Chưa kết nối được Render. Hãy kiểm tra mạng rồi thử lại.', 'error');
         if (retryButton) retryButton.hidden = false;
       } else {
-        if (gateTitle) gateTitle.textContent = 'Đăng nhập để bắt đầu';
-        if (loginButton) loginButton.hidden = false;
         setLoggedOut();
       }
     }
   }
 
   loginButton?.addEventListener('click', login);
-  retryButton?.addEventListener('click', checkSession);
+  retryButton?.addEventListener('click', () => {
+    if (!bannedMode) return checkSession();
+    bannedMode = false;
+    retryButton.hidden = true;
+    retryButton.textContent = 'Thử kiểm tra lại';
+    if (gateTitle) gateTitle.textContent = 'Đăng nhập để bắt đầu';
+    if (gateDescription) gateDescription.textContent = 'Nếu tài khoản khác đã được phép, bạn có thể đăng nhập lại bằng Google.';
+    if (loginButton) loginButton.hidden = false;
+    setGateStatus('');
+  });
   accountCard?.addEventListener('click', () => {
     const open = accountPanel?.classList.toggle('hidden') === false;
     accountCard.setAttribute('aria-expanded', String(open));

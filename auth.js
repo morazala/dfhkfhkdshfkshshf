@@ -84,7 +84,9 @@ async function authenticateRequest(req, res, next) {
     if (!token) return res.status(401).json({ ok: false, error: 'Chưa đăng nhập.' });
     const payload = jwt.verify(token, jwtSecret());
     const user = await findUserById(payload.sub);
-    if (!user || user.disabled) return res.status(401).json({ ok: false, error: 'Phiên đăng nhập không còn hiệu lực.' });
+    if (!user) return res.status(401).json({ ok: false, error: 'Phiên đăng nhập không còn hiệu lực.' });
+    if (user.banned) return res.status(403).json({ ok: false, banned: true, reason: user.ban_reason || 'Vi phạm quy định sử dụng.', error: 'Tài khoản đã bị BAN.' });
+    if (user.disabled) return res.status(403).json({ ok: false, error: 'Tài khoản đã bị vô hiệu hoá.' });
     req.user = user;
     req.sessionPayload = payload;
     req.sessionFromCookie = Boolean(parseCookies(req.headers.cookie)[COOKIE_NAME]);

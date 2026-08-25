@@ -35,9 +35,15 @@ async function initDatabase() {
       avatar_url TEXT NOT NULL DEFAULT '',
       role TEXT NOT NULL DEFAULT 'user' CHECK (role IN ('user', 'admin')),
       disabled BOOLEAN NOT NULL DEFAULT FALSE,
+      banned BOOLEAN NOT NULL DEFAULT FALSE,
+      ban_reason TEXT NOT NULL DEFAULT '',
+      banned_at TIMESTAMPTZ,
       created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
       last_login TIMESTAMPTZ NOT NULL DEFAULT NOW()
     );
+    ALTER TABLE users ADD COLUMN IF NOT EXISTS banned BOOLEAN NOT NULL DEFAULT FALSE;
+    ALTER TABLE users ADD COLUMN IF NOT EXISTS ban_reason TEXT NOT NULL DEFAULT '';
+    ALTER TABLE users ADD COLUMN IF NOT EXISTS banned_at TIMESTAMPTZ;
     CREATE TABLE IF NOT EXISTS user_devices (
       id TEXT PRIMARY KEY,
       user_id TEXT NOT NULL REFERENCES users(id) ON DELETE CASCADE,
@@ -76,13 +82,20 @@ async function upsertGoogleUser({ googleId, email, displayName, avatarUrl, devic
         display_name = EXCLUDED.display_name,
         avatar_url = EXCLUDED.avatar_url,
         last_login = NOW()
-      RETURNING id, email, display_name, avatar_url, role, disabled, created_at, last_login
+      RETURNING id, email, display_name, avatar_url, role, disabled, banned, ban_reason, banned_at, created_at, last_login
     `, [userId, email, googleId, displayName || '', avatarUrl || '']);
     const user = userResult.rows[0];
     if (user.disabled) {
       await client.query('ROLLBACK');
       const error = new Error('Tài khoản đã bị vô hiệu hoá.');
       error.code = 'USER_DISABLED';
+      throw error;
+    }
+    if (user.banned) {
+      await client.query('ROLLBACK');
+      const error = new Error('Tài khoản đã bị BAN.');
+      error.code = 'USER_BANNED';
+      error.reason = user.ban_reason || 'Vi phạm quy định sử dụng.';
       throw error;
     }
     await client.query(`
@@ -107,7 +120,7 @@ async function findUserById(id) {
   const db = getPool();
   if (!db) return null;
   const result = await db.query(`
-    SELECT id, email, display_name, avatar_url, role, disabled, created_at, last_login
+    SELECT id, email, display_name, avatar_url, role, disabled, banned, ban_reason, banned_at, created_at, last_login
     FROM users WHERE id = $1
   `, [id]);
   return result.rows[0] || null;
@@ -118,7 +131,7 @@ async function listUsers() {
   if (!db) throw new Error('DATABASE_URL chưa được cấu hình trên server.');
   const result = await db.query(`
     SELECT
-      u.id, u.email, u.display_name, u.role, u.disabled, u.created_at, u.last_login,
+      u.id, u.email, u.display_name, u.role, u.disabled, u.banned, u.ban_reason, u.banned_at, u.created_at, u.last_login,
       COALESCE(json_agg(json_build_object(
         'deviceInfo', d.device_info,
         'userAgent', d.user_agent,
@@ -140,6 +153,20 @@ async function deleteUser(id) {
   return result.rows[0] || null;
 }
 
+async function setUserBan(id, banned, reason = '') {
+  const db = getPool();
+  if (!db) throw new Error('DATABASE_URL chưa được cấu hình trên server.');
+  const result = await db.query(`
+    UPDATE users
+    SET banned = $2,
+        ban_reason = CASE WHEN $2 THEN LEFT($3, 500) ELSE '' END,
+        banned_at = CASE WHEN $2 THEN NOW() ELSE NULL END
+    WHERE id = $1
+    RETURNING id, email, banned, ban_reason, banned_at
+  `, [id, Boolean(banned), String(reason || '')]);
+  return result.rows[0] || null;
+}
+
 module.exports = {
   databaseConfigured,
   getPool,
@@ -147,5 +174,6 @@ module.exports = {
   upsertGoogleUser,
   findUserById,
   listUsers,
-  deleteUser
+  deleteUser,
+  setUserBan
 };
