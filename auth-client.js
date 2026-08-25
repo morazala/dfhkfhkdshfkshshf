@@ -38,11 +38,19 @@
 
   async function api(path, options = {}) {
     if (!apiBaseUrl) throw new Error('PWA chưa có địa chỉ API Render công khai.');
-    const response = await fetch(apiUrl(path), {
-      ...options,
-      credentials: 'include',
-      headers: { 'Content-Type': 'application/json', ...(options.headers || {}) }
-    });
+    const controller = new AbortController();
+    const timeoutId = window.setTimeout(() => controller.abort(), 12_000);
+    let response;
+    try {
+      response = await fetch(apiUrl(path), {
+        ...options,
+        credentials: 'include',
+        signal: options.signal || controller.signal,
+        headers: { 'Content-Type': 'application/json', ...(options.headers || {}) }
+      });
+    } finally {
+      window.clearTimeout(timeoutId);
+    }
     const result = await response.json().catch(() => ({}));
     if (!response.ok) {
       const error = new Error(result.error || `API lỗi ${response.status}.`);
