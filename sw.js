@@ -1,10 +1,10 @@
 /* Offline shell + cache-first audio. Audio is cached on demand, never all at install time. */
-const VERSION = 'phonics-pwa-v3';
+const VERSION = 'phonics-pwa-v4';
 const SHELL_CACHE = `${VERSION}-shell`;
 const AUDIO_CACHE = `${VERSION}-audio`;
 const SHELL = [
   './', './index.html', './style.css', './script.js', './phonics-parser.js',
-  './app-config.js', './pwa.js', './manifest.webmanifest',
+  './auth-client.js', './app-config.js', './pwa.js', './manifest.webmanifest',
   './vendor/splide/splide-core.min.css', './vendor/splide/splide.min.js',
   './data.json', './tts-routes.json', './audio-cache/manifest.json'
 ];
@@ -66,7 +66,7 @@ async function networkFirst(request) {
   } catch {
     const cached = await caches.match(request);
     if (cached) return cached;
-    throw new Error('offline');
+    return new Response('Offline', { status: 503, statusText: 'Offline' });
   }
 }
 
@@ -86,5 +86,9 @@ self.addEventListener('fetch', event => {
     event.respondWith(cacheFirst(request));
     return;
   }
-  event.respondWith(caches.match(request).then(cached => cached || networkFirst(request)));
+  // App shell phải thử bản mới trước. Cache-first ở đây giữ auth-client cũ
+  // sau reload thường và chỉ Ctrl+Shift+R mới lấy được gate đăng nhập mới.
+  const isAppShell = request.mode === 'navigate'
+    || /\/(index\.html|style\.css|script\.js|auth-client\.js|phonics-parser\.js|app-config\.js|pwa\.js|manifest\.webmanifest|data\.json|tts-routes\.json)$/.test(url.pathname);
+  event.respondWith(isAppShell ? networkFirst(request) : caches.match(request).then(cached => cached || networkFirst(request)));
 });
