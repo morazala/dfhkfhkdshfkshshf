@@ -78,10 +78,18 @@ let activeJobId = null;
 app.set('trust proxy', 1);
 
 const PUBLIC_FRONTEND_ORIGIN = 'https://morazala.github.io';
-const allowedOrigins = new Set(
-  String(process.env.ALLOWED_ORIGINS || process.env.FRONTEND_ORIGIN || PUBLIC_FRONTEND_ORIGIN)
-    .split(',').map(origin => origin.trim().replace(/\/+$/, '')).filter(Boolean)
-);
+const PUBLIC_BACKEND_ORIGIN = 'https://dfhkfhkdshfkshshf.onrender.com';
+const configuredOrigins = String(process.env.ALLOWED_ORIGINS || process.env.FRONTEND_ORIGIN || '')
+  .split(',').map(origin => origin.trim().replace(/\/+$/, '')).filter(Boolean);
+const allowedOrigins = new Set([
+  PUBLIC_FRONTEND_ORIGIN,
+  PUBLIC_BACKEND_ORIGIN,
+  ...configuredOrigins
+]);
+if (process.env.NODE_ENV !== 'production') {
+  allowedOrigins.add('http://localhost:3000');
+  allowedOrigins.add('http://localhost:5173');
+}
 
 app.disable('x-powered-by');
 app.use(helmet({
@@ -94,7 +102,9 @@ app.use(cors({
   credentials: true,
   origin(origin, callback) {
     if (!origin || allowedOrigins.has(origin) || (process.env.NODE_ENV !== 'production' && allowedOrigins.size === 0)) return callback(null, origin || true);
-    return callback(new Error('Origin không được phép.'));
+    const error = new Error('Origin không được phép.');
+    error.status = 403;
+    return callback(error);
   }
 }));
 app.use(rateLimit({ windowMs: 15 * 60 * 1000, limit: 240, standardHeaders: 'draft-7', legacyHeaders: false }));
