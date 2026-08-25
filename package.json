@@ -10,7 +10,8 @@
     "build:config": "node scripts/build-config.js",
     "build": "npm run build:config",
     "tts:plan": "node tts-generate.js --plan-only",
-    "tts:generate": "node tts-generate.js"
+    "tts:generate": "node tts-generate.js",
+    "sync": "node scripts/sync-config.js"
   },
   "dependencies": {
     "@splidejs/splide": "^4.1.4",

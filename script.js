@@ -179,6 +179,7 @@
     mainPrevBtn: document.getElementById('mainPrevBtn'),
     mainNextBtn: document.getElementById('mainNextBtn'),
     autoPlayToggle: document.getElementById('autoPlayToggle'),
+    autoShield: document.getElementById('autoShield'),
     voiceSelect: document.getElementById('voiceSelect'),
     readingModeSelect: document.getElementById('readingModeSelect'),
     cacheSearch: document.getElementById('cacheSearch'),
@@ -1666,8 +1667,16 @@
   // (bấm nút chuyển từ/chuyển chữ, bấm nghe lại, dùng phím mũi tên...), đúng theo
   // yêu cầu "có input từ ngoài thì dừng lại". Việc goTo() do CHÍNH auto-timer gọi
   // (bên trong playWord) không đi qua hàm này nên không tự tắt chính nó.
+  // Khiên chặn input khi Tự động bật: mọi chạm/bấm/kéo/giữ/phím đều bị nuốt
+  // ở cấp trình duyệt, trừ chính nút "Tự động" để người dùng tắt khi cần.
+  function setAutoShield(on) {
+    if (el.autoShield) el.autoShield.hidden = !on;
+    document.body.classList.toggle('auto-shield-on', Boolean(on));
+  }
+
   function stopAutoPlay() {
     if (state.autoTimer) { clearTimeout(state.autoTimer); state.autoTimer = null; }
+    setAutoShield(false);
     if (!state.autoPlay) return;
     state.autoPlay = false;
     if (el.autoPlayToggle) el.autoPlayToggle.checked = false;
@@ -1707,6 +1716,16 @@
   });
 
   document.addEventListener('keydown', (e) => {
+    // Khi Tự động bật: bỏ qua mọi phím (kể cả phím mũi tên trên slider đang
+    // focus) trừ phím tác động lên chính nút Tự động. Tổ hợp Ctrl/Cmd/Alt
+    // (refresh, copy, devtools...) vẫn nhường trình duyệt xử lý.
+    if (state.autoPlay && e.target !== el.autoPlayToggle) {
+      if (!(e.ctrlKey || e.metaKey || e.altKey)) {
+        e.preventDefault();
+        e.stopPropagation();
+      }
+      return;
+    }
     // Khi đang focus slider/select/input, để trình duyệt xử lý phím mũi tên
     // của chính control đó; không được biến ArrowRight thành chuyển từ.
     const target = e.target;
@@ -1795,12 +1814,30 @@
   if (el.autoPlayToggle) {
     el.autoPlayToggle.addEventListener('change', () => {
       state.autoPlay = el.autoPlayToggle.checked;
+      setAutoShield(state.autoPlay);
       if (!state.autoPlay && state.autoTimer) {
         clearTimeout(state.autoTimer);
         state.autoTimer = null;
       } else if (state.autoPlay && !state.isReading) {
         scheduleAutoAdvance();
       }
+    });
+  }
+
+  // Nuốt mọi sự kiện trỏ/bấm/chạm/kéo/giữ ngay trên khiên — sự kiện không bao
+  // giờ chạm tới phần tử bên dưới (menu long-press, double-tap zoom, scroll
+  // vuốt đều bị chặn ở đây).
+  if (el.autoShield) {
+    const swallowEvent = (event) => {
+      event.preventDefault();
+      event.stopPropagation();
+    };
+    ['pointerdown', 'pointerup', 'pointermove', 'pointercancel',
+      'mousedown', 'mouseup', 'mousemove',
+      'touchstart', 'touchmove', 'touchend', 'touchcancel',
+      'click', 'dblclick', 'contextmenu', 'wheel'
+    ].forEach((type) => {
+      el.autoShield.addEventListener(type, swallowEvent, { passive: false });
     });
   }
 

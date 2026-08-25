@@ -579,6 +579,16 @@ async function start() {
   app.listen(PORT, () => {
     console.log(`Bé Học Đánh Vần đang chạy tại http://localhost:${PORT}`);
     console.log('[TTS] Runtime chỉ phát audio-cache; generate chỉ chạy khi người dùng chủ động bấm.');
+    // Đồng bộ cấu hình cache/route/giọng từ máy local lên GitHub để static
+    // web (Pages) luôn nhận bản mới. Chỉ chạy ngoài production; tắt bằng
+    // CONFIG_SYNC=off. Chi tiết xem scripts/sync-config.js.
+    if (process.env.NODE_ENV !== 'production' && process.env.CONFIG_SYNC !== 'off') {
+      const syncChild = spawn(process.execPath, [path.join(__dirname, 'scripts', 'sync-config.js')], {
+        stdio: 'inherit',
+        windowsHide: true
+      });
+      syncChild.on('exit', code => console.log(`[sync] Watcher dừng (mã ${code}).`));
+    }
   });
 }
 
