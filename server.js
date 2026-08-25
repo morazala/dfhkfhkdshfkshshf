@@ -50,6 +50,7 @@ const {
   verifyGoogleCredential,
   exchangeGoogleCode,
   issueToken,
+  SESSION_REFRESH_THRESHOLD_SECONDS,
   authenticateRequest,
   requireAdmin,
   setSessionCookie,
@@ -146,6 +147,10 @@ app.post('/api/auth/google', authRateLimit, async (req, res) => {
 });
 
 app.get('/api/auth/me', authenticateRequest, (req, res) => {
+  const expiresIn = Number(req.sessionPayload?.exp || 0) - Math.floor(Date.now() / 1000);
+  if (req.sessionFromCookie && expiresIn > 0 && expiresIn < SESSION_REFRESH_THRESHOLD_SECONDS) {
+    setSessionCookie(res, issueToken(req.user));
+  }
   res.json({ ok: true, user: req.user });
 });
 

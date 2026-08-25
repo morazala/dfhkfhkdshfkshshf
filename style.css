@@ -1434,6 +1434,9 @@ body{
 .auth-gate-status[data-kind="success"]{ color:#1d6a4d; }
 .auth-retry-btn{ margin-top:10px; border:0; background:transparent; color:var(--board-green); text-decoration:underline; font:600 13px var(--font-body); cursor:pointer; }
 .auth-pending .home-start-btn{ visibility:hidden; pointer-events:none; }
+.auth-checking .auth-gate-card{ border-color:rgba(31,61,46,.3); }
+.auth-checking .auth-gate-mark{ animation:authPulse 1.3s ease-in-out infinite; }
+@keyframes authPulse{ 0%,100%{ opacity:.72; transform:scale(.96); } 50%{ opacity:1; transform:scale(1); } }
 
 .account-card{
   display:flex;

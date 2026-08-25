@@ -6,7 +6,10 @@ const { OAuth2Client } = require('google-auth-library');
 const { findUserById, upsertGoogleUser } = require('./db.js');
 
 const COOKIE_NAME = 'phonics_session';
-const SESSION_DAYS = 30;
+// 90 ngày tối đa không hoạt động; mỗi lần app xác minh thành công và còn
+// hoạt động sẽ tự gia hạn lại cookie, nên người dùng thường không phải login lại.
+const SESSION_DAYS = 90;
+const SESSION_REFRESH_THRESHOLD_SECONDS = 30 * 86400;
 
 function googleClient() {
   const clientId = String(process.env.GOOGLE_CLIENT_ID || '').trim();
@@ -83,6 +86,8 @@ async function authenticateRequest(req, res, next) {
     const user = await findUserById(payload.sub);
     if (!user || user.disabled) return res.status(401).json({ ok: false, error: 'Phiên đăng nhập không còn hiệu lực.' });
     req.user = user;
+    req.sessionPayload = payload;
+    req.sessionFromCookie = Boolean(parseCookies(req.headers.cookie)[COOKIE_NAME]);
     return next();
   } catch (error) {
     return res.status(401).json({ ok: false, error: error.message || 'Phiên đăng nhập không hợp lệ.' });
@@ -117,6 +122,7 @@ function clearSessionCookie(res) {
 
 module.exports = {
   COOKIE_NAME,
+  SESSION_REFRESH_THRESHOLD_SECONDS,
   verifyGoogleCredential,
   exchangeGoogleCode,
   issueToken,

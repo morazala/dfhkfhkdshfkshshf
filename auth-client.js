@@ -2,13 +2,14 @@
 
 (() => {
   // Keep the app locked until Render confirms the HttpOnly session cookie.
-  document.documentElement.classList.add('auth-pending');
+  document.documentElement.classList.add('auth-pending', 'auth-checking');
 
   const config = window.APP_CONFIG || {};
   const apiBaseUrl = String(config.apiBaseUrl || '').trim().replace(/\/+$/, '');
   const googleClientId = String(config.googleClientId || '').trim();
   const gate = document.querySelector('#authGate');
   const gateStatus = document.querySelector('#authGateStatus');
+  const gateTitle = document.querySelector('#authGateTitle');
   const retryButton = document.querySelector('#authRetryBtn');
   const loginButton = document.querySelector('#googleLoginBtn');
   const startButton = document.querySelector('#startBtn');
@@ -76,6 +77,7 @@
     sessionUser = user || null;
     updateAccount(sessionUser);
     document.documentElement.classList.remove('auth-pending');
+    document.documentElement.classList.remove('auth-checking');
     gate?.classList.add('hidden');
     if (startButton) startButton.hidden = false;
     if (accountCard) accountCard.hidden = false;
@@ -87,6 +89,7 @@
   function setLoggedOut(message = 'Hãy đăng nhập bằng Google để bắt đầu.') {
     sessionUser = null;
     document.documentElement.classList.add('auth-pending');
+    document.documentElement.classList.remove('auth-checking');
     gate?.classList.remove('hidden');
     if (startButton) startButton.hidden = true;
     if (accountCard) accountCard.hidden = true;
@@ -172,6 +175,8 @@
       if (retryButton) retryButton.hidden = false;
       return;
     }
+    if (gateTitle) gateTitle.textContent = 'Đang khôi phục phiên…';
+    if (loginButton) loginButton.hidden = true;
     setGateStatus('Đang kiểm tra phiên đăng nhập…');
     try {
       const result = await api('/api/auth/me');
@@ -181,6 +186,8 @@
         setGateStatus('Chưa kết nối được Render. Hãy kiểm tra mạng rồi thử lại.', 'error');
         if (retryButton) retryButton.hidden = false;
       } else {
+        if (gateTitle) gateTitle.textContent = 'Đăng nhập để bắt đầu';
+        if (loginButton) loginButton.hidden = false;
         setLoggedOut();
       }
     }
