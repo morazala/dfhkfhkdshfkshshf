@@ -2569,10 +2569,6 @@
       "model": "FPT.AI-VITs",
       "voice": "std_leminh"
     },
-    "ức": {
-      "model": "FPT.AI-VITs",
-      "voice": "std_giahuy"
-    },
     "ước": {
       "model": "FPT.AI-VITs",
       "voice": "std_leminh"
