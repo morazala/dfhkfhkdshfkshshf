@@ -80,10 +80,16 @@
       <h2 id="homeTitle">BÉ HỌC ĐÁNH VẦN</h2>
       <p>Bắt đầu luyện đọc từng chữ, từng vần và dấu thanh.</p>
       <div class="home-actions">
-        <button class="home-start-btn" id="startBtn" type="button">BẮT ĐẦU</button>
-        <button class="home-settings-btn" id="loginBtn" type="button">ĐĂNG NHẬP / ĐĂNG KÝ GOOGLE</button>
-        <button class="home-settings-btn" id="logoutBtn" type="button" hidden>ĐĂNG XUẤT</button>
-        <span class="auth-status" id="authStatus" role="status" aria-live="polite"></span>
+        <button class="home-start-btn" id="startBtn" type="button" hidden>BẮT ĐẦU</button>
+        <button class="account-card" id="accountCard" type="button" hidden aria-expanded="false" aria-controls="accountPanel">
+          <img id="accountAvatar" alt="Ảnh đại diện tài khoản Google">
+          <span class="account-card-copy"><strong id="accountName">Tài khoản Google</strong><small id="accountEmail"></small></span>
+          <span class="account-card-chevron" aria-hidden="true">⌄</span>
+        </button>
+        <div class="account-panel hidden" id="accountPanel">
+          <p id="accountProfileText"></p>
+          <button class="account-logout-btn" id="accountLogoutBtn" type="button">Đăng xuất</button>
+        </div>
         <button class="home-settings-btn" id="homeSettingsBtn" type="button">⚙ CÀI ĐẶT</button>
       </div>
     </section>
@@ -146,6 +152,20 @@
       </div>
     </div>
   </div>
+
+  <section class="auth-gate" id="authGate" role="dialog" aria-modal="true" aria-labelledby="authGateTitle">
+    <div class="auth-gate-card">
+      <div class="auth-gate-mark" aria-hidden="true">a</div>
+      <h2 id="authGateTitle">Đăng nhập để bắt đầu</h2>
+      <p>Đăng nhập bằng Google để lưu phiên học và sử dụng ứng dụng ổn định trên các thiết bị của bạn.</p>
+      <button class="google-login-btn" id="googleLoginBtn" type="button">
+        <span class="google-g-mark" aria-hidden="true">G</span>
+        <span>Đăng nhập bằng Google</span>
+      </button>
+      <p class="auth-gate-status" id="authGateStatus" role="status" aria-live="polite">Đang kiểm tra phiên đăng nhập…</p>
+      <button class="auth-retry-btn" id="authRetryBtn" type="button" hidden>Thử kiểm tra lại</button>
+    </div>
+  </section>
 
   <section class="settings-panel hidden" id="settingsPanel" aria-labelledby="settingsTitle">
     <div class="settings-head">

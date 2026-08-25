@@ -6,7 +6,7 @@ const { OAuth2Client } = require('google-auth-library');
 const { findUserById, upsertGoogleUser } = require('./db.js');
 
 const COOKIE_NAME = 'phonics_session';
-const SESSION_DAYS = 7;
+const SESSION_DAYS = 30;
 
 function googleClient() {
   const clientId = String(process.env.GOOGLE_CLIENT_ID || '').trim();
@@ -28,6 +28,31 @@ async function verifyGoogleCredential(credential) {
     throw new Error('Google chưa xác minh được email của tài khoản.');
   }
   return payload;
+}
+
+async function exchangeGoogleCode(code) {
+  const clientId = String(process.env.GOOGLE_CLIENT_ID || '').trim();
+  const clientSecret = String(process.env.GOOGLE_CLIENT_SECRET || '').trim();
+  if (!clientId || !clientSecret) {
+    throw new Error('Google OAuth server chưa được cấu hình đủ GOOGLE_CLIENT_ID và GOOGLE_CLIENT_SECRET.');
+  }
+  if (!String(code || '').trim()) throw new Error('Google không trả về mã đăng nhập.');
+  const response = await fetch('https://oauth2.googleapis.com/token', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+    body: new URLSearchParams({
+      code: String(code),
+      client_id: clientId,
+      client_secret: clientSecret,
+      redirect_uri: 'postmessage',
+      grant_type: 'authorization_code'
+    })
+  });
+  const result = await response.json().catch(() => ({}));
+  if (!response.ok || !result.id_token) {
+    throw new Error(result.error_description || 'Không đổi được mã Google thành phiên đăng nhập.');
+  }
+  return verifyGoogleCredential(result.id_token);
 }
 
 function issueToken(user) {
@@ -85,12 +110,15 @@ function setSessionCookie(res, token) {
 }
 
 function clearSessionCookie(res) {
-  res.setHeader('Set-Cookie', `${COOKIE_NAME}=; Path=/; HttpOnly; SameSite=Lax; Max-Age=0`);
+  const secure = process.env.NODE_ENV === 'production' || process.env.COOKIE_SECURE === 'true';
+  const sameSite = secure ? 'SameSite=None' : 'SameSite=Lax';
+  res.setHeader('Set-Cookie', `${COOKIE_NAME}=; Path=/; HttpOnly; ${sameSite}; ${secure ? 'Secure; ' : ''}Max-Age=0`);
 }
 
 module.exports = {
   COOKIE_NAME,
   verifyGoogleCredential,
+  exchangeGoogleCode,
   issueToken,
   authenticateRequest,
   requireAdmin,

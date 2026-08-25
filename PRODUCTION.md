@@ -22,9 +22,17 @@ uses `x-admin-secret` for `/api/admin/users` and account deletion.
 ## 3. Google OAuth
 
 Create a Web OAuth client in Google Cloud. Add the GitHub Pages origin to
-Authorized JavaScript origins. The backend verifies the Google ID token and
-creates or updates the user/device record in PostgreSQL. The session is an
-HttpOnly cookie, not a token stored in localStorage.
+Authorized JavaScript origins. Configure the same client ID on Render as
+`GOOGLE_CLIENT_ID` and its private client secret as `GOOGLE_CLIENT_SECRET`.
+The PWA uses Google Identity Services OAuth code popup; Render exchanges the
+short-lived code server-side, verifies the Google ID token, and creates or
+updates the user/device record in PostgreSQL. The session is an HttpOnly
+cookie, not a token stored in localStorage. Set `ALLOWED_ORIGINS` to the exact
+origin `https://morazala.github.io` (without a trailing slash).
+
+The public build also normalizes `RENDER_API_URL` and `FRONTEND_ORIGIN` with
+trimmed values, so a newline copied into a Render URL cannot produce broken
+requests from the PWA.
 
 ## 4. Presentation mode
 

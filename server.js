@@ -48,6 +48,7 @@ const {
 } = require('./db.js');
 const {
   verifyGoogleCredential,
+  exchangeGoogleCode,
   issueToken,
   authenticateRequest,
   requireAdmin,
@@ -70,9 +71,10 @@ const app = express();
 const jobs = new Map();
 let activeJobId = null;
 
+const PUBLIC_FRONTEND_ORIGIN = 'https://morazala.github.io';
 const allowedOrigins = new Set(
-  String(process.env.ALLOWED_ORIGINS || process.env.FRONTEND_ORIGIN || '')
-    .split(',').map(origin => origin.trim()).filter(Boolean)
+  String(process.env.ALLOWED_ORIGINS || process.env.FRONTEND_ORIGIN || PUBLIC_FRONTEND_ORIGIN)
+    .split(',').map(origin => origin.trim().replace(/\/+$/, '')).filter(Boolean)
 );
 
 app.disable('x-powered-by');
@@ -106,7 +108,11 @@ app.get('/api/health', (req, res) => {
 
 app.post('/api/auth/google', authRateLimit, async (req, res) => {
   try {
-    const payload = await verifyGoogleCredential(req.body?.credential);
+    // GIS OAuth popup trả về authorization code. Credential vẫn được giữ để
+    // tương thích với các client cũ dùng ID token.
+    const payload = req.body?.code
+      ? await exchangeGoogleCode(req.body.code)
+      : await verifyGoogleCredential(req.body?.credential);
     const user = await upsertGoogleUser({
       googleId: payload.sub,
       email: payload.email,

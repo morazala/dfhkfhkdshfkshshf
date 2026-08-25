@@ -1,77 +1,202 @@
 'use strict';
 
 (() => {
+  // Keep the app locked until Render confirms the HttpOnly session cookie.
+  document.documentElement.classList.add('auth-pending');
+
   const config = window.APP_CONFIG || {};
-  const apiBaseUrl = String(config.apiBaseUrl || '').replace(/\/$/, '');
-  const loginButton = document.querySelector('#loginBtn');
-  const logoutButton = document.querySelector('#logoutBtn');
-  const status = document.querySelector('#authStatus');
+  const apiBaseUrl = String(config.apiBaseUrl || '').trim().replace(/\/+$/, '');
+  const googleClientId = String(config.googleClientId || '').trim();
+  const gate = document.querySelector('#authGate');
+  const gateStatus = document.querySelector('#authGateStatus');
+  const retryButton = document.querySelector('#authRetryBtn');
+  const loginButton = document.querySelector('#googleLoginBtn');
+  const startButton = document.querySelector('#startBtn');
+  const accountCard = document.querySelector('#accountCard');
+  const accountPanel = document.querySelector('#accountPanel');
+  const accountLogoutButton = document.querySelector('#accountLogoutBtn');
+  const accountName = document.querySelector('#accountName');
+  const accountEmail = document.querySelector('#accountEmail');
+  const accountAvatar = document.querySelector('#accountAvatar');
+  const accountProfileText = document.querySelector('#accountProfileText');
+  let sessionUser = null;
+  let loginInProgress = false;
+
+  function setGateStatus(message, kind = '') {
+    if (!gateStatus) return;
+    gateStatus.textContent = message;
+    gateStatus.dataset.kind = kind;
+  }
 
   function apiUrl(path) { return apiBaseUrl ? `${apiBaseUrl}${path}` : path; }
-  function setStatus(message, kind = '') {
-    if (!status) return;
-    status.textContent = message;
-    status.dataset.kind = kind;
-  }
+
   function deviceInfo() {
     const platform = navigator.userAgentData?.platform || navigator.platform || 'unknown';
     const mobile = navigator.userAgentData?.mobile ? 'mobile' : 'desktop';
     return `${platform} · ${mobile} · ${window.matchMedia('(display-mode: standalone)').matches ? 'PWA' : 'browser'}`;
   }
+
   async function api(path, options = {}) {
-    const response = await fetch(apiUrl(path), { ...options, credentials: 'include', headers: { 'Content-Type': 'application/json', ...(options.headers || {}) } });
+    if (!apiBaseUrl) throw new Error('PWA chưa có địa chỉ API Render công khai.');
+    const response = await fetch(apiUrl(path), {
+      ...options,
+      credentials: 'include',
+      headers: { 'Content-Type': 'application/json', ...(options.headers || {}) }
+    });
     const result = await response.json().catch(() => ({}));
-    if (!response.ok) throw new Error(result.error || `API lỗi ${response.status}.`);
+    if (!response.ok) {
+      const error = new Error(result.error || `API lỗi ${response.status}.`);
+      error.status = response.status;
+      throw error;
+    }
     return result;
   }
-  async function finishGoogleLogin(credential) {
-    try {
-      const result = await api('/api/auth/google', { method: 'POST', body: JSON.stringify({ credential, deviceInfo: deviceInfo() }) });
-      setStatus(`Đã đăng nhập: ${result.user.email}`, 'success');
-      if (loginButton) loginButton.textContent = 'ĐÃ ĐĂNG NHẬP GOOGLE';
-      if (logoutButton) logoutButton.hidden = false;
-    } catch (error) { setStatus(error.message || 'Đăng nhập thất bại.', 'error'); }
+
+  function updateAccount(user) {
+    const name = String(user?.display_name || user?.email || 'Tài khoản Google');
+    const email = String(user?.email || '');
+    if (accountName) accountName.textContent = name;
+    if (accountEmail) accountEmail.textContent = email;
+    if (accountProfileText) accountProfileText.textContent = email ? `Đang dùng tài khoản ${email}` : 'Đã đăng nhập Google.';
+    if (accountAvatar) {
+      accountAvatar.src = String(user?.avatar_url || 'icons/icon.svg');
+      accountAvatar.onerror = () => { accountAvatar.src = 'icons/icon.svg'; };
+    }
   }
+
+  function setAuthenticated(user) {
+    sessionUser = user || null;
+    updateAccount(sessionUser);
+    document.documentElement.classList.remove('auth-pending');
+    gate?.classList.add('hidden');
+    if (startButton) startButton.hidden = false;
+    if (accountCard) accountCard.hidden = false;
+    if (retryButton) retryButton.hidden = true;
+    setGateStatus('Đã đăng nhập.', 'success');
+    document.dispatchEvent(new CustomEvent('phonics-auth-ready', { detail: sessionUser }));
+  }
+
+  function setLoggedOut(message = 'Hãy đăng nhập bằng Google để bắt đầu.') {
+    sessionUser = null;
+    document.documentElement.classList.add('auth-pending');
+    gate?.classList.remove('hidden');
+    if (startButton) startButton.hidden = true;
+    if (accountCard) accountCard.hidden = true;
+    accountPanel?.classList.add('hidden');
+    accountCard?.setAttribute('aria-expanded', 'false');
+    setGateStatus(message);
+  }
+
   function waitForGoogle() {
     return new Promise((resolve, reject) => {
-      const deadline = Date.now() + 8000;
+      const deadline = Date.now() + 12_000;
       const check = () => {
-        if (window.google?.accounts?.id) return resolve(window.google);
-        if (Date.now() > deadline) return reject(new Error('Google Sign-In chưa tải được.'));
-        setTimeout(check, 100);
+        if (window.google?.accounts?.oauth2?.initCodeClient) return resolve(window.google);
+        if (Date.now() > deadline) return reject(new Error('Google Sign-In chưa tải được. Hãy kiểm tra kết nối mạng rồi thử lại.'));
+        window.setTimeout(check, 100);
       };
       check();
     });
   }
+
+  async function finishGoogleCode(code) {
+    try {
+      const result = await api('/api/auth/google', {
+        method: 'POST',
+        body: JSON.stringify({ code, deviceInfo: deviceInfo() })
+      });
+      setAuthenticated(result.user);
+    } catch (error) {
+      setGateStatus(error.message || 'Đăng nhập Google thất bại. Hãy thử lại.', 'error');
+    } finally {
+      loginInProgress = false;
+      if (loginButton) loginButton.disabled = false;
+    }
+  }
+
   async function login() {
-    if (!apiBaseUrl || !config.googleClientId) {
-      setStatus('Bản web hiện chưa được cấu hình API Render/Google OAuth.', 'error');
+    if (loginInProgress) return;
+    if (!apiBaseUrl || !googleClientId) {
+      setGateStatus('Bản PWA chưa có cấu hình API Render hoặc Google OAuth public.', 'error');
+      if (retryButton) retryButton.hidden = false;
       return;
     }
+    loginInProgress = true;
+    if (loginButton) loginButton.disabled = true;
+    setGateStatus('Đang mở cửa sổ chọn tài khoản Google…');
     try {
       const google = await waitForGoogle();
-      google.accounts.id.initialize({ client_id: config.googleClientId, callback: response => finishGoogleLogin(response.credential), auto_select: false, cancel_on_tap_outside: true });
-      google.accounts.id.prompt(notification => {
-        if (notification.isNotDisplayed() || notification.isSkippedMoment()) setStatus('Google không mở popup; hãy cho phép popup rồi thử lại.', 'error');
+      const codeClient = google.accounts.oauth2.initCodeClient({
+        client_id: googleClientId,
+        scope: 'openid profile email',
+        ux_mode: 'popup',
+        select_account: true,
+        callback: response => {
+          if (response?.error) {
+            loginInProgress = false;
+            if (loginButton) loginButton.disabled = false;
+            setGateStatus('Bạn chưa hoàn tất đăng nhập Google. Hãy thử lại.', 'error');
+            return;
+          }
+          finishGoogleCode(response?.code);
+        },
+        error_callback: error => {
+          loginInProgress = false;
+          if (loginButton) loginButton.disabled = false;
+          if (error?.type === 'popup_failed_to_open') {
+            setGateStatus('Trình duyệt đã chặn cửa sổ Google. Hãy cho phép popup cho trang này rồi bấm lại.', 'error');
+          } else {
+            setGateStatus('Không mở được cửa sổ Google. Hãy thử lại.', 'error');
+          }
+        }
       });
-    } catch (error) { setStatus(error.message || 'Không mở được Google Sign-In.', 'error'); }
+      codeClient.requestCode();
+    } catch (error) {
+      loginInProgress = false;
+      if (loginButton) loginButton.disabled = false;
+      setGateStatus(error.message || 'Không mở được Google Sign-In.', 'error');
+    }
   }
+
   async function checkSession() {
-    if (!apiBaseUrl) { if (loginButton) loginButton.hidden = true; return; }
+    if (!apiBaseUrl) {
+      setLoggedOut('PWA chưa có địa chỉ API Render. Hãy build lại app-config.js với RENDER_API_URL.');
+      if (retryButton) retryButton.hidden = false;
+      return;
+    }
+    setGateStatus('Đang kiểm tra phiên đăng nhập…');
     try {
       const result = await api('/api/auth/me');
-      setStatus(`Đã đăng nhập: ${result.user.email}`, 'success');
-      if (loginButton) loginButton.textContent = 'ĐÃ ĐĂNG NHẬP GOOGLE';
-      if (logoutButton) logoutButton.hidden = false;
-    } catch (_) { setStatus('Chưa đăng nhập · có thể dùng chế độ offline.', ''); }
+      setAuthenticated(result.user);
+    } catch (error) {
+      if (error.status !== 401) {
+        setGateStatus('Chưa kết nối được Render. Hãy kiểm tra mạng rồi thử lại.', 'error');
+        if (retryButton) retryButton.hidden = false;
+      } else {
+        setLoggedOut();
+      }
+    }
   }
+
   loginButton?.addEventListener('click', login);
-  logoutButton?.addEventListener('click', async () => {
-    try { await api('/api/auth/logout', { method: 'POST' }); } catch (_) {}
-    logoutButton.hidden = true;
-    if (loginButton) loginButton.textContent = 'ĐĂNG NHẬP / ĐĂNG KÝ GOOGLE';
-    setStatus('Đã đăng xuất.', '');
+  retryButton?.addEventListener('click', checkSession);
+  accountCard?.addEventListener('click', () => {
+    const open = accountPanel?.classList.toggle('hidden') === false;
+    accountCard.setAttribute('aria-expanded', String(open));
   });
+  accountLogoutButton?.addEventListener('click', async () => {
+    accountLogoutButton.disabled = true;
+    try { await api('/api/auth/logout', { method: 'POST' }); } catch (_) {}
+    accountLogoutButton.disabled = false;
+    setLoggedOut('Đã đăng xuất. Hãy đăng nhập lại để bắt đầu.');
+  });
+
   checkSession();
-  window.PhonicsAuth = Object.freeze({ api, login });
+  window.PhonicsAuth = Object.freeze({
+    api,
+    login,
+    openLogin: () => { gate?.classList.remove('hidden'); loginButton?.focus(); },
+    isAuthenticated: () => Boolean(sessionUser),
+    getUser: () => sessionUser
+  });
 })();

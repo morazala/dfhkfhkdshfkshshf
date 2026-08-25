@@ -1725,6 +1725,10 @@
 
   if (el.startBtn) {
     el.startBtn.addEventListener('click', () => {
+      if (!window.PhonicsAuth?.isAuthenticated?.()) {
+        window.PhonicsAuth?.openLogin?.();
+        return;
+      }
       state.started = true;
       enterPresentationMode();
       renderCurrent();
