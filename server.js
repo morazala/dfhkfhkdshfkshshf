@@ -185,12 +185,16 @@ app.delete('/api/admin/users/:id', requireAdmin, async (req, res) => {
 
 app.patch('/api/admin/users/:id/ban', requireAdmin, async (req, res) => {
   try {
-    const banned = Boolean(req.body?.banned);
-    const user = await setUserBan(String(req.params.id || ''), banned, req.body?.reason);
+    const body = req.body && typeof req.body === 'object' ? req.body : {};
+    if (typeof body.banned !== 'boolean') {
+      return res.status(400).json({ ok: false, error: 'Thiếu trạng thái BAN hợp lệ.' });
+    }
+    const user = await setUserBan(String(req.params.id || ''), body.banned, body.reason);
     if (!user) return res.status(404).json({ ok: false, error: 'Không tìm thấy tài khoản.' });
     return res.json({ ok: true, user });
   } catch (error) {
-    return res.status(503).json({ ok: false, error: error.message || 'Database chưa sẵn sàng.' });
+    console.error('[ADMIN BAN] Không cập nhật được tài khoản:', error);
+    return res.status(503).json({ ok: false, error: error.message || 'Không cập nhật được trạng thái BAN.' });
   }
 });
 
@@ -550,8 +554,9 @@ app.get('/api/cache/generate/:jobId', (req, res) => {
 
 app.use((error, req, res, next) => {
   if (res.headersSent) return next(error);
-  console.error('[API]', error.message || error);
-  return res.status(error.status || 500).json({ ok: false, error: 'Máy chủ gặp lỗi; vui lòng thử lại sau.' });
+  console.error('[API]', req.method, req.originalUrl, error);
+  const status = Number(error.status) >= 400 && Number(error.status) < 600 ? Number(error.status) : 500;
+  return res.status(status).json({ ok: false, error: error.message || 'Máy chủ gặp lỗi; vui lòng thử lại sau.' });
 });
 
 async function start() {
