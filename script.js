@@ -141,6 +141,7 @@
      ====================================================================== */
   const el = {
     letter: document.getElementById('letterDisplay'),
+    board: document.getElementById('board'),
     keyCarousel: document.getElementById('keyCarousel'),
     keyCarouselTrack: document.getElementById('keyCarouselTrack'),
     wholeWordCaption: document.getElementById('wholeWordCaption'),
@@ -1304,6 +1305,61 @@
     return Math.round(safeSeconds * 1000);
   }
 
+  // Co chữ của ô hợp nhất theo chiều rộng có sẵn: chữ ngắn phóng theo trần
+  // chiều cao, chữ dài phóng đến khi chiếm ~78% bề ngang — không tràn, không
+  // bị thanh nút che. Chỉ đo layout, không animate nên rất nhẹ.
+  function fitMergeText() {
+    const text = el.mergeText;
+    const cell = el.mergeCell;
+    if (!text || !cell || cell.classList.contains('hidden')) return;
+    if (!text.children.length) return;
+    const cellStyle = window.getComputedStyle(cell);
+    const availW = cell.clientWidth - parseFloat(cellStyle.paddingLeft) - parseFloat(cellStyle.paddingRight);
+    const availH = cell.clientHeight - parseFloat(cellStyle.paddingTop) - parseFloat(cellStyle.paddingBottom);
+    if (availW <= 0 || availH <= 0) return;
+    text.style.fontSize = '100px';
+    const naturalWidth = Array.from(text.children).reduce((sum, ch) => sum + ch.offsetWidth, 0);
+    if (!naturalWidth) { text.style.fontSize = ''; return; }
+    const fitted = Math.min((availW * 0.78) * (100 / naturalWidth), availH * 0.82);
+    text.style.fontSize = `${Math.max(40, Math.floor(fitted))}px`;
+  }
+
+  let fitMergeRafId = 0;
+  function scheduleFitMergeText() {
+    if (fitMergeRafId) cancelAnimationFrame(fitMergeRafId);
+    fitMergeRafId = requestAnimationFrame(() => {
+      fitMergeRafId = 0;
+      fitMergeText();
+    });
+  }
+  window.addEventListener('resize', scheduleFitMergeText);
+  window.addEventListener('orientationchange', scheduleFitMergeText);
+  document.fonts?.ready?.then(() => scheduleFitMergeText());
+
+  // Thu gọn carousel nhóm chữ khi đang đọc: sau vài giây không đụng vào bảng
+  // thì bảng thu còn một thanh mảnh để nhường chỗ cho chữ; bấm vào bảng là
+  // mở lại. Về trang chủ luôn mở.
+  let carouselCollapseTimer = null;
+  let carouselCollapseArmed = false;
+
+  function setCarouselCollapsed(collapsed) {
+    el.stage?.classList.toggle('carousel-collapsed', collapsed);
+  }
+
+  function scheduleCarouselCollapse(delay = 4000) {
+    if (carouselCollapseTimer) clearTimeout(carouselCollapseTimer);
+    carouselCollapseTimer = setTimeout(() => {
+      carouselCollapseTimer = null;
+      setCarouselCollapsed(true);
+    }, delay);
+  }
+
+  function resetCarouselSession() {
+    if (carouselCollapseTimer) { clearTimeout(carouselCollapseTimer); carouselCollapseTimer = null; }
+    carouselCollapseArmed = false;
+    setCarouselCollapsed(false);
+  }
+
   function waitForTransition(seconds) {
     return new Promise(resolve => setTimeout(resolve, transitionPauseMs(seconds)));
   }
@@ -1343,6 +1399,7 @@
       );
       el.mergeCell.classList.remove('hidden');
       el.mergeCell.classList.add('visible');
+      scheduleFitMergeText();
     }
 
     function renderPartial() {
@@ -1465,6 +1522,7 @@
     stopAutoPlay();
     stopSpeaking();
     leavePresentationMode();
+    resetCarouselSession();
     if (el.stage) el.stage.classList.add('home-active');
     if (el.letter) el.letter.textContent = 'BÉ HỌC ĐÁNH VẦN';
   }
@@ -1576,9 +1634,23 @@
     // Splide is initialized lazily after data.json has loaded.
   }
 
+  // Bấm vào bảng đen: mở carousel nếu đang thu gọn, và luôn đẩy mốc tự thu
+  // gọn ra sau mỗi lần chạm (kể cả khi đang mở).
+  el.board?.addEventListener('pointerdown', () => {
+    if (el.stage?.classList.contains('home-active')) return;
+    setCarouselCollapsed(false);
+    scheduleCarouselCollapse();
+  });
+
   function renderCurrent() {
     state.started = true;
     if (el.stage) el.stage.classList.remove('home-active');
+    // Mỗi phiên đọc chỉ hẹn giờ thu gọn carousel một lần (không hẹn lại theo
+    // từng từ để tránh nhấp nháy mở/đóng khi tự động chuyển từ).
+    if (!carouselCollapseArmed) {
+      carouselCollapseArmed = true;
+      scheduleCarouselCollapse();
+    }
     state.playToken++;
     const myToken = state.playToken;
     const item = FLAT[state.flatIndex];
